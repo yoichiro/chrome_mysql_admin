@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "ChromeMyAdmin",
+    "description": "This application provides you 'MySQL GUI Admin console' windows.",
+    "version": "1.0.0",
+    "author": "Yoichiro Tanaka",
+    "app": {
+        "background": {
+            "scripts": ["scripts/background.js"]
+        }
+    },
+    "permissions": [
+        {"socket": [
+            "tcp-connect:*:*"
+        ]},
+        "storage"
+    ],
+    "offline_enabled": true
+}

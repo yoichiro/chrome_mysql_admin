@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css" />
+<link rel="stylesheet" type="text/css" href="styles/window.css" />
+
+<script type="text/javascript" src="scripts/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="scripts/angular.min.js"></script>
+<script type="text/javascript" src="scripts/encoding.js"></script>
+<script type="text/javascript" src="scripts/encoding-indexes.js"></script>
+<script type="text/javascript" src="scripts/sha1.js"></script>
+<script type="text/javascript" src="scripts/mysql_js_driver_1.0.1.js"></script>
+<script type="text/javascript" src="scripts/window.js"></script>
+
+<!-- TODO Remove me! -->
+<script type="text/javascript" src="scripts/chromereload.js"></script>
+
+</head>
+
+<body ng-app="chromeMyAdmin">
+
+<!-- Header -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="NavbarController" ng-init="initialize();">
+  <div class="container-fluid" ng-show="isNavbarVisible()">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{selectedDatabase}}<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="database in databases" ng-click="selectDatabase($event, database)"><a href="#">{{database}}</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="#">Rows</a></li>
+        <li><a href="#">Structure</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-off" ng-click="logout()"></span></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Left pane -->
+    <div class="col-sm-3 col-md-2 sidebar" ng-controller="DatabaseObjectListController" ng-init="initialize()">
+      <ol class="sidebar-module list-unstyled">
+        <li ng-repeat="table in tables" class="tableLink"><a href="#" ng-click="selectTable(table)"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a></li>
+      </ol>
+    </div>
+
+    <!-- Database object pane -->
+    <div id="objectPanel" ng-controller="DatabaseObjectController" ng-init="initialize()" ng-show="isObjectPanelVisible()">
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+        <div id="rowsPanel">
+          <table class="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>channel_id</th>
+                <th>mid</th>
+                <th>access_key</th>
+                <th>created_at</th>
+                <th>updated_at</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <Td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+              <tr>
+                <td>1373386112</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
+                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
+                <td>2013-10-28 14:13:01</td>
+                <td>2013-10-28 14:13:01</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Login form -->
+    <div id="loginForm" ng-controller="LoginFormController" ng-init="initialize()" ng-show="isLoginFormVisible()">
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+        <form novalidate name="loginForm" class="form-signin">
+          <h2>Login to MySQL server</h2>
+          <input type="text" class="form-control" placeholder="Name" ng-model="Name" />
+          <input type="text" class="form-control" placeholder="Host name" ng-model="hostName" required autofocus />
+          <input type="text" class="form-control" placeholder="Port number" ng-model="portNumber" required />
+          <input type="text" class="form-control" placeholder="User name" ng-model="userName" required />
+          <input type="password" class="form-control" placeholder="Password" ng-model="password" required />
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" ng-disabled="loginForm.$invalid">Add as favorite</button>
+            <button type="button" class="btn btn-default" ng-click="doTestConnection()" ng-disabled="loginForm.$invalid">Test connection</button>
+            <button type="button" class="btn btn-primary" ng-click="connect()" ng-disabled="loginForm.$invalid">Connect</button>
+          </div>
+        </form>
+        <div ng-show="isErrorMessageVisible()">
+          <div class="alert alert-danger">
+            <strong>Error:</strong> {{errorMessage}}
+          </div>
+        </div>
+        <div ng-show="isSuccessMessageVisible()">
+          <div class="alert alert-success">
+            <strong>Success:</strong> {{successMessage}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Logout confirm modal dialog -->
+<div id="logoutConfirmDialog" class="modal fade" ng-controller="LogoutConfirmDialogController">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Confirm</h4>
+      </div>
+      <div class="modal-body">
+        <p>Would you really like to logout from MySQL server?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" ng-click="logout()">Yes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Fatal modal dialog -->
+<div id="fatalDialog" class="modal fade" ng-controller="FatalDialogController" ng-init="initialize()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Fatal error</h4>
+      </div>
+      <div class="modal-body">
+        <p>Fatal error occurred. Go back to login screen.</p>
+        <p>Reason: {{reason}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+</body>
+
+</html>

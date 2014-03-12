@@ -1,0 +1,59 @@
+html, body {
+    mergin: 0;
+    padding: 0;
+}
+
+body {
+    padding-top: 50px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 51px;
+    background-color: #f5f5f5;
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-right: 1px solid #eee;
+}
+
+#loginForm {
+    padding: 20px;
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
+#loginForm .form-signin {
+    margin: 0 auto;
+}
+
+#loginForm .form-signin .btn-group {
+    margin-top: 10px;
+    margin-left: 100px;
+    margin-bottom: 10px;
+}
+
+#objectPanel {
+    margin-top: 5px;
+}
+
+.tableLink {
+    word-break: break-all;
+}
+
+.main {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    border-right: 1px solid #eee;
+}
+
+.main td {
+    white-space: nowrap;
+}
