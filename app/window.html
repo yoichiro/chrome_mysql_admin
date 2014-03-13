@@ -7,22 +7,26 @@
 <link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css" />
 <link rel="stylesheet" type="text/css" href="styles/window.css" />
+<link rel="stylesheet" type="text/css" href="styles/ng-grid.min.css" />
 
 <script type="text/javascript" src="scripts/jquery-2.1.0.min.js"></script>
 <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
 <script type="text/javascript" src="scripts/angular.min.js"></script>
+<script type="text/javascript" src="scripts/ng-grid-2.0.7.min.js"></script>
 <script type="text/javascript" src="scripts/encoding.js"></script>
 <script type="text/javascript" src="scripts/encoding-indexes.js"></script>
 <script type="text/javascript" src="scripts/sha1.js"></script>
 <script type="text/javascript" src="scripts/mysql_js_driver_1.0.1.js"></script>
 <script type="text/javascript" src="scripts/window.js"></script>
+<script type="text/javascript" src="scripts/window_login_form_controller.js"></script>
+<script type="text/javascript" src="scripts/window_navbar_controller.js"></script>
 
 <!-- TODO Remove me! -->
 <script type="text/javascript" src="scripts/chromereload.js"></script>
 
 </head>
 
-<body ng-app="chromeMyAdmin">
+<body ng-app="chromeMyAdmin" ng-csp>
 
 <!-- Header -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="NavbarController" ng-init="initialize();">
@@ -63,160 +67,7 @@
     <div id="objectPanel" ng-controller="DatabaseObjectController" ng-init="initialize()" ng-show="isObjectPanelVisible()">
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-        <div id="rowsPanel">
-          <table class="table table-hover table-condensed">
-            <thead>
-              <tr>
-                <th>channel_id</th>
-                <th>mid</th>
-                <th>access_key</th>
-                <th>created_at</th>
-                <th>updated_at</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <Td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-              <tr>
-                <td>1373386112</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03</td>
-                <td>ubcac5919eb72a9b1edb7598ae4301d03:senabottest</td>
-                <td>2013-10-28 14:13:01</td>
-                <td>2013-10-28 14:13:01</td>
-              </tr>
-            </tbody>
-          </table>
+        <div id="rowsPanel" class="gridStyle" ng-grid="rowsGrid">
         </div>
 
       </div>
