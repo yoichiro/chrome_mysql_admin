@@ -20,6 +20,10 @@
 <script type="text/javascript" src="scripts/window.js"></script>
 <script type="text/javascript" src="scripts/window_login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window_navbar_controller.js"></script>
+<script type="text/javascript" src="scripts/window_database_object_list_controller.js"></script>
+<script type="text/javascript" src="scripts/window_logout_confirm_dialog_controller.js"></script>
+<script type="text/javascript" src="scripts/window_fatal_dialog_controller.js"></script>
+<script type="text/javascript" src="scripts/window_database_object_controller.js"></script>
 
 <!-- TODO Remove me! -->
 <script type="text/javascript" src="scripts/chromereload.js"></script>
@@ -58,48 +62,64 @@
 
     <!-- Left pane -->
     <div class="col-sm-3 col-md-2 sidebar" ng-controller="DatabaseObjectListController" ng-init="initialize()">
-      <ol class="sidebar-module list-unstyled">
-        <li ng-repeat="table in tables" class="tableLink"><a href="#" ng-click="selectTable(table)"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a></li>
-      </ol>
+      <div id="objectList">
+        <ol class="sidebar-module list-unstyled">
+          <li ng-repeat="table in tables" class="tableLink"><a href="#" ng-click="selectTable(table)"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a></li>
+        </ol>
+      </div>
+
+      <!-- Sidebar footer -->
+      <div class="sidebarFooter">
+      </div>
+
     </div>
 
-    <!-- Database object pane -->
-    <div id="objectPanel" ng-controller="DatabaseObjectController" ng-init="initialize()" ng-show="isObjectPanelVisible()">
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
-        <div id="rowsPanel" class="gridStyle" ng-grid="rowsGrid">
+      <div id="mainPanel">
+
+        <!-- Database object pane -->
+        <div id="objectPanel" ng-controller="DatabaseObjectController" ng-init="initialize()" ng-show="isObjectPanelVisible()">
+
+          <div id="rowsPanel" class="gridStyle" ng-grid="rowsGrid">
+          </div>
+
+        </div>
+
+        <!-- Login form -->
+        <div id="loginForm" ng-controller="LoginFormController" ng-init="initialize()" ng-show="isLoginFormVisible()">
+          <form novalidate name="loginForm" class="form-signin">
+            <h2>Login to MySQL server</h2>
+            <input type="text" class="form-control" placeholder="Name" ng-model="Name" />
+            <input type="text" class="form-control" placeholder="Host name" ng-model="hostName" required autofocus />
+            <input type="text" class="form-control" placeholder="Port number" ng-model="portNumber" required />
+            <input type="text" class="form-control" placeholder="User name" ng-model="userName" required />
+            <input type="password" class="form-control" placeholder="Password" ng-model="password" required />
+            <div class="btn-group">
+              <button type="button" class="btn btn-default" ng-disabled="loginForm.$invalid">Add as favorite</button>
+              <button type="button" class="btn btn-default" ng-click="doTestConnection()" ng-disabled="loginForm.$invalid">Test connection</button>
+              <button type="button" class="btn btn-primary" ng-click="connect()" ng-disabled="loginForm.$invalid">Connect</button>
+            </div>
+          </form>
+          <div ng-show="isErrorMessageVisible()">
+            <div class="alert alert-danger">
+              <strong>Error:</strong> {{errorMessage}}
+            </div>
+          </div>
+          <div ng-show="isSuccessMessageVisible()">
+            <div class="alert alert-success">
+              <strong>Success:</strong> {{successMessage}}
+            </div>
+          </div>
         </div>
 
       </div>
-    </div>
 
-    <!-- Login form -->
-    <div id="loginForm" ng-controller="LoginFormController" ng-init="initialize()" ng-show="isLoginFormVisible()">
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
-        <form novalidate name="loginForm" class="form-signin">
-          <h2>Login to MySQL server</h2>
-          <input type="text" class="form-control" placeholder="Name" ng-model="Name" />
-          <input type="text" class="form-control" placeholder="Host name" ng-model="hostName" required autofocus />
-          <input type="text" class="form-control" placeholder="Port number" ng-model="portNumber" required />
-          <input type="text" class="form-control" placeholder="User name" ng-model="userName" required />
-          <input type="password" class="form-control" placeholder="Password" ng-model="password" required />
-          <div class="btn-group">
-            <button type="button" class="btn btn-default" ng-disabled="loginForm.$invalid">Add as favorite</button>
-            <button type="button" class="btn btn-default" ng-click="doTestConnection()" ng-disabled="loginForm.$invalid">Test connection</button>
-            <button type="button" class="btn btn-primary" ng-click="connect()" ng-disabled="loginForm.$invalid">Connect</button>
-          </div>
-        </form>
-        <div ng-show="isErrorMessageVisible()">
-          <div class="alert alert-danger">
-            <strong>Error:</strong> {{errorMessage}}
-          </div>
-        </div>
-        <div ng-show="isSuccessMessageVisible()">
-          <div class="alert alert-success">
-            <strong>Success:</strong> {{successMessage}}
-          </div>
-        </div>
+      <!-- Main footer -->
+      <div class="mainFooter">
+        <div class="mainStatusMessage">Loading...</div>
       </div>
+
     </div>
 
   </div>
