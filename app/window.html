@@ -23,6 +23,7 @@
 <script type="text/javascript" src="scripts/window_database_object_list_controller.js"></script>
 <script type="text/javascript" src="scripts/window_logout_confirm_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window_fatal_dialog_controller.js"></script>
+<script type="text/javascript" src="scripts/window_main_footer_controller.js"></script>
 <script type="text/javascript" src="scripts/window_database_object_controller.js"></script>
 
 <!-- TODO Remove me! -->
@@ -116,8 +117,8 @@
       </div>
 
       <!-- Main footer -->
-      <div class="mainFooter">
-        <div class="mainStatusMessage">Loading...</div>
+      <div class="mainFooter" ng-controller="MainFooterController" ng-init="initialize()">
+        <div class="mainStatusMessage">{{mainStatusMessage}}</div>
       </div>
 
     </div>
