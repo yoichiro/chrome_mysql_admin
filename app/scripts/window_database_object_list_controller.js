@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "$rootScope",  function($scope, $rootScope) {
+chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
 
     var assignWindowResizeEventHandler = function() {
         $(window).resize(function(evt) {
@@ -12,37 +12,32 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "$rootScope"
         $("#objectList").height($(window).height() - 51 - 35);
     };
 
-    var databaseSelected = function(database) {
+    var databaseChanged = function(database) {
         $scope.selectedDatabase = database;
-        MySQL.client.query("USE " + database, function(columnDefinitions, resultsetRows) {
-            // Never called.
-        }, function(result) {
-            if (result.isSuccess()) {
-                loadTables();
+        mySQLClientService.query("USE " + database).then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.fatalErrorOccurred("Changing database failed.");
             } else {
-                $scope.fatalErrorOccurred("Using database [" + database + "] failed.");
+                loadTables();
             }
-        }, function(result) {
-            var errorMessage = result.errorMessage;
+        }, function(reason) {
+            var errorMessage = reason.errorMessage;
             $scope.fatalErrorOccurred(errorMessage);
-        }, function(result) {
-            $scope.fatalErrorOccurred(result);
         });
     };
 
     var loadTables = function() {
         console.log("loadTables");
-        MySQL.client.query("SHOW TABLES", function(columnDefinitions, resultsetRows) {
-            $scope.safeApply(function() {
-                updateTableList(columnDefinitions, resultsetRows);
-            });
-        }, function(result) {
-            // Never called.
-        }, function(result) {
-            var errorMessage = result.errorMessage;
-            $scope.fatalErrorOccurred(errorMessage);
-        }, function(result) {
-            $scope.fatalErrorOccurred(result);
+        mySQLClientService.query("SHOW TABLES").then(function(result) {
+            if (result.hasResultsetRows) {
+                updateTableList(
+                    result.columnDefinitions,
+                    result.resultsetRows);
+            } else {
+                $scope.fatalErrorOccurred("Retrieving tables failed.");
+            }
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
         });
     };
 
@@ -56,15 +51,15 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "$rootScope"
     };
 
     var onConnectionChanged = function() {
-        if ($rootScope.connected === false) {
+        if (!mySQLClientService.isConnected()) {
             $scope.tables = [];
         }
     };
 
     $scope.initialize = function() {
-        $scope.$on("databaseSelected", function(event, database) {
-            console.log("databaseSelected");
-            databaseSelected(database);
+        $scope.$on("databaseChanged", function(event, database) {
+            console.log("databaseChanged");
+            databaseChanged(database);
         });
         $scope.tables = [];
         $scope.$on("connectionChanged", function(event, data) {
@@ -75,7 +70,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "$rootScope"
     };
 
     $scope.selectTable = function(tableName) {
-        $rootScope.$broadcast("tableSelected", tableName);
+        console.log("selectTable");
+        $scope.notifyTableChanged(tableName);
     };
 
 }]);

@@ -1,15 +1,12 @@
 "use strict";
 
-chromeMyAdmin.controller("LogoutConfirmDialogController", ["$scope", "$rootScope",  function($scope, $rootScope) {
+chromeMyAdmin.controller("LogoutConfirmDialogController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
 
     $scope.logout = function() {
         console.log("logout");
         $("#logoutConfirmDialog").modal("hide");
-        MySQL.client.logout(function() {
-            $scope.safeApply(function() {
-                $rootScope.connected = false;
-                $rootScope.$broadcast("connectionChanged", null);
-            });
+        mySQLClientService.logout().then(function() {
+            $scope.notifyConnectionChanged();
         });
     };
 

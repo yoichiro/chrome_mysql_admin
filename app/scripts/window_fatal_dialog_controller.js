@@ -1,13 +1,13 @@
 "use strict";
 
-chromeMyAdmin.controller("FatalDialogController", ["$scope", "$rootScope",  function($scope, $rootScope) {
+chromeMyAdmin.controller("FatalDialogController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
 
     $scope.initialize = function() {
         $("#fatalDialog").on("hidden.bs.modal", function() {
-            MySQL.client.logout(function() {
+            var promise = mySQLClientService.logout();
+            promise.then(function() {
                 $scope.safeApply(function() {
-                    $rootScope.connected = false;
-                    $rootScope.$broadcast("connectionChanged", null);
+                    $scope.notifyConnectionChanged();
                 });
             });
         });

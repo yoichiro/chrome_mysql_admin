@@ -1,24 +1,19 @@
 "use strict";
 
-chromeMyAdmin.controller("NavbarController", ["$scope", "$rootScope",  function($scope, $rootScope) {
+chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
 
     var loadDatabaseList = function() {
-        MySQL.client.getDatabases(function(databases) {
+        mySQLClientService.getDatabases().then(function(databases) {
             $scope.safeApply(function() {
                 $scope.selectedDatabase = "[Select database]";
                 $scope.databases = databases;
             });
-        }, function(result) {
-            // TODO
-            console.log(result);
-        }, function() {
-            // TODO
-            console.log("loadDatabases: failed");
         });
     };
 
     var onConnectionChanged = function() {
-        if ($rootScope.connected === true) {
+        console.log("onConnectionChanged");
+        if (mySQLClientService.isConnected()) {
             loadDatabaseList();
         }
     };
@@ -31,12 +26,12 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "$rootScope",  function(
     };
 
     $scope.isNavbarVisible = function() {
-        return $rootScope.connected === true;
+        return mySQLClientService.isConnected();
     };
 
     $scope.selectDatabase = function(event, database) {
         $scope.selectedDatabase = database;
-        $rootScope.$broadcast("databaseSelected", database);
+        $scope.notifyDatabaseChanged(database);
     };
 
     $scope.logout = function(event) {

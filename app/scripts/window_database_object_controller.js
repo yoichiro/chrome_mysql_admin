@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "$rootScope",  function($scope, $rootScope) {
+chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
 
     var initializeRowsGrid = function() {
         resetRowsGrid();
@@ -14,7 +14,7 @@ chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "$rootScope",  f
     };
 
     var onConnectionChanged = function() {
-        if ($rootScope.connected === false) {
+        if (!mySQLClientService.isConnected()) {
             resetRowsGrid();
         }
     };
@@ -61,18 +61,17 @@ chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "$rootScope",  f
     };
 
     var loadRows = function(tableName) {
-        MySQL.client.query("SELECT * FROM " + tableName + " LIMIT 1000", function(columnDefinitions, resultsetRows) {
-            $scope.safeApply(function() {
-                updateRowsColumnDefs(columnDefinitions);
-                updateRows(columnDefinitions, resultsetRows);
-            });
-        }, function(result) {
-            // Never called.
-        }, function(result) {
-            var errorMessage = result.errorMessage;
-            $scope.fatalErrorOccurred(errorMessage);
-        }, function(result) {
-            $scope.fatalErrorOccurred(result);
+        mySQLClientService.query("SELECT * FROM " + tableName + " LIMIT 1000").then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.safeApply(function() {
+                    updateRowsColumnDefs(result.columnDefinitions);
+                    updateRows(result.columnDefinitions, result.resultsetRows);
+                });
+            } else {
+                $scope.fatalErrorOccurred("Retrieving rows failed.");
+            }
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
         });
     };
 
@@ -80,10 +79,11 @@ chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "$rootScope",  f
         $scope.$on("connectionChanged", function(event, data) {
             onConnectionChanged();
         });
-        $scope.$on("databaseSelected", function(event, database) {
+        $scope.$on("databaseChanged", function(event, database) {
             resetRowsGrid();
         });
-        $scope.$on("tableSelected", function(event, tableName) {
+        $scope.$on("tableChanged", function(event, tableName) {
+            console.log("tableChanged");
             loadRows(tableName);
         });
         initializeRowsGrid();
@@ -92,8 +92,7 @@ chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "$rootScope",  f
     };
 
     $scope.isObjectPanelVisible = function() {
-        var visible = $rootScope.connected;
-        return visible !== false;
+        return mySQLClientService.isConnected();
     };
 
 }]);
