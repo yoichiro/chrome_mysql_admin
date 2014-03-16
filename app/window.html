@@ -18,6 +18,7 @@
 <script type="text/javascript" src="scripts/sha1.js"></script>
 <script type="text/javascript" src="scripts/mysql_js_driver_1.0.1.js"></script>
 <script type="text/javascript" src="scripts/window.js"></script>
+<script type="text/javascript" src="scripts/window_mysql_client_service.js"></script>
 <script type="text/javascript" src="scripts/window_login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window_navbar_controller.js"></script>
 <script type="text/javascript" src="scripts/window_database_object_list_controller.js"></script>
@@ -25,6 +26,7 @@
 <script type="text/javascript" src="scripts/window_fatal_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window_main_footer_controller.js"></script>
 <script type="text/javascript" src="scripts/window_database_object_controller.js"></script>
+<script type="text/javascript" src="scripts/window_progress_bar_controller.js"></script>
 
 <!-- TODO Remove me! -->
 <script type="text/javascript" src="scripts/chromereload.js"></script>
@@ -32,6 +34,13 @@
 </head>
 
 <body ng-app="chromeMyAdmin" ng-csp>
+
+<div id="progressPanel" ng-controller="ProgressBarController" ng-show="isVisibleProgressBar()" ng-init="initialize()">
+  <div class="progress progress-striped active">
+    <div class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 300px;">
+    </div>
+  </div>
+</div>
 
 <!-- Header -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="NavbarController" ng-init="initialize();">

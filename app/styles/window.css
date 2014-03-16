@@ -78,3 +78,23 @@ body {
     height: 300px;
     font-size: 12px;
 }
+
+#progressPanel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(45,45,45, 0.3);
+    z-index: 9999;
+    margin-bottom: 25px;
+}
+
+#progressPanel .progress {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -150px;
+    width: 300px;
+}

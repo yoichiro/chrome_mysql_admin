@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "$rootScope", function($scope, $timeout, $rootScope) {
+chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", function($scope, $timeout, mySQLClientService) {
 
     // Private methods
 
@@ -25,8 +25,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "$rootSco
 
     var onConnected = function() {
         $scope.safeApply(function() {
-            $rootScope.connected = true;
-            $rootScope.$broadcast("connectionChanged", null);
+            $scope.notifyConnectionChanged();
         });
     };
 
@@ -35,7 +34,6 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "$rootSco
     $scope.initialize = function() {
         $scope.successMessage = "";
         $scope.errorMessage = "";
-        MySQL.communication.setSocketImpl(new MySQL.ChromeSocket());
 
         $scope.hostName = "127.0.0.1";
         $scope.portNumber = "3306";
@@ -45,44 +43,33 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "$rootSco
 
     $scope.connect = function() {
         hideMessage();
-        MySQL.client.login(
+        var promise = mySQLClientService.login(
             $scope.hostName,
             Number($scope.portNumber),
             $scope.userName,
-            $scope.password,
-            function(initialHandshakeRequest, result) {
-                if (result.isSuccess()) {
-                    onConnected();
-                } else {
-                    showErrorMessage("Connection failed: " + result.errorMessage);
-                    MySQL.client.logout(function() {});
-                }
-            }, function(errorCode) {
-                showErrorMessage("Connection failed: " + errorCode);
-            }, function(result) {
-                showErrorMessage("Connection failed: " + result);
-            });
+            $scope.password
+        );
+        promise.then(function(initialHandshakeRequest) {
+            onConnected();
+        }, function(reason) {
+            showErrorMessage("Connection failed: " + reason);
+        });
     };
 
     $scope.doTestConnection = function() {
         hideMessage();
-        MySQL.client.login(
+        var promise = mySQLClientService.login(
             $scope.hostName,
             Number($scope.portNumber),
             $scope.userName,
-            $scope.password,
-            function(initialHandshakeRequest, result) {
-                if (result.isSuccess()) {
-                    showSuccessMessage("Connection was successfully.");
-                } else {
-                    showErrorMessage("Connection failed: " + result.errorMessage);
-                }
-                MySQL.client.logout(function() {});
-            }, function(errorCode) {
-                showErrorMessage("Connection failed: " + errorCode);
-            }, function(result) {
-                showErrorMessage("Connection failed: " + result);
-            });
+            $scope.password
+        );
+        promise.then(function(initialHandshakeRequest) {
+            showSuccessMessage("Connection was successfully.");
+            mySQLClientService.logout();
+        }, function(reason) {
+            showErrorMessage("Connection failed: " + reason);
+        });
     };
 
     $scope.isErrorMessageVisible = function() {
@@ -94,7 +81,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "$rootSco
     };
 
     $scope.isLoginFormVisible = function() {
-        return $rootScope.connected === false;
+        return !mySQLClientService.isConnected();
     };
 
 }]);
