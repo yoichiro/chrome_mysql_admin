@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
+chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", function($scope, mySQLClientService, modeService, targetObjectService) {
 
     var initializeRowsGrid = function() {
         resetRowsGrid();
@@ -31,8 +31,7 @@ chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "mySQLClientServ
     };
 
     var adjustRowsPanelHeight = function() {
-        $("#mainPanel").height($(window).height() - 76);
-        $("#rowsPanel").height($(window).height() - 76);
+        $("#rowsGrid").height($(window).height() - 76);
     };
 
     var updateRowsColumnDefs = function(columnDefinitions) {
@@ -75,6 +74,21 @@ chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "mySQLClientServ
         });
     };
 
+    var onModeChanged = function(mode) {
+        if (mode === "rows") {
+            var tableName = targetObjectService.getTable();
+            if ($scope.tableName !== tableName) {
+                $scope.tableName = tableName;
+                loadRows(tableName);
+            }
+        }
+    };
+
+    var _isRowsPanelVisible = function() {
+        return mySQLClientService.isConnected()
+            && modeService.getMode() === "rows";
+    };
+
     $scope.initialize = function() {
         $scope.$on("connectionChanged", function(event, data) {
             onConnectionChanged();
@@ -83,16 +97,21 @@ chromeMyAdmin.controller("DatabaseObjectController", ["$scope", "mySQLClientServ
             resetRowsGrid();
         });
         $scope.$on("tableChanged", function(event, tableName) {
-            console.log("tableChanged");
-            loadRows(tableName);
+            if (_isRowsPanelVisible()) {
+                $scope.tableName = tableName;
+                loadRows(tableName);
+            }
+        });
+        $scope.$on("modeChanged", function(event, mode) {
+            onModeChanged(mode);
         });
         initializeRowsGrid();
         assignWindowResizeEventHandler();
         adjustRowsPanelHeight();
     };
 
-    $scope.isObjectPanelVisible = function() {
-        return mySQLClientService.isConnected();
+    $scope.isRowsPanelVisible = function() {
+        return _isRowsPanelVisible();
     };
 
 }]);

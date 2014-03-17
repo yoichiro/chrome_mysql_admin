@@ -45,4 +45,34 @@ chromeMyAdmin.run(function($rootScope) {
         $rootScope.$broadcast("hideProgressBar", null);
     };
 
+    var adjustMainPanelHeight = function() {
+        $("#mainPanel").height($(window).height() - 76);
+    };
+
+    var assignWindowResizeEventHandler = function() {
+        $(window).resize(function(evt) {
+            adjustMainPanelHeight();
+        });
+    };
+
+    assignWindowResizeEventHandler();
+    adjustMainPanelHeight();
+
+});
+
+chromeMyAdmin.directive("resizeWhen", function() {
+    return {
+        restrict: "A",
+        scope: false,
+        link: function(scope, elem, attrs, ctrl) {
+            var resizeExpr = attrs.resizeWhen;
+            var listener = scope.$watch(resizeExpr, function(value) {
+                console.log(value);
+                if (value) {
+                    elem.resize();
+                    listener();
+                }
+            }, false);
+        }
+    };
 });

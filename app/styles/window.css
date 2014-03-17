@@ -30,6 +30,10 @@ body {
     border-right: 1px solid #eee;
 }
 
+#objectList .list-group {
+    margin-bottom: 0;
+}
+
 #loginForm {
     padding: 20px;
     padding-right: 40px;
