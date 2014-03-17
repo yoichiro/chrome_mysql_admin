@@ -19,13 +19,16 @@
 <script type="text/javascript" src="scripts/lib/mysql_js_driver_1.0.1.js"></script>
 <script type="text/javascript" src="scripts/window/main.js"></script>
 <script type="text/javascript" src="scripts/window/mysql_client_service.js"></script>
+<script type="text/javascript" src="scripts/window/mode_service.js"></script>
+<script type="text/javascript" src="scripts/window/target_object_service.js"></script>
 <script type="text/javascript" src="scripts/window/login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window/navbar_controller.js"></script>
 <script type="text/javascript" src="scripts/window/database_object_list_controller.js"></script>
 <script type="text/javascript" src="scripts/window/logout_confirm_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/fatal_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/main_footer_controller.js"></script>
-<script type="text/javascript" src="scripts/window/database_object_controller.js"></script>
+<script type="text/javascript" src="scripts/window/rows_panel_controller.js"></script>
+<script type="text/javascript" src="scripts/window/structure_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/progress_bar_controller.js"></script>
 
 <!-- TODO Remove me! -->
@@ -59,8 +62,8 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a href="#">Rows</a></li>
-        <li><a href="#">Structure</a></li>
+        <li ng-class="{active: isRowsActive()}"><a href="#" ng-click="selectRows()">Rows</a></li>
+        <li ng-class="{active: isStructureActive()}"><a href="#" ng-click="selectStructure()">Structure</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-off" ng-click="logout()"></span></a></li>
       </ul>
     </div>
@@ -73,9 +76,9 @@
     <!-- Left pane -->
     <div class="col-sm-3 col-md-2 sidebar" ng-controller="DatabaseObjectListController" ng-init="initialize()">
       <div id="objectList">
-        <ol class="sidebar-module list-unstyled">
-          <li ng-repeat="table in tables" class="tableLink"><a href="#" ng-click="selectTable(table)"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a></li>
-        </ol>
+        <div class="list-group">
+          <a href="#" ng-repeat="table in tables" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table)}"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a>
+        </div>
       </div>
 
       <!-- Sidebar footer -->
@@ -88,10 +91,18 @@
 
       <div id="mainPanel">
 
-        <!-- Database object pane -->
-        <div id="objectPanel" ng-controller="DatabaseObjectController" ng-init="initialize()" ng-show="isObjectPanelVisible()">
+        <!-- Rows pane -->
+        <div id="rowsPanel" ng-controller="RowsPanelController" ng-init="initialize()" ng-show="isRowsPanelVisible()">
 
-          <div id="rowsPanel" class="gridStyle" ng-grid="rowsGrid">
+          <div id="rowsGrid" class="gridStyle" ng-grid="rowsGrid">
+          </div>
+
+        </div>
+
+        <!-- Structure pane -->
+        <div id="structurePanel" ng-controller="StructurePanelController" ng-init="initialize()" ng-show="isStructurePanelVisible()">
+
+          <div id="structureGrid" class="gridStyle" ng-grid="structureGrid">
           </div>
 
         </div>

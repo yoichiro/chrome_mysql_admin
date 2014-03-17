@@ -1,13 +1,12 @@
 "use strict";
 
-(function() {
-})();
-
 chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $rootScope) {
 
     MySQL.communication.setSocketImpl(new MySQL.ChromeSocket());
 
-    var doLogout = function() {
+    var queryQueue = [];
+
+    var _logout = function() {
         $rootScope.showMainStatusMessage("Logging out from MySQL server...");
         $rootScope.showProgressBar();
         var deferred = $q.defer();
@@ -15,6 +14,66 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Logged out from MySQL server.");
             deferred.resolve();
+        });
+        return deferred.promise;
+    };
+
+    var _addQueryQueue = function(query) {
+        var deferred = $q.defer();
+        queryQueue.push({
+            query: query,
+            deferred: deferred
+        });
+        if (queryQueue.length === 1) {
+            _query();
+        }
+        return deferred.promise;
+    };
+
+    var _query = function() {
+        var task = queryQueue[0];
+        $rootScope.showMainStatusMessage("Executing query...");
+        $rootScope.showProgressBar();
+        var deferred = $q.defer();
+        console.log("Query: " + task.query);
+        MySQL.client.query(task.query, function(columnDefinitions, resultsetRows) {
+            $rootScope.showMainStatusMessage(
+                "No errors. Rows count is " + resultsetRows.length);
+            queryQueue.shift();
+            task.deferred.resolve({
+                hasResultsetRows: true,
+                columnDefinitions: columnDefinitions,
+                resultsetRows: resultsetRows
+            });
+            $rootScope.hideProgressBar();
+            if (queryQueue.length > 0) {
+                _query();
+            }
+        }, function(result) {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage(
+                "No errors. Affected rows count is " + result.affectedRows);
+            queryQueue.shift();
+            task.deferred.resolve({
+                hasResultsetRows: false,
+                result: result
+            });
+            if (queryQueue.length > 0) {
+                _query();
+            }
+        }, function(result) {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage(result.errorMessage);
+            queryQueue.shift();
+            task.deferred.reject(result);
+            if (queryQueue.length > 0) {
+                _query();
+            }
+        }, function(result) {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("Fatal error occurred. " + result);
+            queryQueue = [];
+            $rootScope.fatalErrorOccurred(result);
         });
         return deferred.promise;
     };
@@ -38,7 +97,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                         $rootScope.showMainStatusMessage("Logged in to MySQL server.");
                         deferred.resolve(initialHandshakeRequest);
                     } else {
-                        doLogout();
+                        _logout();
                         deferred.reject(result.errorMessage);
                     }
                 }, function(errorCode) {
@@ -54,7 +113,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             return deferred.promise;
         },
         logout: function() {
-            return doLogout();
+            return _logout();
         },
         getDatabases: function() {
             $rootScope.showMainStatusMessage("Retrieving database list...");
@@ -77,36 +136,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             return deferred.promise;
         },
         query: function(query) {
-            $rootScope.showMainStatusMessage("Executing query...");
-            $rootScope.showProgressBar();
-            var deferred = $q.defer();
-            MySQL.client.query(query, function(columnDefinitions, resultsetRows) {
-                $rootScope.showMainStatusMessage(
-                    "No errors. Rows count is " + resultsetRows.length);
-                deferred.resolve({
-                    hasResultsetRows: true,
-                    columnDefinitions: columnDefinitions,
-                    resultsetRows: resultsetRows
-                });
-                $rootScope.hideProgressBar();
-            }, function(result) {
-                $rootScope.hideProgressBar();
-                $rootScope.showMainStatusMessage(
-                    "No errors. Affected rows count is " + result.affectedRows);
-                deferred.resolve({
-                    hasResultsetRows: false,
-                    result: result
-                });
-            }, function(result) {
-                $rootScope.hideProgressBar();
-                $rootScope.showMainStatusMessage(result.errorMessage);
-                deferred.reject(result);
-            }, function(result) {
-                $rootScope.hideProgressBar();
-                $rootScope.showMainStatusMessage("Fatal error occurred. " + result);
-                $rootScope.fatalErrorOccurred(result);
-            });
-            return deferred.promise;
+            return _addQueryQueue(query);
         }
     };
 

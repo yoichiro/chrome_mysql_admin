@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
+chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", function($scope, mySQLClientService, modeService, targetObjectService) {
 
     var loadDatabaseList = function() {
         mySQLClientService.getDatabases().then(function(databases) {
@@ -12,8 +12,8 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", fu
     };
 
     var onConnectionChanged = function() {
-        console.log("onConnectionChanged");
         if (mySQLClientService.isConnected()) {
+            targetObjectService.resetDatabase();
             loadDatabaseList();
         }
     };
@@ -31,11 +31,27 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", fu
 
     $scope.selectDatabase = function(event, database) {
         $scope.selectedDatabase = database;
-        $scope.notifyDatabaseChanged(database);
+        targetObjectService.changeDatabase(database);
     };
 
     $scope.logout = function(event) {
         $("#logoutConfirmDialog").modal("show");
+    };
+
+    $scope.isRowsActive = function() {
+        return modeService.getMode() === "rows";
+    };
+
+    $scope.isStructureActive = function() {
+        return modeService.getMode() === "structure";
+    };
+
+    $scope.selectRows = function() {
+        modeService.changeMode("rows");
+    };
+
+    $scope.selectStructure = function() {
+        modeService.changeMode("structure");
     };
 
 }]);

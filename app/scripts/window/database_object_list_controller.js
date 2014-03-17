@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
+chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", function($scope, mySQLClientService, targetObjectService) {
 
     var assignWindowResizeEventHandler = function() {
         $(window).resize(function(evt) {
@@ -12,22 +12,22 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         $("#objectList").height($(window).height() - 51 - 35);
     };
 
-    var databaseChanged = function(database) {
-        $scope.selectedDatabase = database;
-        mySQLClientService.query("USE " + database).then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.fatalErrorOccurred("Changing database failed.");
-            } else {
-                loadTables();
-            }
-        }, function(reason) {
-            var errorMessage = reason.errorMessage;
-            $scope.fatalErrorOccurred(errorMessage);
-        });
+    var databaseChanged = function() {
+        targetObjectService.resetTable();
+        mySQLClientService.query(
+            "USE " + targetObjectService.getDatabase()).then(function(result) {
+                if (result.hasResultsetRows) {
+                    $scope.fatalErrorOccurred("Changing database failed.");
+                } else {
+                    loadTables();
+                }
+            }, function(reason) {
+                var errorMessage = reason.errorMessage;
+                $scope.fatalErrorOccurred(errorMessage);
+            });
     };
 
     var loadTables = function() {
-        console.log("loadTables");
         mySQLClientService.query("SHOW TABLES").then(function(result) {
             if (result.hasResultsetRows) {
                 updateTableList(
@@ -42,7 +42,6 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     var updateTableList = function(columnDefinition, resultsetRows) {
-        console.log("updateTableList");
         var tables = [];
         for (var i = 0; i < resultsetRows.length; i++) {
             tables.push(resultsetRows[i].values[0]);
@@ -58,8 +57,7 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
 
     $scope.initialize = function() {
         $scope.$on("databaseChanged", function(event, database) {
-            console.log("databaseChanged");
-            databaseChanged(database);
+            databaseChanged();
         });
         $scope.tables = [];
         $scope.$on("connectionChanged", function(event, data) {
@@ -70,8 +68,11 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     $scope.selectTable = function(tableName) {
-        console.log("selectTable");
-        $scope.notifyTableChanged(tableName);
+        targetObjectService.changeTable(tableName);
+    };
+
+    $scope.isTableActive = function(tableName) {
+        return tableName === targetObjectService.getTable();
     };
 
 }]);
