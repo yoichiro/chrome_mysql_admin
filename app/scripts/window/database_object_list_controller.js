@@ -75,4 +75,15 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         return tableName === targetObjectService.getTable();
     };
 
+    $scope.refresh = function() {
+        if (targetObjectService.getDatabase()) {
+            targetObjectService.resetTable();
+            loadTables();
+        }
+    };
+
+    $scope.isSidebarFooterVisible = function() {
+        return mySQLClientService.isConnected();
+    };
+
 }]);

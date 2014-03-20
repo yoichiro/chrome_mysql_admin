@@ -40,13 +40,14 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             $rootScope.showMainStatusMessage(
                 "No errors. Rows count is " + resultsetRows.length);
             queryQueue.shift();
+            var remaining = queryQueue.length;
             task.deferred.resolve({
                 hasResultsetRows: true,
                 columnDefinitions: columnDefinitions,
                 resultsetRows: resultsetRows
             });
             $rootScope.hideProgressBar();
-            if (queryQueue.length > 0) {
+            if (remaining > 0) {
                 _query();
             }
         }, function(result) {
@@ -54,19 +55,21 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             $rootScope.showMainStatusMessage(
                 "No errors. Affected rows count is " + result.affectedRows);
             queryQueue.shift();
+            var remaining = queryQueue.length;
             task.deferred.resolve({
                 hasResultsetRows: false,
                 result: result
             });
-            if (queryQueue.length > 0) {
+            if (remaining > 0) {
                 _query();
             }
         }, function(result) {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage(result.errorMessage);
             queryQueue.shift();
+            var remaining = queryQueue.length;
             task.deferred.reject(result);
-            if (queryQueue.length > 0) {
+            if (remaining > 0) {
                 _query();
             }
         }, function(result) {

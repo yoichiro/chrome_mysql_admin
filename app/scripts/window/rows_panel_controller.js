@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", function($scope, mySQLClientService, modeService, targetObjectService) {
+chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService) {
 
     var initializeRowsGrid = function() {
         resetRowsGrid();
@@ -8,6 +8,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             data: "rowsData",
             columnDefs: "rowsColumnDefs",
             enableColumnResize: true,
+            enableSorting: false,
             headerRowHeight: 25,
             rowHeight: 25
         };
@@ -31,7 +32,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     };
 
     var adjustRowsPanelHeight = function() {
-        $("#rowsGrid").height($(window).height() - 76);
+        $("#rowsGrid").height($(window).height() - 76 - 30);
     };
 
     var updateRowsColumnDefs = function(columnDefinitions) {
@@ -59,11 +60,54 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         $scope.rowsData = rows;
     };
 
+    var updateColumnNames = function(columnDefinitions) {
+        $scope.columnNames = jQuery.map(columnDefinitions, function(columnDefinition, i) {
+            return columnDefinition.name;
+        });
+    };
+
+    var createSqlWhereSection = function() {
+        var filterColumnName = $scope.filterColumnName;
+        if (filterColumnName && filterColumnName.length > 0) {
+            var filterValue = $scope.filterValue;
+            if (filterValue && filterValue.length > 0) {
+                filterValue = filterValue.replace(/'/g, "\\'");
+                var result =
+                        " WHERE `" +
+                        filterColumnName +
+                        "` " +
+                        $scope.filterOperator +
+                        " '" +
+                        filterValue +
+                        "'";
+                return result;
+            }
+        }
+        return "";
+    };
+
+    var createSqlLimitSection = function() {
+        var paging = rowsPagingService.current();
+        var sql = " LIMIT " + paging.offset + ", " + paging.count;
+        return sql;
+    };
+
     var loadRows = function(tableName) {
-        mySQLClientService.query("SELECT * FROM " + tableName + " LIMIT 1000").then(function(result) {
+        var rowsCount = 0;
+        var where = createSqlWhereSection();
+        mySQLClientService.query("SELECT COUNT(*) FROM `" + tableName + "`" + where).then(function(result) {
+            if (result.hasResultsetRows) {
+                rowsCount = result.resultsetRows[0].values[0];
+                rowsPagingService.updateTotalRowCount(rowsCount);
+                return mySQLClientService.query("SELECT * FROM `" + tableName + "` " + where + createSqlLimitSection());
+            } else {
+                return $q.reject("Retrieving rows count failed.");
+            }
+        }).then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.safeApply(function() {
                     updateRowsColumnDefs(result.columnDefinitions);
+                    updateColumnNames(result.columnDefinitions);
                     updateRows(result.columnDefinitions, result.resultsetRows);
                 });
             } else {
@@ -77,9 +121,15 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     var onModeChanged = function(mode) {
         if (mode === "rows") {
             var tableName = targetObjectService.getTable();
-            if ($scope.tableName !== tableName) {
-                $scope.tableName = tableName;
-                loadRows(tableName);
+            if (tableName) {
+                if ($scope.tableName !== tableName) {
+                    $scope.tableName = tableName;
+                    initializeOptions();
+                    loadRows(tableName);
+                }
+            } else {
+                resetRowsGrid();
+                $scope.tableName = null;
             }
         }
     };
@@ -89,29 +139,64 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             && modeService.getMode() === "rows";
     };
 
-    $scope.initialize = function() {
+    var assignEventHandlers = function() {
         $scope.$on("connectionChanged", function(event, data) {
             onConnectionChanged();
         });
         $scope.$on("databaseChanged", function(event, database) {
+            rowsPagingService.reset();
             resetRowsGrid();
         });
         $scope.$on("tableChanged", function(event, tableName) {
             if (_isRowsPanelVisible()) {
+                rowsPagingService.reset();
                 $scope.tableName = tableName;
-                loadRows(tableName);
+                if (tableName) {
+                    initializeOptions();
+                    loadRows(tableName);
+                } else {
+                    resetRowsGrid();
+                }
             }
         });
         $scope.$on("modeChanged", function(event, mode) {
             onModeChanged(mode);
         });
+        $scope.$on("rowsPagingChanged", function(event, currentPageIndex) {
+            doQueryAndReload();
+        });
+    };
+
+    var doQueryAndReload = function() {
+        var tableName = targetObjectService.getTable();
+        if (tableName) {
+            loadRows(tableName);
+        }
+    };
+
+    var initializeOptions = function() {
+        $scope.operators = ["=", "!=", "<", ">", "<=", ">=", "LIKE"];
+        $scope.filterOperator = $scope.operators[0];
+        $scope.columnNames = [];
+        $scope.filterValue = null;
+        $scope.filterColumnName = null;
+    };
+
+    $scope.initialize = function() {
+        assignEventHandlers();
         initializeRowsGrid();
         assignWindowResizeEventHandler();
         adjustRowsPanelHeight();
+        initializeOptions();
     };
 
     $scope.isRowsPanelVisible = function() {
         return _isRowsPanelVisible();
+    };
+
+    $scope.filter = function() {
+        rowsPagingService.reset();
+        doQueryAndReload();
     };
 
 }]);

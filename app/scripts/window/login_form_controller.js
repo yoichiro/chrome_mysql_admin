@@ -43,13 +43,12 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     $scope.connect = function() {
         hideMessage();
-        var promise = mySQLClientService.login(
+        mySQLClientService.login(
             $scope.hostName,
             Number($scope.portNumber),
             $scope.userName,
             $scope.password
-        );
-        promise.then(function(initialHandshakeRequest) {
+        ).then(function(initialHandshakeRequest) {
             onConnected();
         }, function(reason) {
             showErrorMessage("Connection failed: " + reason);
@@ -58,13 +57,12 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     $scope.doTestConnection = function() {
         hideMessage();
-        var promise = mySQLClientService.login(
+        mySQLClientService.login(
             $scope.hostName,
             Number($scope.portNumber),
             $scope.userName,
             $scope.password
-        );
-        promise.then(function(initialHandshakeRequest) {
+        ).then(function(initialHandshakeRequest) {
             showSuccessMessage("Connection was successfully.");
             mySQLClientService.logout();
         }, function(reason) {

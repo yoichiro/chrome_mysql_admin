@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css" />
 <link rel="stylesheet" type="text/css" href="styles/window.css" />
 <link rel="stylesheet" type="text/css" href="styles/ng-grid.min.css" />
+<link rel="stylesheet" type="text/css" href="styles/font-awesome.min.css" />
 
 <script type="text/javascript" src="scripts/lib/jquery-2.1.0.min.js"></script>
 <script type="text/javascript" src="scripts/lib/bootstrap.min.js"></script>
@@ -16,11 +17,12 @@
 <script type="text/javascript" src="scripts/lib/encoding.js"></script>
 <script type="text/javascript" src="scripts/lib/encoding-indexes.js"></script>
 <script type="text/javascript" src="scripts/lib/sha1.js"></script>
-<script type="text/javascript" src="scripts/lib/mysql_js_driver_1.0.1.js"></script>
+<script type="text/javascript" src="scripts/lib/mysql_js_driver_1.0.3.js"></script>
 <script type="text/javascript" src="scripts/window/main.js"></script>
 <script type="text/javascript" src="scripts/window/mysql_client_service.js"></script>
 <script type="text/javascript" src="scripts/window/mode_service.js"></script>
 <script type="text/javascript" src="scripts/window/target_object_service.js"></script>
+<script type="text/javascript" src="scripts/window/rows_paging_service.js"></script>
 <script type="text/javascript" src="scripts/window/login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window/navbar_controller.js"></script>
 <script type="text/javascript" src="scripts/window/database_object_list_controller.js"></script>
@@ -83,6 +85,11 @@
 
       <!-- Sidebar footer -->
       <div class="sidebarFooter">
+        <div ng-show="isSidebarFooterVisible()">
+          <div class="pull-left footerButtonLeft" ng-click="refresh()">
+            <span class="fa fa-refresh"></span>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -93,7 +100,12 @@
 
         <!-- Rows pane -->
         <div id="rowsPanel" ng-controller="RowsPanelController" ng-init="initialize()" ng-show="isRowsPanelVisible()">
-
+          <div class="rowsConditionPanel">
+            <select class="form-control pull-left" ng-model="filterColumnName" ng-options="columnName for columnName in columnNames"></select>
+            <select class="form-control pull-left operators" ng-model="filterOperator" ng-options="operator for operator in operators"></select>
+            <input type="text" class="form-control pull-left" ng-model="filterValue" ng-trim="true" />
+            <button class="btn btn-default btn-xs pull-right" ng-click="filter()">Filter</button>
+          </div>
           <div id="rowsGrid" class="gridStyle" ng-grid="rowsGrid">
           </div>
 
@@ -138,7 +150,19 @@
 
       <!-- Main footer -->
       <div class="mainFooter" ng-controller="MainFooterController" ng-init="initialize()">
-        <div class="mainStatusMessage">{{mainStatusMessage}}</div>
+        <div class="mainStatusMessage pull-left">{{mainStatusMessage}}</div>
+        <div class="pull-right" ng-show="isButtonsVisible()">
+          <div class="pull-left footerButtonRight" ng-click="refresh()">
+            <span class="fa fa-refresh"></span>
+          </div>
+          <div class="pull-left footerButtonRight" ng-class="!hasPreviousPage() && 'footerButtonDisable'" ng-click="goPreviousPage()">
+            <span class="fa fa-arrow-left"></span>
+          </div>
+          <div class="pull-left footerTextRight">{{getPagingInfo()}}</div>
+          <div class="pull-left footerButtonRight" ng-class="!hasNextPage() && 'footerButtonDisable'" ng-click="goNextPage()">
+            <span class="fa fa-arrow-right"></span>
+          </div>
+        </div>
       </div>
 
     </div>

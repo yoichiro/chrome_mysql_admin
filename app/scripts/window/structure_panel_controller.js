@@ -8,6 +8,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             data: "structureData",
             columnDefs: "structureColumnDefs",
             enableColumnResize: true,
+            enableSorting: false,
             headerRowHeight: 25,
             rowHeight: 25
         };
@@ -77,9 +78,14 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     var onModeChanged = function(mode) {
         if (mode === "structure") {
             var tableName = targetObjectService.getTable();
-            if ($scope.tableName !== tableName) {
-                $scope.tableName = tableName;
-                loadStructure(tableName);
+            if (tableName) {
+                if ($scope.tableName !== tableName) {
+                    $scope.tableName = tableName;
+                    loadStructure(tableName);
+                }
+            } else {
+                resetStructureGrid();
+                $scope.tableName = null;
             }
         }
     };
@@ -99,7 +105,11 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         $scope.$on("tableChanged", function(event, tableName) {
             if (_isStructurePanelVisible()) {
                 $scope.tableName = tableName;
-                loadStructure(tableName);
+                if (tableName) {
+                    loadStructure(tableName);
+                } else {
+                    resetStructureGrid();
+                }
             }
         });
         $scope.$on("modeChanged", function(event, mode) {

@@ -14,9 +14,7 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", function($rootScope)
 
     var _changeTable = function(newTable) {
         table = newTable;
-        if (table) {
-            $rootScope.$broadcast("tableChanged", table);
-        }
+        $rootScope.$broadcast("tableChanged", table);
     };
 
     return {
