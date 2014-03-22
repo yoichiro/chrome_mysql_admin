@@ -46,12 +46,20 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         return modeService.getMode() === "structure";
     };
 
+    $scope.isQueryActive = function() {
+        return modeService.getMode() === "query";
+    };
+
     $scope.selectRows = function() {
         modeService.changeMode("rows");
     };
 
     $scope.selectStructure = function() {
         modeService.changeMode("structure");
+    };
+
+    $scope.selectQuery = function() {
+        modeService.changeMode("query");
     };
 
 }]);

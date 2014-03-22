@@ -32,6 +32,7 @@
 <script type="text/javascript" src="scripts/window/rows_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/structure_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/progress_bar_controller.js"></script>
+<script type="text/javascript" src="scripts/window/query_panel_controller.js"></script>
 
 <!-- TODO Remove me! -->
 <script type="text/javascript" src="scripts/chromereload.js"></script>
@@ -66,6 +67,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li ng-class="{active: isRowsActive()}"><a href="#" ng-click="selectRows()">Rows</a></li>
         <li ng-class="{active: isStructureActive()}"><a href="#" ng-click="selectStructure()">Structure</a></li>
+        <li ng-class="{active: isQueryActive()}"><a href="#" ng-click="selectQuery()">Query</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-off" ng-click="logout()"></span></a></li>
       </ul>
     </div>
@@ -113,10 +115,19 @@
 
         <!-- Structure pane -->
         <div id="structurePanel" ng-controller="StructurePanelController" ng-init="initialize()" ng-show="isStructurePanelVisible()">
-
           <div id="structureGrid" class="gridStyle" ng-grid="structureGrid">
           </div>
+        </div>
 
+        <!-- Query pane -->
+        <div id="queryPanel" ng-controller="QueryPanelController" ng-init="initialize()" ng-show="isQueryPanelVisible()">
+          <textarea id="queryEditor" class="form-control" ng-model="query"></textarea>
+          <div class="queryMiddlePanel">
+            <button type="button" class="btn btn-default btn-xs pull-right" ng-click="executeQuery()">Execute</button>
+          </div>
+          <div id="queryResultGrid" class="gridStyle" ng-grid="queryResultGrid">
+          </div>
+          <div class="queryErrorMessage" ng-model="queryError" ng-show="isQueryErrorMessageVisible()">{{queryErrorMessage}}</div>
         </div>
 
         <!-- Login form -->

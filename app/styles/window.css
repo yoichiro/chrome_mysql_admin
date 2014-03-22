@@ -161,3 +161,31 @@ body {
     width: 10%;
     height: 25px;
 }
+
+#queryPanel textarea {
+    resize: none;
+    font-size: 16px;
+}
+
+.queryMiddlePanel {
+    width: 100%;
+    height: 32px;
+    background-color: white;
+}
+
+.queryMiddlePanel button {
+    margin-top: 1px;
+    height: 28px;
+}
+
+.queryErrorMessage {
+    position: absolute;
+    bottom: 25px;
+    width: 100%;
+    height: 80px;
+    padding: 2px 2px 2px 4px;
+    border-top: 1px solid #ccc;
+    background-color: white;
+    overflow-y: auto;
+    font-size: 13px;
+}
