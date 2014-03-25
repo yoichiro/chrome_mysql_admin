@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", function($scope, modeService, mySQLClientService, rowsPagingService) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService) {
 
     var showMainStatusMessage = function(message) {
         $scope.safeApply(function() {
@@ -52,6 +52,19 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
 
     $scope.refresh = function() {
         rowsPagingService.refresh();
+    };
+
+    $scope.isRowSelection = function() {
+        if (rowsSelectionService.getSelectedRows() &&
+           modeService.getMode() === "rows") {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    $scope.confirmDeleteSelectedRow = function() {
+        rowsSelectionService.confirmDeleteSelectedRow();
     };
 
 }]);
