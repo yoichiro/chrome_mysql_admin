@@ -9,6 +9,9 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             columnDefs: "rowsColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
+            enableCellSelection: true,
+            enableRowSelection: false,
+            enableCellEdit: true,
             headerRowHeight: 25,
             rowHeight: 25
         };
@@ -23,6 +26,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     var resetRowsGrid = function() {
         $scope.rowsColumnDefs = [];
         $scope.rowsData = [];
+        $scope.lastQueryResult = null;
     };
 
     var assignWindowResizeEventHandler = function() {
@@ -37,10 +41,13 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
 
     var updateRowsColumnDefs = function(columnDefinitions) {
         var columnDefs = [];
-        angular.forEach(columnDefinitions, function(columnDefinition) {
+        var editableCellTemplate = "<input type=\"text\" ng-input=\"COL_FIELD\" ng-model=\"COL_FIELD\" ng-blur=\"updateCellValue(col, row, $event)\" />";
+        angular.forEach(columnDefinitions, function(columnDefinition, index) {
             this.push({
-                field: columnDefinition.name,
+                field: "column" + index,
                 displayName: columnDefinition.name,
+                enableCellEdit: true,
+                editableCellTemplate: editableCellTemplate,
                 width: Math.min(Number(columnDefinition.columnLength) * 14, 300)
             });
         }, columnDefs);
@@ -53,7 +60,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             var values = resultsetRow.values;
             var row = {};
             angular.forEach(columnDefinitions, function(columnDefinition, index) {
-                row[columnDefinition.name] = values[index];
+                row["column" + index] = values[index];
             });
             rows.push(row);
         });
@@ -92,6 +99,59 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         return sql;
     };
 
+    var doUpdateQuery = function(column, row) {
+        if (!$scope.lastQueryResult) {
+            return;
+        }
+        var originalRow = $scope.lastQueryResult.resultsetRows[row.rowIndex];
+        var columnIndex = column.index;
+        var originalValue = originalRow.values[columnIndex];
+        var newValue = row.entity["column" + columnIndex];
+        if (originalValue === newValue) {
+            return;
+        }
+        var columnDefinitions = $scope.lastQueryResult.columnDefinitions;
+        var primaryKeyColumns = {};
+        angular.forEach(columnDefinitions, function(columnDefinition, index) {
+            if (columnDefinition.isPrimaryKey()) {
+                this[index] = columnDefinition;
+            }
+        }, primaryKeyColumns);
+        var sql = "UPDATE `" + targetObjectService.getTable() + "` SET `";
+        sql += column.displayName + "`='" + newValue.replace(/'/g, "\\'") + "' WHERE ";
+        var whereConditions = [];
+        var limitCondition = "";
+        if (jQuery.isEmptyObject(primaryKeyColumns)) {
+            angular.forEach(columnDefinitions, function(columnDefinition, index) {
+                if (columnDefinition.name !== column.displayName) {
+                    var condition =
+                            "`" + columnDefinition.name + "`='" +
+                            originalRow.values[index].replace(/'/g, "\\'") + "'";
+                    this.push(condition);
+                }
+            }, whereConditions);
+            limitCondition = " LIMIT 1";
+        } else {
+            angular.forEach(primaryKeyColumns, function(primaryKeyColumn, index) {
+                var condition =
+                        "`" + primaryKeyColumn.name + "`='" +
+                        originalRow.values[index].replace(/'/g, "\\'") + "'";
+                this.push(condition);
+            }, whereConditions);
+        }
+        sql += whereConditions.join(" AND ");
+        sql += limitCondition;
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                return $q.reject("Updating row failed.");
+            } else {
+                return doQueryAndReload();
+            }
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
+        });
+    };
+
     var loadRows = function(tableName) {
         var rowsCount = 0;
         var where = createSqlWhereSection();
@@ -106,6 +166,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         }).then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.safeApply(function() {
+                    $scope.lastQueryResult = result;
                     updateRowsColumnDefs(result.columnDefinitions);
                     updateColumnNames(result.columnDefinitions);
                     updateRows(result.columnDefinitions, result.resultsetRows);
@@ -197,6 +258,10 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     $scope.filter = function() {
         rowsPagingService.reset();
         doQueryAndReload();
+    };
+
+    $scope.updateCellValue = function(column, row, $event) {
+        doUpdateQuery(column, row);
     };
 
 }]);
