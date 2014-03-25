@@ -23,10 +23,12 @@
 <script type="text/javascript" src="scripts/window/mode_service.js"></script>
 <script type="text/javascript" src="scripts/window/target_object_service.js"></script>
 <script type="text/javascript" src="scripts/window/rows_paging_service.js"></script>
+<script type="text/javascript" src="scripts/window/rows_selection_service.js"></script>
 <script type="text/javascript" src="scripts/window/login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window/navbar_controller.js"></script>
 <script type="text/javascript" src="scripts/window/database_object_list_controller.js"></script>
 <script type="text/javascript" src="scripts/window/logout_confirm_dialog_controller.js"></script>
+<script type="text/javascript" src="scripts/window/delete_row_confirm_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/fatal_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/main_footer_controller.js"></script>
 <script type="text/javascript" src="scripts/window/rows_panel_controller.js"></script>
@@ -163,6 +165,9 @@
       <div class="mainFooter" ng-controller="MainFooterController" ng-init="initialize()">
         <div class="mainStatusMessage pull-left">{{mainStatusMessage}}</div>
         <div class="pull-right" ng-show="isButtonsVisible()">
+          <div class="pull-left footerButtonRight" ng-class="!isRowSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedRow()">
+            <span class="fa fa-trash-o"></span>
+          </div>
           <div class="pull-left footerButtonRight" ng-click="refresh()">
             <span class="fa fa-refresh"></span>
           </div>
@@ -220,7 +225,24 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
+<!-- Delete row confirm modal dialog -->
+<div id="deleteRowConfirmDialog" class="modal fade" ng-controller="DeleteRowConfirmDialogController">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Confirm</h4>
+      </div>
+      <div class="modal-body">
+        <p>Would you really like to delete the selected row from MySQL server?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" ng-click="deleteRow()">Yes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 </body>
 
