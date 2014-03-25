@@ -629,6 +629,32 @@
 
     // Constructor
 
+    var FieldFlags = {
+        NOT_NULL: 0x0001,
+        PRIMARY_KEY: 0x0002,
+        UNIQUE: 0x0004,
+        INDEX: 0x0008,
+        BLOB: 0x0010,
+        UNSIGNED: 0x0020,
+        ZEROFILL: 0x0040,
+        BINARY: 0x0080,
+        AUTO_INCREMENT: 0x0200,
+        ENUM: 0x0100,
+        SET: 0x0800,
+        NO_DEFAULT_VALUE: 0x1000
+    };
+
+    // Export
+
+    MySQL.FieldFlags = FieldFlags;
+
+})();
+
+(function(FieldFlags) {
+    "use strict";
+
+    // Constructor
+
     var ColumnDefinition = function(newCatalog,
                                     newSchema,
                                     newTable,
@@ -655,11 +681,61 @@
         this.decimals = newDecimals;
     };
 
+    // Public methods
+
+    ColumnDefinition.prototype.isNotNull = function() {
+        return (this.flags & FieldFlags.NOT_NULL) !== 0;
+    };
+
+    ColumnDefinition.prototype.isPrimaryKey = function() {
+        return (this.flags & FieldFlags.PRIMARY_KEY) !== 0;
+    };
+
+    ColumnDefinition.prototype.isUnique = function() {
+        return (this.flags & FieldFlags.UNIQUE) !== 0;
+    };
+
+    ColumnDefinition.prototype.isIndex = function() {
+        return (this.flags & FieldFlags.INDEX) !== 0;
+    };
+
+    ColumnDefinition.prototype.isBlob = function() {
+        return (this.flags & FieldFlags.BLOB) !== 0;
+    };
+
+    ColumnDefinition.prototype.isUnsigned = function() {
+        return (this.flags & FieldFlags.UNSIGNED) !== 0;
+    };
+
+    ColumnDefinition.prototype.isZeroFill = function() {
+        return (this.flags & FieldFlags.ZEROFILL) !== 0;
+    };
+
+    ColumnDefinition.prototype.isBinary = function() {
+        return (this.flags & FieldFlags.BINARY) !== 0;
+    };
+
+    ColumnDefinition.prototype.isAutoIncrement = function() {
+        return (this.flags & FieldFlags.AUTO_INCREMENT) !== 0;
+    };
+
+    ColumnDefinition.prototype.isEnum = function() {
+        return (this.flags & FieldFlags.ENUM) !== 0;
+    };
+
+    ColumnDefinition.prototype.isSet = function() {
+        return (this.flags & FieldFlags.SET) !== 0;
+    };
+
+    ColumnDefinition.prototype.isNoDefaultValue = function() {
+        return (this.flags & FieldFlags.NO_DEFAULT_VALUE) !== 0;
+    };
+
     // Export
 
     MySQL.ColumnDefinition = ColumnDefinition;
 
-})();
+})(MySQL.FieldFlags);
 
 (function() {
     "use strict";

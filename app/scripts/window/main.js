@@ -67,20 +67,11 @@ chromeMyAdmin.directive("resizeWhen", function() {
         link: function(scope, elem, attrs, ctrl) {
             var resizeExpr = attrs.resizeWhen;
             var listener = scope.$watch(resizeExpr, function(value) {
-                console.log(value);
                 if (value) {
                     elem.resize();
                     listener();
                 }
             }, false);
         }
-    };
-});
-
-chromeMyAdmin.directive("ngBlur", function() {
-    return function(scope, elem, attrs) {
-        elem.bind("blur", function() {
-            scope.$apply(attrs.ngBlur);
-        });
     };
 });
