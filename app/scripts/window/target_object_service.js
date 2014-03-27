@@ -35,6 +35,12 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", function($rootScope)
         },
         getTable: function() {
             return table;
+        },
+        requestInsertRow: function() {
+            $rootScope.$broadcast("requestInsertRow", table);
+        },
+        showInsertRowPanel: function(columnDefinitions) {
+            $rootScope.$broadcast("showInsertRowPanel", columnDefinitions);
         }
     };
 

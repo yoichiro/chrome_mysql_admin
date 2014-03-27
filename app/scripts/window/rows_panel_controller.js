@@ -237,6 +237,13 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         }
     };
 
+    var showInsertRowPanel = function() {
+        if ($scope.lastQueryResult) {
+            var columnDefinitions = $scope.lastQueryResult.columnDefinitions;
+            targetObjectService.showInsertRowPanel(columnDefinitions);
+        }
+    };
+
     var _isRowsPanelVisible = function() {
         return mySQLClientService.isConnected()
             && modeService.getMode() === "rows";
@@ -273,6 +280,9 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         });
         $scope.$on("requestDeleteSelectedRow", function(event, selectedRow) {
             requestDeleteSelectedRow(selectedRow);
+        });
+        $scope.$on("requestInsertRow", function(event, table) {
+            showInsertRowPanel();
         });
     };
 

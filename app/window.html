@@ -17,7 +17,7 @@
 <script type="text/javascript" src="scripts/lib/encoding.js"></script>
 <script type="text/javascript" src="scripts/lib/encoding-indexes.js"></script>
 <script type="text/javascript" src="scripts/lib/sha1.js"></script>
-<script type="text/javascript" src="scripts/lib/mysql_js_driver_1.1.0.js"></script>
+<script type="text/javascript" src="scripts/lib/mysql_js_driver_1.2.0.js"></script>
 <script type="text/javascript" src="scripts/window/main.js"></script>
 <script type="text/javascript" src="scripts/window/mysql_client_service.js"></script>
 <script type="text/javascript" src="scripts/window/mode_service.js"></script>
@@ -35,6 +35,7 @@
 <script type="text/javascript" src="scripts/window/structure_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/progress_bar_controller.js"></script>
 <script type="text/javascript" src="scripts/window/query_panel_controller.js"></script>
+<script type="text/javascript" src="scripts/window/insert_row_panel_controller.js"></script>
 
 <!-- TODO Remove me! -->
 <script type="text/javascript" src="scripts/chromereload.js"></script>
@@ -102,7 +103,7 @@
 
       <div id="mainPanel">
 
-        <!-- Rows pane -->
+        <!-- Rows panel -->
         <div id="rowsPanel" ng-controller="RowsPanelController" ng-init="initialize()" ng-show="isRowsPanelVisible()">
           <div class="rowsConditionPanel">
             <select class="form-control pull-left" ng-model="filterColumnName" ng-options="columnName for columnName in columnNames"></select>
@@ -111,6 +112,33 @@
             <button class="btn btn-default btn-xs pull-right" ng-click="filter()">Filter</button>
           </div>
           <div id="rowsGrid" class="gridStyle" ng-grid="rowsGrid">
+          </div>
+
+          <!-- Insert row panel -->
+          <div class="panel panel-default insertPanel" ng-controller="InsertRowPanelController" ng-show="isInsertRowPanelVisible()" ng-init="initialize()">
+            <div class="panel-heading clearfix">
+              <h3 class="panel-title pull-left">Insert row</h3>
+              <div class="btn-group pull-right">
+                <button type="button" class="close" ng-click="close()">&times;</button>
+              </div>
+            </div>
+            <div class="panel-body insertForm">
+              <div ng-show="isErrorMessageVisible()">
+                <div class="alert alert-danger">{{errorMessage}}</div>
+              </div>
+              <form class="form-horizontal" role="form">
+                <div class="form-group" ng-repeat="column in targetInputColumns(columnDefinitions)">
+                  <label for="{{column.name}}" class="col-sm-2 control-label">{{column.name}}</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" id="{{column.name}}" rows="2" ng-model="values[column.name]" ng-trim="false"></textarea>
+                  </div>
+                </div>
+                <div class="btn-group pull-right">
+                  <button type="button" class="btn btn-default" ng-click="close()">Cancel</button>
+                  <button type="button" class="btn btn-primary" ng-click="insertRow()">Insert</button>
+                </div>
+              </form>
+            </div>
           </div>
 
         </div>
@@ -165,6 +193,9 @@
       <div class="mainFooter" ng-controller="MainFooterController" ng-init="initialize()">
         <div class="mainStatusMessage pull-left">{{mainStatusMessage}}</div>
         <div class="pull-right" ng-show="isButtonsVisible()">
+          <div class="pull-left footerButtonRight" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="insertRow()">
+            <span class="fa fa-plus"></span>
+          </div>
           <div class="pull-left footerButtonRight" ng-class="!isRowSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedRow()">
             <span class="fa fa-trash-o"></span>
           </div>
