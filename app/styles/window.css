@@ -189,3 +189,16 @@ body {
     overflow-y: auto;
     font-size: 13px;
 }
+
+.insertPanel {
+    position: absolute;
+    bottom: 25px;
+    width: 99%;
+    height: 400px;
+    margin: 5px;
+}
+
+.insertForm {
+    height: 350px;
+    overflow-y: auto;
+}
