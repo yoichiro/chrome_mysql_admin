@@ -24,9 +24,11 @@
 <script type="text/javascript" src="scripts/window/target_object_service.js"></script>
 <script type="text/javascript" src="scripts/window/rows_paging_service.js"></script>
 <script type="text/javascript" src="scripts/window/rows_selection_service.js"></script>
+<script type="text/javascript" src="scripts/window/favorite_service.js"></script>
 <script type="text/javascript" src="scripts/window/login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window/navbar_controller.js"></script>
 <script type="text/javascript" src="scripts/window/database_object_list_controller.js"></script>
+<script type="text/javascript" src="scripts/window/favorite_list_controller.js"></script>
 <script type="text/javascript" src="scripts/window/logout_confirm_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/delete_row_confirm_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/fatal_dialog_controller.js"></script>
@@ -80,20 +82,32 @@
 <div class="container-fluid">
   <div class="row">
 
-    <!-- Left pane -->
-    <div class="col-sm-3 col-md-2 sidebar" ng-controller="DatabaseObjectListController" ng-init="initialize()">
-      <div id="objectList">
-        <div class="list-group">
-          <a href="#" ng-repeat="table in tables" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table)}"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a>
-        </div>
-      </div>
+    <!-- Left panel -->
+    <div class="col-sm-3 col-md-2 sidebar">
 
-      <!-- Sidebar footer -->
-      <div class="sidebarFooter">
-        <div ng-show="isSidebarFooterVisible()">
+      <!-- Table list panel -->
+      <div ng-controller="DatabaseObjectListController" ng-init="initialize()"  ng-show="isDatabaseObjectListVisible()">
+        <div id="objectList">
+          <div class="list-group">
+            <a href="#" ng-repeat="table in tables" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table)}"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a>
+          </div>
+        </div>
+
+        <div class="sidebarFooter">
           <div class="pull-left footerButtonLeft" ng-click="refresh()">
             <span class="fa fa-refresh"></span>
           </div>
+        </div>
+      </div>
+
+      <!-- Favorite list panel -->
+      <div ng-controller="FavoriteListController" ng-init="initialize()" ng-show="isFavoriteListVisible()">
+        <div id="favoriteList">
+          <div class="list-group">
+            <a href="#" class="list-group-item tableLink" ng-repeat="(name, favorite) in favorites" ng-click="selectFavorite(name)"><span class="glyphicon glyphicon-hdd"></span> {{name}}</a>
+          </div>
+        </div>
+        <div class="sidebarFooter">
         </div>
       </div>
 
@@ -168,7 +182,7 @@
               <div class="form-group">
                 <label for="loginFormName" class="col-sm-3 control-label">Name</label>
                 <div class="col-sm-9">
-                  <input type="text" id="loginFormName" class="form-control" ng-model="Name" />
+                  <input type="text" id="loginFormName" class="form-control" ng-model="name" />
                 </div>
               </div>
               <div class="form-group">
@@ -192,13 +206,13 @@
               <div class="form-group">
                 <label for="loginFormPassword" class="col-sm-3 control-label">Password</label>
                 <div class="col-sm-9">
-                  <input type="text" id="loginFormPassword" class="form-control" ng-model="password" required />
+                  <input type="password" id="loginFormPassword" class="form-control" ng-model="password" required />
                 </div>
               </div>
             </form>
             <div class="clearfix">
               <div class="btn-group pull-right">
-                <button type="button" class="btn btn-default" ng-disabled="loginForm.$invalid">Add as favorite</button>
+                <button type="button" class="btn btn-default" ng-click="addFavorite()" ng-disabled="loginForm.$invalid">Add as favorite</button>
                 <button type="button" class="btn btn-default" ng-click="doTestConnection()" ng-disabled="loginForm.$invalid">Test connection</button>
                 <button type="button" class="btn btn-primary" ng-click="connect()" ng-disabled="loginForm.$invalid">Connect</button>
               </div>

@@ -69,6 +69,14 @@ body {
     margin-bottom: 0;
 }
 
+#favoriteList {
+    position: relative;
+    padding: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-right: 1px solid #eee;
+}
+
 .loginPanel {
     width: 400px;
     padding-top: 30px;

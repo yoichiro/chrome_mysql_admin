@@ -82,7 +82,7 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         }
     };
 
-    $scope.isSidebarFooterVisible = function() {
+    $scope.isDatabaseObjectListVisible = function() {
         return mySQLClientService.isConnected();
     };
 

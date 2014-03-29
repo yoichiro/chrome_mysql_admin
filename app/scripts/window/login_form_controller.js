@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", function($scope, $timeout, mySQLClientService) {
+chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", function($scope, $timeout, mySQLClientService, favoriteService) {
 
     // Private methods
 
@@ -29,16 +29,24 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         });
     };
 
+    var assignEventHandlers = function() {
+        $scope.$on("favoriteSelected", function(event, favorite) {
+            $scope.safeApply(function() {
+                $scope.name = favorite.name;
+                $scope.hostName = favorite.hostName;
+                $scope.portNumber = favorite.port;
+                $scope.userName = favorite.userName;
+                $scope.password = favorite.password;
+            });
+        });
+    };
+
     // Public methods
 
     $scope.initialize = function() {
         $scope.successMessage = "";
         $scope.errorMessage = "";
-
-        $scope.hostName = "127.0.0.1";
-        $scope.portNumber = "3306";
-        $scope.userName = "yoichiro";
-        $scope.password = "pass";
+        assignEventHandlers();
     };
 
     $scope.connect = function() {
@@ -80,6 +88,13 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     $scope.isLoginFormVisible = function() {
         return !mySQLClientService.isConnected();
+    };
+
+    $scope.addFavorite = function() {
+        var name = $scope.name || $scope.hostName;
+        if (name) {
+            favoriteService.set(name, $scope.hostName, Number($scope.portNumber), $scope.userName, $scope.password);
+        }
     };
 
 }]);
