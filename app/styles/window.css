@@ -5,6 +5,7 @@ html, body {
 
 body {
     padding-top: 50px;
+    -webkit-user-select: text;
 }
 
 .sidebar {
@@ -202,4 +203,14 @@ body {
 .insertForm {
     height: 350px;
     overflow-y: auto;
+}
+
+.aboutMe {
+    position: absolute;
+    bottom: 25px;
+    right: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 9px;
+    font-style: italic;
 }

@@ -48,12 +48,20 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         });
     };
 
+    var showAboutMe = function() {
+        var manifest = chrome.runtime.getManifest();
+        var aboutMe = manifest.name + " version " + manifest.version;
+        aboutMe += " (C) " + manifest.author + " 2014, all rights reserved.";
+        $scope.aboutMe = aboutMe;
+    };
+
     // Public methods
 
     $scope.initialize = function() {
         $scope.successMessage = "";
         $scope.errorMessage = "";
         assignEventHandlers();
+        showAboutMe();
     };
 
     $scope.connect = function() {
