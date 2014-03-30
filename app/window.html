@@ -195,7 +195,7 @@
               <div class="form-group">
                 <label for="loginFormPort" class="col-sm-3 control-label">Port no.</label>
                 <div class="col-sm-9">
-                  <input type="text" id="loginFormPort" class="form-control" ng-model="portNumber" required />
+                  <input type="number" id="loginFormPort" class="form-control" ng-model="portNumber" required />
                 </div>
               </div>
               <div class="form-group">
@@ -213,9 +213,9 @@
             </form>
             <div class="clearfix">
               <div class="btn-group pull-right">
-                <button type="button" class="btn btn-default" ng-click="addFavorite()" ng-disabled="loginForm.$invalid">Add as favorite</button>
-                <button type="button" class="btn btn-default" ng-click="doTestConnection()" ng-disabled="loginForm.$invalid">Test connection</button>
-                <button type="button" class="btn btn-primary" ng-click="connect()" ng-disabled="loginForm.$invalid">Connect</button>
+                <button type="button" class="btn btn-default" ng-click="addFavorite()" ng-disabled="!canConnect()">Add as favorite</button>
+                <button type="button" class="btn btn-default" ng-click="doTestConnection()" ng-disabled="!canConnect()">Test connection</button>
+                <button type="button" class="btn btn-primary" ng-click="connect()" ng-disabled="!canConnect()">Connect</button>
               </div>
             </div>
             <div class="loginPanelAlertBlock">

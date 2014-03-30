@@ -104,4 +104,8 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         }
     };
 
+    $scope.canConnect = function() {
+        return $scope.hostName && $scope.portNumber && $scope.userName;
+    };
+
 }]);
