@@ -21,8 +21,8 @@ chromeMyAdmin.run(function($rootScope) {
         $rootScope.$broadcast("fatalErrorOccurred", errorMessage);
     };
 
-    $rootScope.notifyConnectionChanged = function() {
-        $rootScope.$broadcast("connectionChanged", null);
+    $rootScope.notifyConnectionChanged = function(connectionInfo) {
+        $rootScope.$broadcast("connectionChanged", connectionInfo);
     };
 
     $rootScope.notifyDatabaseChanged = function(database) {
@@ -57,7 +57,6 @@ chromeMyAdmin.run(function($rootScope) {
 
     assignWindowResizeEventHandler();
     adjustMainPanelHeight();
-
 });
 
 chromeMyAdmin.directive("resizeWhen", function() {

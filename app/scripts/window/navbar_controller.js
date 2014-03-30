@@ -11,16 +11,33 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         });
     };
 
-    var onConnectionChanged = function() {
+    var onConnectionChanged = function(connectionInfo) {
         if (mySQLClientService.isConnected()) {
-            targetObjectService.resetDatabase();
-            loadDatabaseList();
+            $scope.safeApply(function() {
+                targetObjectService.resetDatabase();
+                loadDatabaseList();
+                $scope.connectionInfo = connectionInfo;
+                $("body").popover({
+                    placement: "bottom",
+                    trigger: "hover",
+                    html: true,
+                    content: function() {
+                        var info = $scope.connectionInfo;
+                        return "Server: " +
+                            info.hostName + ":" + info.port + "<br />" +
+                            "MySQL version: " +
+                            info.initialHandshakeRequest.serverVersion;
+                    },
+                    container: "body",
+                    selector: "[rel=\"popover\"]"
+                });
+            });
         }
     };
 
     $scope.initialize = function() {
-        $scope.$on("connectionChanged", function(event, data) {
-            onConnectionChanged();
+        $scope.$on("connectionChanged", function(event, connectionInfo) {
+            onConnectionChanged(connectionInfo);
         });
         $scope.selectedDatabase = "[Select database]";
     };
@@ -60,6 +77,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.selectQuery = function() {
         modeService.changeMode("query");
+    };
+
+    $scope.showDatabaseInfo = function() {
+        console.log("showDatabaseInfo");
     };
 
 }]);
