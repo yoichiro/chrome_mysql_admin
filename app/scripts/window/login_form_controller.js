@@ -23,9 +23,16 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         });
     };
 
-    var onConnected = function() {
+    var onConnected = function(initialHandshakeRequest) {
         $scope.safeApply(function() {
-            $scope.notifyConnectionChanged();
+            var connectionInfo = {
+                name: $scope.name,
+                hostName: $scope.hostName,
+                port: $scope.portNumber,
+                userName: $scope.userName,
+                initialHandshakeRequest: initialHandshakeRequest
+            };
+            $scope.notifyConnectionChanged(connectionInfo);
         });
     };
 
@@ -57,7 +64,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
             $scope.userName,
             $scope.password
         ).then(function(initialHandshakeRequest) {
-            onConnected();
+            onConnected(initialHandshakeRequest);
         }, function(reason) {
             showErrorMessage("Connection failed: " + reason);
         });
