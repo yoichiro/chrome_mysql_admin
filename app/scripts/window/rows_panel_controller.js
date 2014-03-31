@@ -45,7 +45,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     };
 
     var adjustRowsPanelHeight = function() {
-        $("#rowsGrid").height($(window).height() - 76 - 30);
+        $("#rowsGrid").height($(window).height() - 81 - 30);
     };
 
     var updateRowsColumnDefs = function(columnDefinitions) {
