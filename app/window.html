@@ -123,8 +123,12 @@
           <div class="rowsConditionPanel">
             <select class="form-control pull-left" ng-model="filterColumnName" ng-options="columnName for columnName in columnNames"></select>
             <select class="form-control pull-left operators" ng-model="filterOperator" ng-options="operator for operator in operators"></select>
-            <input type="text" class="form-control pull-left" ng-model="filterValue" ng-trim="true" />
-            <button class="btn btn-default btn-xs pull-right" ng-click="filter()">Filter</button>
+            <div class="input-group input-group-sm">
+              <input type="text" class="form-control" ng-model="filterValue" ng-trim="true" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="filter()"><span class="fa fa-search"></span></button>
+              </span>
+            </div>
           </div>
           <div id="rowsGrid" class="gridStyle" ng-grid="rowsGrid">
           </div>

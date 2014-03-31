@@ -142,27 +142,29 @@ body {
 
 .rowsConditionPanel {
     padding: 2px;
-    height: 30px;
+    height: 35px;
 }
 
 .rowsConditionPanel select {
     width: 35%;
-    height: 25px;
+    height: 30px;
 }
 
 .rowsConditionPanel select.operators {
     width: 15%;
 }
 
+/*
 .rowsConditionPanel input {
     width: 40%;
     height: 25px;
 }
 
 .rowsConditionPanel button {
-    width: 10%;
     height: 25px;
+    font-size: 9px;
 }
+*/
 
 #queryPanel textarea {
     resize: none;
