@@ -18,20 +18,35 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         return deferred.promise;
     };
 
-    var _addQueryQueue = function(query) {
+    var _addQueryQueue = function(type, query) {
+        console.log("Add query to queue: " + type + " (" + query + ")");
         var deferred = $q.defer();
         queryQueue.push({
+            type: type,
             query: query,
             deferred: deferred
         });
         if (queryQueue.length === 1) {
-            _query();
+            _consumeQuery();
         }
         return deferred.promise;
     };
 
-    var _query = function() {
+    var _consumeQuery = function() {
         var task = queryQueue[0];
+        if (task.type === "query") {
+            return _doQuery(task);
+        } else if (task.type === "getDatabases") {
+            return _getDatabases(task);
+        } else if (task.type === "getStatistics") {
+            return _getStatistics(task);
+        } else {
+            $rootScope.fatalErrorOccurred("Unknown query type: " + type);
+            return null;
+        }
+    };
+
+    var _doQuery = function(task) {
         $rootScope.showMainStatusMessage("Executing query...");
         $rootScope.showProgressBar();
         var deferred = $q.defer();
@@ -48,7 +63,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             });
             $rootScope.hideProgressBar();
             if (remaining > 0) {
-                _query();
+                _consumeQuery();
             }
         }, function(result) {
             $rootScope.hideProgressBar();
@@ -61,7 +76,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                 result: result
             });
             if (remaining > 0) {
-                _query();
+                _consumeQuery();
             }
         }, function(result) {
             $rootScope.hideProgressBar();
@@ -70,13 +85,63 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             var remaining = queryQueue.length;
             task.deferred.reject(result);
             if (remaining > 0) {
-                _query();
+                _consumeQuery();
             }
         }, function(result) {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Fatal error occurred. " + result);
             queryQueue = [];
             $rootScope.fatalErrorOccurred(result);
+        });
+        return deferred.promise;
+    };
+
+    var _getDatabases = function(task) {
+        $rootScope.showMainStatusMessage("Retrieving database list...");
+        $rootScope.showProgressBar();
+        var deferred = $q.defer();
+        console.log("Get databases");
+        MySQL.client.getDatabases(function(databases) {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("Retrieved database list.");
+            queryQueue.shift();
+            var remaining = queryQueue.length;
+            task.deferred.resolve(databases);
+            if (remaining > 0) {
+                _consumeQuery();
+            }
+        }, function(result) {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("");
+            $rootScope.fatalErrorOccurred(result);
+        }, function() {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("");
+            $rootScope.fatalErrorOccurred(
+                "Fatal error: Retrieving database list failed.");
+        });
+        return deferred.promise;
+    };
+
+    var _getStatistics = function(task) {
+        $rootScope.showMainStatusMessage("Retrieving statistics...");
+        $rootScope.showProgressBar();
+        var deferred = $q.defer();
+        console.log("Get statistics");
+        MySQL.client.getStatistics(function(statistics) {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("Retrieved statistics.");
+            queryQueue.shift();
+            var remaining = queryQueue.length;
+            task.deferred.resolve(statistics);
+            if (remaining > 0) {
+                _consumeQuery();
+            }
+        }, function() {
+            $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("");
+            $rootScope.fatalErrorOccurred(
+                "Fatal error: Retrieving statistics failed.");
         });
         return deferred.promise;
     };
@@ -119,27 +184,13 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             return _logout();
         },
         getDatabases: function() {
-            $rootScope.showMainStatusMessage("Retrieving database list...");
-            $rootScope.showProgressBar();
-            var deferred = $q.defer();
-            MySQL.client.getDatabases(function(databases) {
-                $rootScope.hideProgressBar();
-                $rootScope.showMainStatusMessage("Retrieved database list.");
-                deferred.resolve(databases);
-            }, function(result) {
-                $rootScope.hideProgressBar();
-                $rootScope.showMainStatusMessage("");
-                $rootScope.fatalErrorOccurred(result);
-            }, function() {
-                $rootScope.hideProgressBar();
-                $rootScope.showMainStatusMessage("");
-                $rootScope.fatalErrorOccurred(
-                    "Fatal error: Retrieving database list failed.");
-            });
-            return deferred.promise;
+            return _addQueryQueue("getDatabases", null);
         },
         query: function(query) {
-            return _addQueryQueue(query);
+            return _addQueryQueue("query", query);
+        },
+        getStatistics: function() {
+            return _addQueryQueue("getStatistics", null);
         }
     };
 

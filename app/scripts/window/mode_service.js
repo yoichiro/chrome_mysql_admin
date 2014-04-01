@@ -2,7 +2,7 @@
 
 chromeMyAdmin.factory("modeService", ["$rootScope", function($rootScope) {
 
-    var mode = "rows";
+    var mode = "database";
 
     return {
         changeMode: function(newMode) {

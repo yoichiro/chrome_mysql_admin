@@ -216,3 +216,11 @@ body {
     font-size: 9px;
     font-style: italic;
 }
+
+.statisticsPanel {
+    width: 100%;
+    height: 50px;
+    padding-top: 3px;
+    padding-left: 5px;
+    font-size: 14px;
+}
