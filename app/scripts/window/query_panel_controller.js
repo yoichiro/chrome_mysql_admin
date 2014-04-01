@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", function($scope, modeService, mySQLClientService, targetObjectService) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants) {
 
     var initializeQueryResultGrid = function() {
         resetQueryResultGrid();
@@ -9,8 +9,8 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             columnDefs: "queryResultColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
-            headerRowHeight: 25,
-            rowHeight: 25
+            headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
+            rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
     };
 
@@ -31,7 +31,10 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     var adjustQueryPanelHeight = function() {
-        var totalHeight = $(window).height() - 76;
+        var totalHeight =
+                $(window).height() -
+                UIConstants.NAVBAR_HEIGHT -
+                UIConstants.FOOTER_HEIGHT;
         $("#queryEditor").height(totalHeight / 3 - 14);
         $("#queryResultGrid").height(totalHeight * 2 / 3 - 32);
     };
@@ -76,7 +79,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             this.push({
                 field: "column" + index,
                 displayName: columnDefinition.name,
-                width: Math.min(Number(columnDefinition.columnLength) * 14, 300)
+                width: Math.min(
+                    Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
+                    UIConstants.GRID_COLUMN_MAX_WIDTH)
             });
         }, columnDefs);
         $scope.queryResultColumnDefs = columnDefs;

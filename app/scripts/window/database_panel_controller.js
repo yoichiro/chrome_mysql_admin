@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", function($scope, mySQLClientService, modeService, $timeout) {
+chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", function($scope, mySQLClientService, modeService, $timeout, UIConstants) {
 
     var autoUpdatePromise = null;
 
@@ -16,8 +16,8 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
             columnDefs: "processListColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
-            headerRowHeight: 25,
-            rowHeight: 25
+            headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
+            rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
     };
 
@@ -33,7 +33,10 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
     };
 
     var adjustProcessListHeight = function() {
-        $("#processListGrid").height($(window).height() - 126);
+        $("#processListGrid").height(
+            $(window).height() -
+                UIConstants.NAVBAR_HEIGHT -
+                UIConstants.FOOTER_HEIGHT - 50);
     };
 
     var onModeChanged = function(mode) {
@@ -66,7 +69,8 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
                 $scope.safeApply(function() {
                     updateProcessListColumnDefs(result.columnDefinitions);
                     updateProcessList(result.columnDefinitions, result.resultsetRows);
-                    autoUpdatePromise = $timeout(loadProcessList, 10000);
+                    autoUpdatePromise = $timeout(
+                        loadProcessList, UIConstants.DATABASE_INFO_AUTO_UPDATE_SPAN);
                 });
             } else {
                 $scope.fatalErrorOccurred("Retrieving process list failed.");
@@ -82,7 +86,9 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
             this.push({
                 field: columnDefinition.name,
                 displayName: columnDefinition.name,
-                width: Math.min(Number(columnDefinition.columnLength) * 14, 300)
+                width: Math.min(
+                    Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
+                    UIConstants.GRID_COLUMN_MAX_WIDTH)
             });
         }, columnDefs);
         $scope.processListColumnDefs = columnDefs;
