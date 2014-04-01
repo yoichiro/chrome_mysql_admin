@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", function($scope, mySQLClientService, modeService, targetObjectService) {
+chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants) {
 
     var initializeStructureGrid = function() {
         resetStructureGrid();
@@ -9,8 +9,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             columnDefs: "structureColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
-            headerRowHeight: 25,
-            rowHeight: 25
+            headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
+            rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
     };
 
@@ -32,7 +32,10 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     };
 
     var adjustStructurePanelHeight = function() {
-        $("#structureGrid").height($(window).height() - 76);
+        $("#structureGrid").height(
+            $(window).height() -
+                UIConstants.NAVBAR_HEIGHT -
+                UIConstants.FOOTER_HEIGHT);
     };
 
     var updateStructureColumnDefs = function(columnDefinitions) {
@@ -41,7 +44,9 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             this.push({
                 field: columnDefinition.name,
                 displayName: columnDefinition.name,
-                width: Math.min(Number(columnDefinition.columnLength) * 14, 300)
+                width: Math.min(
+                    Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
+                    UIConstants.GRID_COLUMN_MAX_WIDTH)
             });
         }, columnDefs);
         $scope.structureColumnDefs = columnDefs;

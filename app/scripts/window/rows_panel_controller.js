@@ -1,6 +1,6 @@
 "use strict";
 
-chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService) {
+chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants) {
 
     var initializeRowsGrid = function() {
         resetRowsGrid();
@@ -20,8 +20,8 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                     rowsSelectionService.reset();
                 }
             },
-            headerRowHeight: 25,
-            rowHeight: 25
+            headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
+            rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
     };
 
@@ -45,7 +45,10 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     };
 
     var adjustRowsPanelHeight = function() {
-        $("#rowsGrid").height($(window).height() - 81 - 30);
+        $("#rowsGrid").height(
+            $(window).height() -
+                UIConstants.NAVBAR_HEIGHT -
+                UIConstants.FOOTER_HEIGHT - 35);
     };
 
     var updateRowsColumnDefs = function(columnDefinitions) {
@@ -57,7 +60,9 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                 displayName: columnDefinition.name,
                 enableCellEdit: true,
                 editableCellTemplate: editableCellTemplate,
-                width: Math.min(Number(columnDefinition.columnLength) * 14, 300)
+                width: Math.min(
+                    Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
+                    UIConstants.GRID_COLUMN_MAX_WIDTH)
             });
         }, columnDefs);
         $scope.rowsColumnDefs = columnDefs;
