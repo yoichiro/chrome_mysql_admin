@@ -15,5 +15,9 @@
         ]},
         "storage"
     ],
-    "offline_enabled": true
+    "offline_enabled": true,
+    "icons": {
+        "16": "images/icon-16.png",
+        "128": "images/icon-128.png"
+    }
 }
