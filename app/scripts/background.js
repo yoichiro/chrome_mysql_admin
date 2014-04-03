@@ -19,8 +19,6 @@
 function createWindow() {
     chrome.app.window.create("window.html", {
         bounds: {
-            top: 0,
-            left: 0,
             width: 800,
             height: 600
         },
