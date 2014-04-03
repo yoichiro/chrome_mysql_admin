@@ -21,6 +21,8 @@
         "chrome": true,
         "MySQL": true,
         "angular": true,
-        "$": true
+        "$": true,
+        "chromeMyAdmin": true,
+        "jQuery": true
     }
 }
