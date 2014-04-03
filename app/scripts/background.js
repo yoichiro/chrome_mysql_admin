@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+"use strict";
+
 function createWindow() {
     chrome.app.window.create("window.html", {
         bounds: {
