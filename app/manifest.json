@@ -6,13 +6,17 @@
     "author": "Yoichiro Tanaka",
     "app": {
         "background": {
-            "scripts": ["scripts/background.js"]
+            "scripts": [
+                "scripts/background.js"
+            ]
         }
     },
     "permissions": [
-        {"socket": [
-            "tcp-connect:*:*"
-        ]},
+        {
+            "socket": [
+                "tcp-connect:*:*"
+            ]
+        },
         "storage"
     ],
     "offline_enabled": true,
