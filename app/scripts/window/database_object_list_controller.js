@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", function($scope, mySQLClientService, targetObjectService) {
+chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", function($scope, mySQLClientService, targetObjectService, modeService) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {
@@ -68,6 +68,9 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
 
     $scope.selectTable = function(tableName) {
         targetObjectService.changeTable(tableName);
+        if (modeService.getMode() === "database") {
+            modeService.changeMode("rows");
+        }
     };
 
     $scope.isTableActive = function(tableName) {
