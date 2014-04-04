@@ -13,11 +13,13 @@
 <script type="text/javascript" src="scripts/lib/jquery-2.1.0.min.js"></script>
 <script type="text/javascript" src="scripts/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="scripts/lib/angular.min.js"></script>
-<script type="text/javascript" src="scripts/lib/ng-grid-2.0.7.debug.js"></script>
+<script type="text/javascript" src="scripts/lib/ng-grid-2.0.7.min.js"></script>
 <script type="text/javascript" src="scripts/lib/encoding.js"></script>
 <script type="text/javascript" src="scripts/lib/encoding-indexes.js"></script>
 <script type="text/javascript" src="scripts/lib/sha1.js"></script>
-<script type="text/javascript" src="scripts/lib/mysql_js_driver_1.2.0.js"></script>
+<script type="text/javascript" src="scripts/lib/mysql_js_driver_1.2.0.min.js"></script>
+
+<!-- build:js scripts/window.min.js -->
 <script type="text/javascript" src="scripts/window/main.js"></script>
 <script type="text/javascript" src="scripts/window/constants.js"></script>
 <script type="text/javascript" src="scripts/window/mysql_client_service.js"></script>
@@ -40,9 +42,11 @@
 <script type="text/javascript" src="scripts/window/query_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/insert_row_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/database_panel_controller.js"></script>
+<!-- endbuild -->
 
-<!-- TODO Remove me! -->
+<!-- @if DEBUG -->
 <script type="text/javascript" src="scripts/chromereload.js"></script>
+<!-- @endif -->
 
 </head>
 
