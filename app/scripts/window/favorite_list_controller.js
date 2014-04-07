@@ -38,4 +38,9 @@ chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientServic
         favoriteService.select(name);
     };
 
+    $scope.deleteFavorite = function($event, name) {
+        favoriteService.delete(name);
+        $event.preventDefault();
+    };
+
 }]);

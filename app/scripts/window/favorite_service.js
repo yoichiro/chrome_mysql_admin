@@ -41,6 +41,18 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", function($rootScop
                 deferred.resolve(favorites);
             });
             return deferred.promise;
+        },
+        delete: function(name) {
+            var deferred = $q.defer();
+            chrome.storage.sync.get("favorites", function(items) {
+                var favorites = items.favorites || {};
+                delete favorites[name];
+                chrome.storage.sync.set({favorites: favorites}, function() {
+                    $rootScope.$broadcast("favoritesChanged", favorites);
+                    deferred.resolve();
+                });
+            });
+            return deferred.promise;
         }
     };
 

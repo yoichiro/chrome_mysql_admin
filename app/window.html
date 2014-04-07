@@ -111,7 +111,11 @@
       <div ng-controller="FavoriteListController" ng-init="initialize()" ng-show="isFavoriteListVisible()">
         <div id="favoriteList">
           <div class="list-group">
-            <a href="#" class="list-group-item tableLink" ng-repeat="(name, favorite) in favorites" ng-click="selectFavorite(name)"><span class="glyphicon glyphicon-hdd"></span> {{name}}</a>
+            <a href="#" class="list-group-item tableLink" ng-repeat="(name, favorite) in favorites" ng-click="selectFavorite(name)">
+              <span class="glyphicon glyphicon-hdd"></span>
+              {{name}}
+              <button type="button" class="close" ng-click="deleteFavorite($event, name)">&times;</button>
+            </a>
           </div>
         </div>
         <div class="sidebarFooter">
