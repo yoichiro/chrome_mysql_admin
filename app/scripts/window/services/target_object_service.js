@@ -13,6 +13,10 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
 
     var _changeTable = function(newTable) {
         table = newTable;
+        _fireTableChangedEvent(table);
+    };
+
+    var _fireTableChangedEvent = function(table) {
         $rootScope.$broadcast(Events.TABLE_CHANGED, table);
     };
 
@@ -40,6 +44,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         showInsertRowPanel: function(columnDefinitions) {
             $rootScope.$broadcast(Events.SHOW_INSERT_ROW_PANEL, columnDefinitions);
+        },
+        reSelectTable: function() {
+            _fireTableChangedEvent(table);
         }
     };
 
