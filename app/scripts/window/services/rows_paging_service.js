@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("rowsPagingService", ["$rootScope", function($rootScope) {
+chromeMyAdmin.factory("rowsPagingService", ["$rootScope", "Events", function($rootScope, Events) {
     "use strict";
 
     var ROW_COUNT_PER_PAGE = 100;
@@ -24,12 +24,12 @@ chromeMyAdmin.factory("rowsPagingService", ["$rootScope", function($rootScope) {
         },
         next: function() {
             currentPageIndex++;
-            $rootScope.$broadcast("rowsPagingChanged", currentPageIndex);
+            $rootScope.$broadcast(Events.ROWS_PAGING_CHANGED, currentPageIndex);
         },
         previous: function() {
             if (currentPageIndex > 0) {
                 currentPageIndex--;
-                $rootScope.$broadcast("rowsPagingChanged", currentPageIndex);
+                $rootScope.$broadcast(Events.ROWS_PAGING_CHANGED, currentPageIndex);
             }
         },
         current: function() {
@@ -46,7 +46,7 @@ chromeMyAdmin.factory("rowsPagingService", ["$rootScope", function($rootScope) {
             return currentPageIndex;
         },
         refresh: function() {
-            $rootScope.$broadcast("rowsPagingChanged", currentPageIndex);
+            $rootScope.$broadcast(Events.ROWS_PAGING_CHANGED, currentPageIndex);
         }
     };
 

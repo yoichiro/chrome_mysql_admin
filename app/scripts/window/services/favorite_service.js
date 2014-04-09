@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", function($rootScope, $q) {
+chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", "Events", function($rootScope, $q, Events) {
     "use strict";
 
     return {
@@ -13,7 +13,7 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", function($rootScop
                 favorite.password = password;
                 favorites[name] = favorite;
                 chrome.storage.sync.set({favorites: favorites}, function() {
-                    $rootScope.$broadcast("favoritesChanged", favorites);
+                    $rootScope.$broadcast(Events.FAVORITES_CHANGED, favorites);
                     deferred.resolve();
                 });
             });
@@ -26,7 +26,7 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", function($rootScop
                 var result = favorites[name];
                 if (result) {
                     result.name = name;
-                    $rootScope.$broadcast("favoriteSelected", result);
+                    $rootScope.$broadcast(Events.FAVORITE_SELECTED, result);
                     deferred.resolve(result);
                 } else {
                     deferred.reject();
@@ -48,7 +48,7 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", function($rootScop
                 var favorites = items.favorites || {};
                 delete favorites[name];
                 chrome.storage.sync.set({favorites: favorites}, function() {
-                    $rootScope.$broadcast("favoritesChanged", favorites);
+                    $rootScope.$broadcast(Events.FAVORITES_CHANGED, favorites);
                     deferred.resolve();
                 });
             });

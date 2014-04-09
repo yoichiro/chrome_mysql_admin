@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("FatalDialogController", ["$scope", "mySQLClientService", function($scope, mySQLClientService) {
+chromeMyAdmin.controller("FatalDialogController", ["$scope", "mySQLClientService", "Events", function($scope, mySQLClientService, Events) {
     "use strict";
 
     $scope.initialize = function() {
@@ -10,7 +10,7 @@ chromeMyAdmin.controller("FatalDialogController", ["$scope", "mySQLClientService
                 });
             });
         });
-        $scope.$on("fatalErrorOccurred", function(event, errorMessage) {
+        $scope.$on(Events.FATAL_ERROR_OCCURRED, function(event, errorMessage) {
             $scope.safeApply(function() {
                 $scope.reason = errorMessage;
                 $("#fatalDialog").modal("show");

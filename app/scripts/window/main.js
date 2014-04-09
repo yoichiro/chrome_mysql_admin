@@ -1,6 +1,6 @@
 var chromeMyAdmin = angular.module("chromeMyAdmin", ["ngGrid"]);
 
-chromeMyAdmin.run(["$rootScope", function($rootScope) {
+chromeMyAdmin.run(["$rootScope", "Events", function($rootScope, Events) {
     "use strict";
 
     $rootScope.connected = false;
@@ -17,31 +17,23 @@ chromeMyAdmin.run(["$rootScope", function($rootScope) {
     };
 
     $rootScope.fatalErrorOccurred = function(errorMessage) {
-        $rootScope.$broadcast("fatalErrorOccurred", errorMessage);
+        $rootScope.$broadcast(Events.FATAL_ERROR_OCCURRED, errorMessage);
     };
 
     $rootScope.notifyConnectionChanged = function(connectionInfo) {
-        $rootScope.$broadcast("connectionChanged", connectionInfo);
-    };
-
-    $rootScope.notifyDatabaseChanged = function(database) {
-        $rootScope.$broadcast("databaseChanged", database);
-    };
-
-    $rootScope.notifyTableChanged = function(table) {
-        $rootScope.$broadcast("tableChanged", table);
+        $rootScope.$broadcast(Events.CONNECTION_CHANGED, connectionInfo);
     };
 
     $rootScope.showMainStatusMessage = function(message) {
-        $rootScope.$broadcast("showMainStatusMessage", message);
+        $rootScope.$broadcast(Events.SHOW_MAIN_STATUS_MESSAGE, message);
     };
 
     $rootScope.showProgressBar = function() {
-        $rootScope.$broadcast("showProgressBar", null);
+        $rootScope.$broadcast(Events.SHOW_PROGRESS_BAR, null);
     };
 
     $rootScope.hideProgressBar = function() {
-        $rootScope.$broadcast("hideProgressBar", null);
+        $rootScope.$broadcast(Events.HIDE_PROGRESS_BAR, null);
     };
 
     var adjustMainPanelHeight = function() {

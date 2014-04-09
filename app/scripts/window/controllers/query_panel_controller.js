@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -20,7 +20,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
 
     var _isQueryPanelVisible = function() {
         return mySQLClientService.isConnected() &&
-            modeService.getMode() === "query";
+            modeService.getMode() === Modes.QUERY;
     };
 
     var assignWindowResizeEventHandler = function() {
@@ -39,7 +39,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     var assignEventHandlers = function() {
-        $scope.$on("connectionChanged", function(event, data) {
+        $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
     };

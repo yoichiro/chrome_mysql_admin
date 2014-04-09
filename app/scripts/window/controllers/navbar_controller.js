@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", function($scope, mySQLClientService, modeService, targetObjectService) {
+chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "Events", "Modes", function($scope, mySQLClientService, modeService, targetObjectService, Events, Modes) {
     "use strict";
 
     var loadDatabaseList = function() {
@@ -6,7 +6,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
             $scope.safeApply(function() {
                 $scope.selectedDatabase = "[Select database]";
                 $scope.databases = databases;
-                modeService.changeMode("database");
+                modeService.changeMode(Modes.DATABASE);
             });
         });
     };
@@ -36,7 +36,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
     };
 
     $scope.initialize = function() {
-        $scope.$on("connectionChanged", function(event, connectionInfo) {
+        $scope.$on(Events.CONNECTION_CHANGED, function(event, connectionInfo) {
             onConnectionChanged(connectionInfo);
         });
         $scope.selectedDatabase = "[Select database]";
@@ -56,35 +56,35 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
     };
 
     $scope.isRowsActive = function() {
-        return modeService.getMode() === "rows";
+        return modeService.getMode() === Modes.ROWS;
     };
 
     $scope.isStructureActive = function() {
-        return modeService.getMode() === "structure";
+        return modeService.getMode() === Modes.STRUCTURE;
     };
 
     $scope.isQueryActive = function() {
-        return modeService.getMode() === "query";
+        return modeService.getMode() === Modes.QUERY;
     };
 
     $scope.isDatabaseActive = function() {
-        return modeService.getMode() === "database";
+        return modeService.getMode() === Modes.DATABASE;
     };
 
     $scope.selectRows = function() {
-        modeService.changeMode("rows");
+        modeService.changeMode(Modes.ROWS);
     };
 
     $scope.selectStructure = function() {
-        modeService.changeMode("structure");
+        modeService.changeMode(Modes.STRUCTURE);
     };
 
     $scope.selectQuery = function() {
-        modeService.changeMode("query");
+        modeService.changeMode(Modes.QUERY);
     };
 
     $scope.showDatabaseInfo = function() {
-        modeService.changeMode("database");
+        modeService.changeMode(Modes.DATABASE);
     };
 
 }]);

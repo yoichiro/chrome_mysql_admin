@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientService", "favoriteService", function($scope, mySQLClientService, favoriteService) {
+chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientService", "favoriteService", "Events", function($scope, mySQLClientService, favoriteService, Events) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {
@@ -18,7 +18,7 @@ chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientServic
     };
 
     var assignEventHandlers = function() {
-        $scope.$on("favoritesChanged", function(event, favorites) {
+        $scope.$on(Events.FAVORITES_CHANGED, function(event, favorites) {
             loadFavorites();
         });
     };

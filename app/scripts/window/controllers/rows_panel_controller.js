@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants) {
+chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes) {
     "use strict";
 
     var initializeRowsGrid = function() {
@@ -226,7 +226,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     };
 
     var onModeChanged = function(mode) {
-        if (mode === "rows") {
+        if (mode === Modes.ROWS) {
             var tableName = targetObjectService.getTable();
             if (tableName) {
                 if ($scope.tableName !== tableName) {
@@ -250,18 +250,18 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
 
     var _isRowsPanelVisible = function() {
         return mySQLClientService.isConnected() &&
-            modeService.getMode() === "rows";
+            modeService.getMode() === Modes.ROWS;
     };
 
     var assignEventHandlers = function() {
-        $scope.$on("connectionChanged", function(event, data) {
+        $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
-        $scope.$on("databaseChanged", function(event, database) {
+        $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             rowsPagingService.reset();
             resetRowsGrid();
         });
-        $scope.$on("tableChanged", function(event, tableName) {
+        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
             if (_isRowsPanelVisible()) {
                 rowsPagingService.reset();
                 $scope.tableName = tableName;
@@ -273,19 +273,19 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                 }
             }
         });
-        $scope.$on("modeChanged", function(event, mode) {
+        $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
-        $scope.$on("rowsPagingChanged", function(event, currentPageIndex) {
+        $scope.$on(Events.ROWS_PAGING_CHANGED, function(event, currentPageIndex) {
             doQueryAndReload();
         });
-        $scope.$on("confirmDeleteSelectedRow", function(event, selectedRow) {
+        $scope.$on(Events.CONFIRM_DELETE_SELECTED_ROW, function(event, selectedRow) {
             confirmDeleteSelectedRow();
         });
-        $scope.$on("requestDeleteSelectedRow", function(event, selectedRow) {
+        $scope.$on(Events.REQUEST_DELETE_SELECTED_ROW, function(event, selectedRow) {
             requestDeleteSelectedRow(selectedRow);
         });
-        $scope.$on("requestInsertRow", function(event, table) {
+        $scope.$on(Events.REQUEST_INSERT_ROW, function(event, table) {
             showInsertRowPanel();
         });
     };
