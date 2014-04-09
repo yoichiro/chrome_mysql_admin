@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ProgressBarController", ["$scope", function($scope) {
+chromeMyAdmin.controller("ProgressBarController", ["$scope", "Events", function($scope, Events) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {
@@ -18,10 +18,10 @@ chromeMyAdmin.controller("ProgressBarController", ["$scope", function($scope) {
     };
 
     $scope.initialize = function() {
-        $scope.$on("showProgressBar", function(event) {
+        $scope.$on(Events.SHOW_PROGRESS_BAR, function(event) {
             setVisibleProgressBar(true);
         });
-        $scope.$on("hideProgressBar", function(event) {
+        $scope.$on(Events.HIDE_PROGRESS_BAR, function(event) {
             setVisibleProgressBar(false);
         });
         $scope.visibleProgressBar = false;

@@ -1,11 +1,11 @@
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", function($scope, mySQLClientService, modeService, $timeout, UIConstants) {
+chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes) {
     "use strict";
 
     var autoUpdatePromise = null;
 
     var _isDatabasePanelVisible = function() {
         return mySQLClientService.isConnected() &&
-            modeService.getMode() === "database";
+            modeService.getMode() === Modes.DATABASE;
     };
 
     var initializeProcessListGrid = function() {
@@ -39,7 +39,7 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
     };
 
     var onModeChanged = function(mode) {
-        if (mode === "database") {
+        if (mode === Modes.DATABASE) {
             loadProcessList();
         } else {
             stopAutoUpdate();
@@ -107,10 +107,10 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
     };
 
     $scope.initialize = function() {
-        $scope.$on("modeChanged", function(event, mode) {
+        $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
-        $scope.$on("connectionChanged", function(event, data) {
+        $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
         initializeProcessListGrid();

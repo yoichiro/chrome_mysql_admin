@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes) {
     "use strict";
 
     var showMainStatusMessage = function(message) {
@@ -16,13 +16,13 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     };
 
     $scope.initialize = function() {
-        $scope.$on("showMainStatusMessage", function(event, message) {
+        $scope.$on(Events.SHOW_MAIN_STATUS_MESSAGE, function(event, message) {
             showMainStatusMessage(message);
         });
     };
 
     $scope.isButtonsVisible = function() {
-        return mySQLClientService.isConnected() && modeService.getMode() === "rows";
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.ROWS;
     };
 
     $scope.hasPreviousPage = function() {
@@ -55,7 +55,7 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
 
     $scope.isRowSelection = function() {
         if (rowsSelectionService.getSelectedRows() &&
-           modeService.getMode() === "rows") {
+           modeService.getMode() === Modes.ROWS) {
             return true;
         } else {
             return false;

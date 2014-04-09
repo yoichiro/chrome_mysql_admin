@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", function($scope, $timeout, mySQLClientService, favoriteService) {
+chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", "Events", function($scope, $timeout, mySQLClientService, favoriteService, Events) {
     "use strict";
 
     // Private methods
@@ -36,7 +36,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     };
 
     var assignEventHandlers = function() {
-        $scope.$on("favoriteSelected", function(event, favorite) {
+        $scope.$on(Events.FAVORITE_SELECTED, function(event, favorite) {
             $scope.safeApply(function() {
                 $scope.name = favorite.name;
                 $scope.hostName = favorite.hostName;

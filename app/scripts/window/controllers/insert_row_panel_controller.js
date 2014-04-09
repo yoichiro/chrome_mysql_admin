@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("InsertRowPanelController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", function($scope, targetObjectService, rowsPagingService, mySQLClientService) {
+chromeMyAdmin.controller("InsertRowPanelController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events) {
     "use strict";
 
     var insertRowPanelVisible = false;
@@ -15,13 +15,13 @@ chromeMyAdmin.controller("InsertRowPanelController", ["$scope", "targetObjectSer
     };
 
     var assignEventHandlers = function() {
-        $scope.$on("databaseChanged", function(event, database) {
+        $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             doClose();
         });
-        $scope.$on("tableChanged", function(event, tableName) {
+        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
             doClose();
         });
-        $scope.$on("showInsertRowPanel", function(event, columnDefinitions) {
+        $scope.$on(Events.SHOW_INSERT_ROW_PANEL, function(event, columnDefinitions) {
             doOpen(columnDefinitions);
         });
     };

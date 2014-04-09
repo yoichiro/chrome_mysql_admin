@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q) {
+chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes) {
     "use strict";
 
     var initializeStructureGrid = function() {
@@ -143,7 +143,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     };
 
     var onModeChanged = function(mode) {
-        if (mode === "structure") {
+        if (mode === Modes.STRUCTURE) {
             var tableName = targetObjectService.getTable();
             if (tableName) {
                 if ($scope.tableName !== tableName) {
@@ -159,18 +159,18 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
 
     var _isStructurePanelVisible = function() {
         return mySQLClientService.isConnected() &&
-            modeService.getMode() === "structure";
+            modeService.getMode() === Modes.STRUCTURE;
     };
 
     $scope.initialize = function() {
-        $scope.$on("connectionChanged", function(event, data) {
+        $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
-        $scope.$on("databaseChanged", function(event, database) {
+        $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             resetStructureGrid();
             resetIndexesGrid();
         });
-        $scope.$on("tableChanged", function(event, tableName) {
+        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
             if (_isStructurePanelVisible()) {
                 $scope.tableName = tableName;
                 if (tableName) {
@@ -181,7 +181,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
                 }
             }
         });
-        $scope.$on("modeChanged", function(event, mode) {
+        $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
         initializeStructureGrid();
