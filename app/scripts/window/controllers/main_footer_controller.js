@@ -21,8 +21,12 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         });
     };
 
-    $scope.isButtonsVisible = function() {
+    $scope.isRowsButtonsVisible = function() {
         return mySQLClientService.isConnected() && modeService.getMode() === Modes.ROWS;
+    };
+
+    $scope.isStructureButtonsVisible = function() {
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.STRUCTURE;
     };
 
     $scope.hasPreviousPage = function() {
@@ -49,8 +53,12 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         return (rowsPagingService.getCurrentPageIndex() + 1) + "/" + rowsPagingService.getTotalPageCount();
     };
 
-    $scope.refresh = function() {
+    $scope.refreshRows = function() {
         rowsPagingService.refresh();
+    };
+
+    $scope.refreshStructure = function() {
+        targetObjectService.reSelectTable();
     };
 
     $scope.isRowSelection = function() {
