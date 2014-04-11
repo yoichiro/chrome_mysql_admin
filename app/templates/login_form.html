@@ -1,0 +1,57 @@
+<div id="loginForm" ng-controller="LoginFormController" ng-init="initialize()" ng-show="isLoginFormVisible()">
+  <div class="center-block loginPanel">
+    <h2>Login to MySQL server</h2>
+    <form novalidate class="form-horizontal" role="form">
+      <div class="form-group">
+        <label for="loginFormName" class="col-sm-3 control-label">Name</label>
+        <div class="col-sm-9">
+          <input type="text" id="loginFormName" class="form-control" ng-model="name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="loginFormHostName" class="col-sm-3 control-label">Host name</label>
+        <div class="col-sm-9">
+          <input type="text" id="loginFormHostName" class="form-control" ng-model="hostName" required autofocus />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="loginFormPort" class="col-sm-3 control-label">Port no.</label>
+        <div class="col-sm-9">
+          <input type="number" id="loginFormPort" class="form-control" ng-model="portNumber" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="loginFormUsername" class="col-sm-3 control-label">User name</label>
+        <div class="col-sm-9">
+          <input type="text" id="loginFormUsername" class="form-control" ng-model="userName" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="loginFormPassword" class="col-sm-3 control-label">Password</label>
+        <div class="col-sm-9">
+          <input type="password" id="loginFormPassword" class="form-control" ng-model="password" required />
+        </div>
+      </div>
+    </form>
+    <div class="clearfix">
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-default" ng-click="addFavorite()" ng-disabled="!canConnect()">Add as favorite</button>
+        <button type="button" class="btn btn-default" ng-click="doTestConnection()" ng-disabled="!canConnect()">Test connection</button>
+        <button type="button" class="btn btn-primary" ng-click="connect()" ng-disabled="!canConnect()">Connect</button>
+      </div>
+    </div>
+    <div class="loginPanelAlertBlock">
+      <div ng-show="isErrorMessageVisible()">
+        <div class="alert alert-danger">
+          <strong>Error:</strong> {{errorMessage}}
+        </div>
+      </div>
+      <div ng-show="isSuccessMessageVisible()">
+        <div class="alert alert-success">
+          <strong>Success:</strong> {{successMessage}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="aboutMe">{{aboutMe}}</div>
+</div>

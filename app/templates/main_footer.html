@@ -1,0 +1,28 @@
+<div class="mainFooter" ng-controller="MainFooterController" ng-init="initialize()">
+  <div class="mainStatusMessage pull-left">{{mainStatusMessage}}</div>
+  <!-- for Rows panel -->
+  <div class="pull-right" ng-show="isRowsButtonsVisible()">
+    <div class="pull-left footerButtonRight" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="insertRow()">
+      <span class="fa fa-plus"></span>
+    </div>
+    <div class="pull-left footerButtonRight" ng-class="!isRowSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedRow()">
+      <span class="fa fa-trash-o"></span>
+    </div>
+    <div class="pull-left footerButtonRight" ng-click="refreshRows()">
+      <span class="fa fa-refresh"></span>
+    </div>
+    <div class="pull-left footerButtonRight" ng-class="!hasPreviousPage() && 'footerButtonDisable'" ng-click="goPreviousPage()">
+      <span class="fa fa-arrow-left"></span>
+    </div>
+    <div class="pull-left footerTextRight">{{getPagingInfo()}}</div>
+    <div class="pull-left footerButtonRight" ng-class="!hasNextPage() && 'footerButtonDisable'" ng-click="goNextPage()">
+      <span class="fa fa-arrow-right"></span>
+    </div>
+  </div>
+  <!-- for Structure panel -->
+  <div class="pull-right" ng-show="isStructureButtonsVisible()">
+    <div class="pull-left footerButtonRight" ng-click="refreshStructure()">
+      <span class="fa fa-refresh"></span>
+    </div>
+  </div>
+</div>
