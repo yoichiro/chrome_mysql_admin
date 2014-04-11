@@ -67,3 +67,147 @@ chromeMyAdmin.directive("resizeWhen", function() {
         }
     };
 });
+
+chromeMyAdmin.directive("dropTableConfirmDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/drop_table_config_dialog.html"
+    };
+});
+
+chromeMyAdmin.directive("createTableDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/create_table_dialog.html"
+    };
+});
+
+chromeMyAdmin.directive("deleteRowConfirmDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/delete_row_confirm_dialog.html"
+    };
+});
+
+chromeMyAdmin.directive("fatalDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/fatal_dialog.html"
+    };
+});
+
+chromeMyAdmin.directive("logoutConfirmDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/logout_confirm_dialog.html"
+    };
+});
+
+chromeMyAdmin.directive("mainFooter", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/main_footer.html"
+    };
+});
+
+chromeMyAdmin.directive("loginForm", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/login_form.html"
+    };
+});
+
+chromeMyAdmin.directive("databasePanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/database_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("queryPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/query_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("structurePanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/structure_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("insertRowPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/insert_row_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("rowsPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/rows_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("favoriteListPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/favorite_list_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("databaseObjectListPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/database_object_list_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("navbarPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/navbar_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("progressPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/progress_panel.html"
+    };
+});

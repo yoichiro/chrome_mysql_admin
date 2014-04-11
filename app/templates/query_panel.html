@@ -1,0 +1,9 @@
+<div id="queryPanel" ng-controller="QueryPanelController" ng-init="initialize()" ng-show="isQueryPanelVisible()">
+  <textarea id="queryEditor" class="form-control" ng-model="query"></textarea>
+  <div class="queryMiddlePanel">
+    <button type="button" class="btn btn-default btn-xs pull-right" ng-click="executeQuery()">Execute</button>
+  </div>
+  <div id="queryResultGrid" class="gridStyle" ng-grid="queryResultGrid">
+  </div>
+  <div class="queryErrorMessage" ng-model="queryError" ng-show="isQueryErrorMessageVisible()">{{queryErrorMessage}}</div>
+</div>

@@ -29,6 +29,7 @@ module.exports = function (grunt) {
                 },
                 files: [
                     '<%= yeoman.app %>/*.html',
+                    '<%= yeoman.app %>/templates/*.html',
                     '<%= yeoman.app %>/styles/{,*/}*.css',
                     '<%= yeoman.app %>/scripts/{,*/}*.js',
                     '<%= yeoman.app %>/scripts/window/{,*/}*.js',
@@ -138,7 +139,8 @@ module.exports = function (grunt) {
                         'scripts/background.js',
                         'scripts/lib/*.js',
                         'fonts/{,*/}*.*',
-                        '*.html'
+                        '*.html',
+                        'templates/*.html'
                     ]
                 }]
             }

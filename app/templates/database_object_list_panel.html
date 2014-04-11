@@ -1,0 +1,19 @@
+<div ng-controller="DatabaseObjectListController" ng-init="initialize()"  ng-show="isDatabaseObjectListVisible()">
+  <div id="objectList">
+    <div class="list-group">
+      <a href="#" ng-repeat="table in tables" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table)}"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a>
+    </div>
+  </div>
+
+  <div class="sidebarFooter">
+    <div class="pull-left footerButtonLeft" ng-click="refresh()">
+      <span class="fa fa-refresh"></span>
+    </div>
+    <div class="pull-left footerButtonLeft" ng-class="!isDatabaseSelection() && 'footerButtonDisable'" ng-click="createTable()">
+      <span class="fa fa-plus"></span>
+    </div>
+    <div class="pull-left footerButtonLeft" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="confirmDropSelectedTable()">
+      <span class="fa fa-trash-o"></span>
+    </div>
+  </div>
+</div>
