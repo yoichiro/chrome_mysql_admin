@@ -18,7 +18,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
     };
 
     var _addQueryQueue = function(type, query) {
-        console.log("Add query to queue: " + type + " (" + query + ")");
+        // console.log("Add query to queue: " + type + " (" + query + ")");
         var deferred = $q.defer();
         queryQueue.push({
             type: type,
