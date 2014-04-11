@@ -25,7 +25,8 @@ chromeMyAdmin.constant("Events", {
     CONFIRM_DELETE_SELECTED_ROW: "confirmDeleteSelectedRow",
     REQUEST_DELETE_SELECTED_ROW: "requestDeleteSelectedRow",
     REQUEST_INSERT_ROW: "requestInsertRow",
-    FATAL_ERROR_OCCURRED: "fatalErrorOccurred"
+    FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
+    REFRESH_TABLE_LIST: "refreshTableList"
 });
 
 chromeMyAdmin.constant("Modes", {

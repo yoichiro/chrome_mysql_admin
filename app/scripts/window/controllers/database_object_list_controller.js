@@ -54,6 +54,13 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         }
     };
 
+    var doRefresh = function() {
+        if (targetObjectService.getDatabase()) {
+            targetObjectService.resetTable();
+            loadTables();
+        }
+    };
+
     $scope.initialize = function() {
         $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             databaseChanged();
@@ -61,6 +68,9 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         $scope.tables = [];
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
+        });
+        $scope.$on(Events.REFRESH_TABLE_LIST, function(event, database) {
+            doRefresh();
         });
         assignWindowResizeEventHandler();
         adjustObjectListHeight();
@@ -78,14 +88,19 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     $scope.refresh = function() {
-        if (targetObjectService.getDatabase()) {
-            targetObjectService.resetTable();
-            loadTables();
-        }
+        doRefresh();
     };
 
     $scope.isDatabaseObjectListVisible = function() {
         return mySQLClientService.isConnected();
+    };
+
+    $scope.isDatabaseSelection = function() {
+        return targetObjectService.getDatabase() !== null;
+    };
+
+    $scope.createTable = function() {
+        $("#createTableDialog").modal("show");
     };
 
 }]);

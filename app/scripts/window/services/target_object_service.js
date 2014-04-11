@@ -47,6 +47,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         reSelectTable: function() {
             _fireTableChangedEvent(table);
+        },
+        refreshTableList: function() {
+            $rootScope.$broadcast(Events.REFRESH_TABLE_LIST, database);
         }
     };
 
