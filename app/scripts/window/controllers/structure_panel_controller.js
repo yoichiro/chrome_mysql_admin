@@ -95,15 +95,13 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
 
     var updateStructure = function(columnDefinitions, resultsetRows) {
         var rows = [];
-        angular.forEach(resultsetRows, function(resultsetRow, index) {
-            if (index > 0) { // Skip table name
-                var values = resultsetRow.values;
-                var row = {};
-                angular.forEach(columnDefinitions, function(columnDefinition, index) {
-                    row[columnDefinition.name] = values[index];
-                });
-                rows.push(row);
-            }
+        angular.forEach(resultsetRows, function(resultsetRow) {
+            var values = resultsetRow.values;
+            var row = {};
+            angular.forEach(columnDefinitions, function(columnDefinition, index) {
+                row[columnDefinition.name] = values[index];
+            });
+            rows.push(row);
         });
         $scope.structureData = rows;
     };
@@ -114,7 +112,9 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             var values = resultsetRow.values;
             var row = {};
             angular.forEach(columnDefinitions, function(columnDefinition, index) {
-                row[columnDefinition.name] = values[index];
+                if (index > 0) { // Skip table name
+                    row[columnDefinition.name] = values[index];
+                }
             });
             rows.push(row);
         });
