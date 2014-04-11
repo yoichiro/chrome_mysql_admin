@@ -43,6 +43,7 @@
 <script type="text/javascript" src="scripts/window/controllers/insert_row_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/database_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/create_table_dialog_controller.js"></script>
+<script type="text/javascript" src="scripts/window/controllers/drop_table_confirm_dialog_controller.js"></script>
 <!-- endbuild -->
 
 <!-- @if DEBUG -->
@@ -107,6 +108,9 @@
           </div>
           <div class="pull-left footerButtonLeft" ng-class="!isDatabaseSelection() && 'footerButtonDisable'" ng-click="createTable()">
             <span class="fa fa-plus"></span>
+          </div>
+          <div class="pull-left footerButtonLeft" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="confirmDropSelectedTable()">
+            <span class="fa fa-trash-o"></span>
           </div>
         </div>
       </div>
@@ -350,7 +354,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary" ng-click="deleteRow()">Yes</button>
+        <button type="button" class="btn btn-danger" ng-click="deleteRow()">Yes</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -400,6 +404,25 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary" ng-click="createTable()">Create</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Drop table confirm modal dialog -->
+<div id="dropTableConfirmDialog" class="modal fade" ng-controller="DropTableConfirmDialogController">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Confirm</h4>
+      </div>
+      <div class="modal-body">
+        <p>Would you really like to drop the selected table from MySQL server?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger" ng-click="dropTable()">Yes</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

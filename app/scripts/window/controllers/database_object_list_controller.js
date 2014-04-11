@@ -61,6 +61,19 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         }
     };
 
+    var doDropTable = function() {
+        var sql = "DROP TABLE `" + targetObjectService.getTable() + "`";
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.fatalErrorOccurred("Dropping table failed.");
+            } else {
+                doRefresh();
+            }
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
+        });
+    };
+
     $scope.initialize = function() {
         $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             databaseChanged();
@@ -71,6 +84,9 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         });
         $scope.$on(Events.REFRESH_TABLE_LIST, function(event, database) {
             doRefresh();
+        });
+        $scope.$on(Events.REQUEST_DROP_TABLE, function(event, table) {
+            doDropTable();
         });
         assignWindowResizeEventHandler();
         adjustObjectListHeight();
@@ -101,6 +117,14 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
 
     $scope.createTable = function() {
         $("#createTableDialog").modal("show");
+    };
+
+    $scope.isTableSelection = function() {
+        return targetObjectService.getTable() !== null;
+    };
+
+    $scope.confirmDropSelectedTable = function() {
+        $("#dropTableConfirmDialog").modal("show");
     };
 
 }]);

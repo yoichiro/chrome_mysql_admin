@@ -50,6 +50,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         refreshTableList: function() {
             $rootScope.$broadcast(Events.REFRESH_TABLE_LIST, database);
+        },
+        requestDropSelectedTable: function() {
+            $rootScope.$broadcast(Events.REQUEST_DROP_TABLE, table);
         }
     };
 
