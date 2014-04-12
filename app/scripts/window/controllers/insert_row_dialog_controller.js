@@ -1,33 +1,21 @@
-chromeMyAdmin.controller("InsertRowPanelController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events) {
+chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events) {
     "use strict";
 
-    var insertRowPanelVisible = false;
-
-    var doClose = function() {
-        insertRowPanelVisible = false;
+    var resetErrorMessage = function() {
+        $scope.errorMessage = "";
     };
 
     var doOpen = function(columnDefinitions) {
         resetErrorMessage();
         $scope.values = {};
         $scope.columnDefinitions = columnDefinitions;
-        insertRowPanelVisible = true;
+        $("#insertRowDialog").modal("show");
     };
 
     var assignEventHandlers = function() {
-        $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
-            doClose();
-        });
-        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
-            doClose();
-        });
-        $scope.$on(Events.SHOW_INSERT_ROW_PANEL, function(event, columnDefinitions) {
+        $scope.$on(Events.SHOW_INSERT_ROW_DIALOG, function(event, columnDefinitions) {
             doOpen(columnDefinitions);
         });
-    };
-
-    var resetErrorMessage = function() {
-        $scope.errorMessage = "";
     };
 
     $scope.initialize = function() {
@@ -35,12 +23,8 @@ chromeMyAdmin.controller("InsertRowPanelController", ["$scope", "targetObjectSer
         assignEventHandlers();
     };
 
-    $scope.close = function() {
-        doClose();
-    };
-
-    $scope.isInsertRowPanelVisible = function() {
-        return insertRowPanelVisible;
+    $scope.isErrorMessageVisible = function() {
+        return $scope.errorMessage.length > 0;
     };
 
     $scope.targetInputColumns = function() {
@@ -72,7 +56,7 @@ chromeMyAdmin.controller("InsertRowPanelController", ["$scope", "targetObjectSer
                 if (result.hasResultsetRows) {
                     $scope.fatalErrorOccurred("Inserting row failed.");
                 } else {
-                    doClose();
+                    $("#insertRowDialog").modal("hide");
                     rowsPagingService.refresh();
                 }
             }, function(reason) {
@@ -85,10 +69,6 @@ chromeMyAdmin.controller("InsertRowPanelController", ["$scope", "targetObjectSer
         } else {
             $scope.errorMessage = "Any values not filled in.";
         }
-    };
-
-    $scope.isErrorMessageVisible = function() {
-        return $scope.errorMessage.length > 0;
     };
 
 }]);

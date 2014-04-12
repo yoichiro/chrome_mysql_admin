@@ -158,12 +158,12 @@ chromeMyAdmin.directive("structurePanel", function() {
     };
 });
 
-chromeMyAdmin.directive("insertRowPanel", function() {
+chromeMyAdmin.directive("insertRowDialog", function() {
     "use strict";
 
     return {
         restrict: "E",
-        templateUrl: "templates/insert_row_panel.html"
+        templateUrl: "templates/insert_row_dialog.html"
     };
 });
 

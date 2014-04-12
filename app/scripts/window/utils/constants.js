@@ -18,7 +18,7 @@ chromeMyAdmin.constant("Events", {
     FAVORITE_SELECTED: "favoriteSelected",
     ROWS_PAGING_CHANGED: "rowsPagingChanged",
 
-    SHOW_INSERT_ROW_PANEL: "showInsertRowPanel",
+    SHOW_INSERT_ROW_DIALOG: "showInsertRowDialog",
     SHOW_MAIN_STATUS_MESSAGE: "showMainStatusMessage",
     SHOW_PROGRESS_BAR: "showProgressBar",
     HIDE_PROGRESS_BAR: "hideProgressBar",

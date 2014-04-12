@@ -42,8 +42,8 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         requestInsertRow: function() {
             $rootScope.$broadcast(Events.REQUEST_INSERT_ROW, table);
         },
-        showInsertRowPanel: function(columnDefinitions) {
-            $rootScope.$broadcast(Events.SHOW_INSERT_ROW_PANEL, columnDefinitions);
+        showInsertRowDialog: function(columnDefinitions) {
+            $rootScope.$broadcast(Events.SHOW_INSERT_ROW_DIALOG, columnDefinitions);
         },
         reSelectTable: function() {
             _fireTableChangedEvent(table);
