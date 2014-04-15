@@ -36,6 +36,20 @@ chromeMyAdmin.run(["$rootScope", "Events", function($rootScope, Events) {
         $rootScope.$broadcast(Events.HIDE_PROGRESS_BAR, null);
     };
 
+    $rootScope.callbackFromConfirmDialog = function(callbackEvent, result) {
+        $rootScope.$broadcast(callbackEvent, result);
+    };
+
+    $rootScope.showConfirmDialog = function(
+        message, yesButtonLabel, noButtonLabel, callbackEvent) {
+        $rootScope.$broadcast(Events.SHOW_CONFIRM_DIALOG, {
+            message: message,
+            yesButtonLabel: yesButtonLabel,
+            noButtonLabel: noButtonLabel,
+            callbackEvent: callbackEvent
+        });
+    };
+
     var adjustMainPanelHeight = function() {
         $("#mainPanel").height($(window).height() - 76);
     };
@@ -68,15 +82,6 @@ chromeMyAdmin.directive("resizeWhen", function() {
     };
 });
 
-chromeMyAdmin.directive("dropTableConfirmDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/drop_table_config_dialog.html"
-    };
-});
-
 chromeMyAdmin.directive("createTableDialog", function() {
     "use strict";
 
@@ -86,30 +91,12 @@ chromeMyAdmin.directive("createTableDialog", function() {
     };
 });
 
-chromeMyAdmin.directive("deleteRowConfirmDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/delete_row_confirm_dialog.html"
-    };
-});
-
 chromeMyAdmin.directive("fatalDialog", function() {
     "use strict";
 
     return {
         restrict: "E",
         templateUrl: "templates/fatal_dialog.html"
-    };
-});
-
-chromeMyAdmin.directive("logoutConfirmDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/logout_confirm_dialog.html"
     };
 });
 
@@ -209,5 +196,14 @@ chromeMyAdmin.directive("progressPanel", function() {
     return {
         restrict: "E",
         templateUrl: "templates/progress_panel.html"
+    };
+});
+
+chromeMyAdmin.directive("confirmDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/confirm_dialog.html"
     };
 });

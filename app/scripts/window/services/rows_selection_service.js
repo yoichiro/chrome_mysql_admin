@@ -13,12 +13,6 @@ chromeMyAdmin.factory("rowsSelectionService", ["$rootScope", "Events", function(
         },
         getSelectedRows: function() {
             return selectedRow;
-        },
-        confirmDeleteSelectedRow: function() {
-            $rootScope.$broadcast(Events.CONFIRM_DELETE_SELECTED_ROW, selectedRow);
-        },
-        requestDeleteSelectedRow: function() {
-            $rootScope.$broadcast(Events.REQUEST_DELETE_SELECTED_ROW, selectedRow);
         }
     };
 

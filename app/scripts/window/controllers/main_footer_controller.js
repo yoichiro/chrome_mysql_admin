@@ -71,7 +71,12 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     };
 
     $scope.confirmDeleteSelectedRow = function() {
-        rowsSelectionService.confirmDeleteSelectedRow();
+        $scope.showConfirmDialog(
+            "Would you really like to delete the selected row from MySQL server?",
+            "Yes",
+            "No",
+            Events.DELETE_SELECTED_ROW
+        );
     };
 
     $scope.isTableSelection = function() {

@@ -35,9 +35,18 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         }
     };
 
+    var logout = function() {
+        mySQLClientService.logout().then(function() {
+            $scope.notifyConnectionChanged();
+        });
+    };
+
     $scope.initialize = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, connectionInfo) {
             onConnectionChanged(connectionInfo);
+        });
+        $scope.$on(Events.LOGOUT, function(event, data) {
+            logout();
         });
         $scope.selectedDatabase = "[Select database]";
     };
@@ -52,7 +61,12 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
     };
 
     $scope.logout = function(event) {
-        $("#logoutConfirmDialog").modal("show");
+        $scope.showConfirmDialog(
+            "Would you really like to logout from MySQL server?",
+            "Yes",
+            "No",
+            Events.LOGOUT
+        );
     };
 
     $scope.isRowsActive = function() {

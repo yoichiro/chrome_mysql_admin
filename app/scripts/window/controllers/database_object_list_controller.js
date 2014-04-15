@@ -85,7 +85,7 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         $scope.$on(Events.REFRESH_TABLE_LIST, function(event, database) {
             doRefresh();
         });
-        $scope.$on(Events.REQUEST_DROP_TABLE, function(event, table) {
+        $scope.$on(Events.DROP_SELECTED_TABLE, function(event, data) {
             doDropTable();
         });
         assignWindowResizeEventHandler();
@@ -124,7 +124,12 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     $scope.confirmDropSelectedTable = function() {
-        $("#dropTableConfirmDialog").modal("show");
+        $scope.showConfirmDialog(
+            "Would you really like to drop the selected table from MySQL server?",
+            "Yes",
+            "No",
+            Events.DROP_SELECTED_TABLE
+        );
     };
 
 }]);

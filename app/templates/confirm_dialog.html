@@ -1,4 +1,4 @@
-<div id="dropTableConfirmDialog" class="modal fade" ng-controller="DropTableConfirmDialogController">
+<div id="confirmDialog" class="modal fade" ng-controller="ConfirmDialogController" ng-init="initialize()">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -6,11 +6,11 @@
         <h4 class="modal-title">Confirm</h4>
       </div>
       <div class="modal-body">
-        <p>Would you really like to drop the selected table from MySQL server?</p>
+        <p>{{message}}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-danger" ng-click="dropTable()">Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{noButtonLabel}}</button>
+        <button type="button" class="btn btn-danger" ng-click="execute()">{{yesButtonLabel}}</button>
       </div>
     </div>
   </div>

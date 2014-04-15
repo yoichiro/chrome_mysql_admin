@@ -21,13 +21,17 @@ chromeMyAdmin.constant("Events", {
     SHOW_INSERT_ROW_DIALOG: "showInsertRowDialog",
     SHOW_MAIN_STATUS_MESSAGE: "showMainStatusMessage",
     SHOW_PROGRESS_BAR: "showProgressBar",
+    SHOW_CONFIRM_DIALOG: "showConfirmDialog",
+
     HIDE_PROGRESS_BAR: "hideProgressBar",
-    CONFIRM_DELETE_SELECTED_ROW: "confirmDeleteSelectedRow",
-    REQUEST_DELETE_SELECTED_ROW: "requestDeleteSelectedRow",
+
+    DELETE_SELECTED_ROW: "deleteSelectedRow",
+    DROP_SELECTED_TABLE: "dropSelectedTable",
     REQUEST_INSERT_ROW: "requestInsertRow",
     FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
     REFRESH_TABLE_LIST: "refreshTableList",
-    REQUEST_DROP_TABLE: "requestDropTable"
+    REQUEST_DROP_TABLE: "requestDropTable",
+    LOGOUT: "logout"
 });
 
 chromeMyAdmin.constant("Modes", {
