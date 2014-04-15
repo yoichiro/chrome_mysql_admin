@@ -112,10 +112,6 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         return sql;
     };
 
-    var confirmDeleteSelectedRow = function() {
-        $("#deleteRowConfirmDialog").modal("show");
-    };
-
     var getPrimaryKeyColumns = function(columnDefinitions) {
         var primaryKeyColumns = {};
         angular.forEach(columnDefinitions, function(columnDefinition, index) {
@@ -126,10 +122,11 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         return primaryKeyColumns;
     };
 
-    var requestDeleteSelectedRow = function(row) {
+    var deleteSelectedRow = function() {
         if (!$scope.lastQueryResult) {
             return;
         }
+        var row = rowsSelectionService.getSelectedRows();
         var originalRow = $scope.lastQueryResult.resultsetRows[row.rowIndex];
         var columnDefinitions = $scope.lastQueryResult.columnDefinitions;
         var primaryKeyColumns = getPrimaryKeyColumns(columnDefinitions);
@@ -279,11 +276,8 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         $scope.$on(Events.ROWS_PAGING_CHANGED, function(event, currentPageIndex) {
             doQueryAndReload();
         });
-        $scope.$on(Events.CONFIRM_DELETE_SELECTED_ROW, function(event, selectedRow) {
-            confirmDeleteSelectedRow();
-        });
-        $scope.$on(Events.REQUEST_DELETE_SELECTED_ROW, function(event, selectedRow) {
-            requestDeleteSelectedRow(selectedRow);
+        $scope.$on(Events.DELETE_SELECTED_ROW, function(event, data) {
+            deleteSelectedRow();
         });
         $scope.$on(Events.REQUEST_INSERT_ROW, function(event, table) {
             showInsertRowDialog();
