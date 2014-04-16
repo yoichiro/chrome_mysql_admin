@@ -1,6 +1,6 @@
 var chromeMyAdmin = angular.module("chromeMyAdmin", ["ngGrid"]);
 
-chromeMyAdmin.run(["$rootScope", "Events", function($rootScope, Events) {
+chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", function($rootScope, Events, ErrorLevel) {
     "use strict";
 
     $rootScope.connected = false;
@@ -17,7 +17,18 @@ chromeMyAdmin.run(["$rootScope", "Events", function($rootScope, Events) {
     };
 
     $rootScope.fatalErrorOccurred = function(errorMessage) {
-        $rootScope.$broadcast(Events.FATAL_ERROR_OCCURRED, errorMessage);
+        $rootScope.$broadcast(Events.SHOW_ERROR_DIALOG, {
+            errorLevel: ErrorLevel.FATAL,
+            reason: errorMessage
+        });
+    };
+
+    $rootScope.showErrorDialog = function(message, reason) {
+        $rootScope.$broadcast(Events.SHOW_ERROR_DIALOG, {
+            errorLevel: ErrorLevel.ERROR,
+            message: message,
+            reason: reason
+        });
     };
 
     $rootScope.notifyConnectionChanged = function(connectionInfo) {
@@ -205,5 +216,14 @@ chromeMyAdmin.directive("confirmDialog", function() {
     return {
         restrict: "E",
         templateUrl: "templates/confirm_dialog.html"
+    };
+});
+
+chromeMyAdmin.directive("errorDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/error_dialog.html"
     };
 });
