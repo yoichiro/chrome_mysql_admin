@@ -22,6 +22,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_MAIN_STATUS_MESSAGE: "showMainStatusMessage",
     SHOW_PROGRESS_BAR: "showProgressBar",
     SHOW_CONFIRM_DIALOG: "showConfirmDialog",
+    SHOW_ERROR_DIALOG: "showErrorDialog",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
 
@@ -39,4 +40,9 @@ chromeMyAdmin.constant("Modes", {
     ROWS: "rows",
     STRUCTURE: "structure",
     QUERY: "query"
+});
+
+chromeMyAdmin.constant("ErrorLevel", {
+    FATAL: "fatal",
+    ERROR: "error"
 });

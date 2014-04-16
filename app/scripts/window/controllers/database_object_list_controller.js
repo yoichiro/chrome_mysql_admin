@@ -70,7 +70,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
                 doRefresh();
             }
         }, function(reason) {
-            $scope.fatalErrorOccurred(reason);
+            $scope.showErrorDialog("Dropping table failed.", reason);
+            doRefresh();
         });
     };
 
