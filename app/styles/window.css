@@ -234,3 +234,9 @@ body {
     background-color: #eee;
     font-weight: bold;
 }
+
+.middleFooter {
+    background-color: white;
+    height: 25px;
+    border-top: 1px solid #eee;
+}

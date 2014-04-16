@@ -8,9 +8,19 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             columnDefs: "structureColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
+            multiSelect: false,
+            selectedItems: $scope.selectedColumns,
+            afterSelectionChange: function(rowItem, event) {
+                if (rowItem.selected) {
+                    $scope.selectedColumn = rowItem.entity;
+                } else {
+                    $scope.selectedColumn = null;
+                }
+            },
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
+        $scope.selectedColumn = null;
     };
 
     var initializeIndexesGrid = function() {
@@ -20,6 +30,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             columnDefs: "indexesColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
+            multiSelect: false,
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
@@ -53,7 +64,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         $("#structureGrid").height(
             ($(window).height() -
                 UIConstants.NAVBAR_HEIGHT -
-                UIConstants.FOOTER_HEIGHT) * (2 / 3));
+                UIConstants.FOOTER_HEIGHT) * (2 / 3) -
+                UIConstants.FOOTER_HEIGHT); // Footer area for columns table
     };
 
     var adjustIndexesPanelHeight = function() {
@@ -104,6 +116,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             rows.push(row);
         });
         $scope.structureData = rows;
+        $scope.selectedColumn = null;
     };
 
     var updateIndexes = function(columnDefinitions, resultsetRows) {
@@ -162,7 +175,22 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             modeService.getMode() === Modes.STRUCTURE;
     };
 
-    $scope.initialize = function() {
+    var deleteColumn = function() {
+        var table = targetObjectService.getTable();
+        var column = $scope.selectedColumn.Field;
+        var sql = "ALTER TABLE `" + table + "` DROP COLUMN `" + column + "`";
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.fatalErrorOccurred("Deleting column failed.");
+            } else {
+                loadStructure(table);
+            }
+        }, function(reason) {
+            $scope.showErrorDialog("Deleting column failed.", reason);
+        });
+    };
+
+    var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
@@ -184,15 +212,39 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
+        $scope.$on(Events.DELETE_SELECTED_COLUMN, function(event, data) {
+            deleteColumn();
+        });
+    };
+
+    $scope.initialize = function() {
         initializeStructureGrid();
         initializeIndexesGrid();
         assignWindowResizeEventHandler();
         adjustStructurePanelHeight();
         adjustIndexesPanelHeight();
+        assignEventHandlers();
     };
 
     $scope.isStructurePanelVisible = function() {
         return _isStructurePanelVisible();
+    };
+
+    $scope.isTableSelection = function() {
+        return targetObjectService.getTable() !== null;
+    };
+
+    $scope.isColumnSelection = function() {
+        return $scope.selectedColumn !== null;
+    };
+
+    $scope.confirmDeleteSelectedColumn = function() {
+        $scope.showConfirmDialog(
+            "Would you really like to delete the selected column?",
+            "Yes",
+            "No",
+            Events.DELETE_SELECTED_COLUMN
+        );
     };
 
 }]);
