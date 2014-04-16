@@ -27,6 +27,7 @@ chromeMyAdmin.constant("Events", {
     HIDE_PROGRESS_BAR: "hideProgressBar",
 
     DELETE_SELECTED_ROW: "deleteSelectedRow",
+    DELETE_SELECTED_COLUMN: "deleteSelectedColumn",
     DROP_SELECTED_TABLE: "dropSelectedTable",
     REQUEST_INSERT_ROW: "requestInsertRow",
     FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
