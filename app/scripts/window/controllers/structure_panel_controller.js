@@ -247,4 +247,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         );
     };
 
+    $scope.addColumn = function() {
+        targetObjectService.showAddColumnDialog();
+    };
+
 }]);
