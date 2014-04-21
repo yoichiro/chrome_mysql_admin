@@ -53,6 +53,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         requestDropSelectedTable: function() {
             $rootScope.$broadcast(Events.REQUEST_DROP_TABLE, table);
+        },
+        showAddColumnDialog: function() {
+            $rootScope.$broadcast(Events.SHOW_ADD_COLUMN_DIALOG, table);
         }
     };
 

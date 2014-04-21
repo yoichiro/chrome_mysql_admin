@@ -23,6 +23,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_PROGRESS_BAR: "showProgressBar",
     SHOW_CONFIRM_DIALOG: "showConfirmDialog",
     SHOW_ERROR_DIALOG: "showErrorDialog",
+    SHOW_ADD_COLUMN_DIALOG: "showAddColumnDialog",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
 
@@ -46,4 +47,157 @@ chromeMyAdmin.constant("Modes", {
 chromeMyAdmin.constant("ErrorLevel", {
     FATAL: "fatal",
     ERROR: "error"
+});
+
+chromeMyAdmin.constant("TypeMap", {
+    "TINYINT": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "BIT": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "BOOL": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "BOOLEAN": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "SMALLINT": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "MEDUIMINT": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "INT": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "INTEGER": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "BIGINT": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "FLOAT": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "DOUBLE": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "DECIMAL": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "DEC": {
+        isString: false,
+        isNumeric: true,
+        isDateTime: false
+    },
+    "DATE": {
+        isString: false,
+        isNumeric: false,
+        isDateTime: true
+    },
+    "DATETIME": {
+        isString: false,
+        isNumeric: false,
+        isDateTime: true
+    },
+    "TIMESTAMP": {
+        isString: false,
+        isNumeric: false,
+        isDateTime: true
+    },
+    "TIME": {
+        isString: false,
+        isNumeric: false,
+        isDateTime: true
+    },
+    "YEAR": {
+        isString: false,
+        isNumeric: false,
+        isDateTime: true
+    },
+    "CHAR": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "VARCHAR": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "TINYBLOB": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "TINYTEXT": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "BLOB": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "TEXT": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "MEDIUMBLOB": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "MEDIUMTEXT": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "LONGBLOB": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "LONGTEXT": {
+        isString: true,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "ENUM": {
+        isString: false,
+        isNumeric: false,
+        isDateTime: false
+    },
+    "SET": {
+        isString: false,
+        isNumeric: false,
+        isDateTime: false
+    }
 });

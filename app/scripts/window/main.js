@@ -227,3 +227,12 @@ chromeMyAdmin.directive("errorDialog", function() {
         templateUrl: "templates/error_dialog.html"
     };
 });
+
+chromeMyAdmin.directive("addColumnDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/add_column_dialog.html"
+    };
+});
