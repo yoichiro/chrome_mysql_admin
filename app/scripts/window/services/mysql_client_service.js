@@ -1,7 +1,7 @@
 chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $rootScope) {
     "use strict";
 
-    MySQL.communication.setSocketImpl(new MySQL.ChromeSocket());
+    MySQL.communication.setSocketImpl(new MySQL.ChromeSocket2());
 
     var queryQueue = [];
 
@@ -18,7 +18,6 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
     };
 
     var _addQueryQueue = function(type, query) {
-        // console.log("Add query to queue: " + type + " (" + query + ")");
         var deferred = $q.defer();
         queryQueue.push({
             type: type,
