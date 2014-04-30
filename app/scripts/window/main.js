@@ -236,3 +236,12 @@ chromeMyAdmin.directive("addColumnDialog", function() {
         templateUrl: "templates/add_column_dialog.html"
     };
 });
+
+chromeMyAdmin.directive("addIndexDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/add_index_dialog.html"
+    };
+});
