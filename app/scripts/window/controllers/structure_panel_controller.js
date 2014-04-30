@@ -31,9 +31,18 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             enableColumnResize: true,
             enableSorting: false,
             multiSelect: false,
+            selectedItems: $scope.selectedIndexes,
+            afterSelectionChange: function(rowItem, event) {
+                if (rowItem.selected) {
+                    $scope.selectedIndex = rowItem.entity;
+                } else {
+                    $scope.selectedIndex = null;
+                }
+            },
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
+        $scope.selectedIndex = null;
     };
 
     var onConnectionChanged = function() {
@@ -65,7 +74,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             ($(window).height() -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT) * (2 / 3) -
-                UIConstants.FOOTER_HEIGHT); // Footer area for columns table
+                UIConstants.FOOTER_HEIGHT * 2); // Footer area x2 for columns table
     };
 
     var adjustIndexesPanelHeight = function() {
@@ -132,6 +141,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             rows.push(row);
         });
         $scope.indexesData = rows;
+        $scope.selectedIndex = null;
     };
 
     var loadStructure = function(tableName) {
@@ -190,6 +200,21 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         });
     };
 
+    var deleteIndex = function() {
+        var table = targetObjectService.getTable();
+        var indexName = $scope.selectedIndex.Key_name;
+        var sql = "DROP INDEX `" + indexName + "` ON `" + table + "`";
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.fatalErrorOccurred("Deleting index failed.");
+            } else {
+                loadStructure(table);
+            }
+        }, function(reason) {
+            $scope.showErrorDialog("Deleting index failed.", reason);
+        });
+    };
+
     var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
@@ -214,6 +239,9 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         });
         $scope.$on(Events.DELETE_SELECTED_COLUMN, function(event, data) {
             deleteColumn();
+        });
+        $scope.$on(Events.DELETE_SELECTED_INDEX, function(event, data) {
+            deleteIndex();
         });
     };
 
@@ -249,6 +277,27 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
 
     $scope.addColumn = function() {
         targetObjectService.showAddColumnDialog();
+    };
+
+    $scope.isIndexSelection = function() {
+        return $scope.selectedIndex !== null;
+    };
+
+    $scope.confirmDeleteSelectedIndex = function() {
+        $scope.showConfirmDialog(
+            "Would you really like to delete the selected index?",
+            "Yes",
+            "No",
+            Events.DELETE_SELECTED_INDEX
+        );
+    };
+
+    $scope.addIndex = function() {
+        var columnNames = [];
+        angular.forEach($scope.structureData, function(column) {
+            this.push(column.Field);
+        }, columnNames);
+        targetObjectService.showAddIndexDialog(columnNames);
     };
 
 }]);

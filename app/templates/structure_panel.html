@@ -14,4 +14,14 @@
   <div class="subTitle">Indexes</div>
   <div id="indexesGrid" class="gridStyle" ng-grid="indexesGrid">
   </div>
+  <div class="middleFooter">
+    <div class="pull-right">
+      <div class="pull-left footerButtonRight" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="addIndex()">
+        <span class="fa fa-plus"></span>
+      </div>
+      <div class="pull-left footerButtonRight" ng-class="!isIndexSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedIndex()">
+        <span class="fa fa-trash-o"></span>
+      </div>
+    </div>
+  </div>
 </div>

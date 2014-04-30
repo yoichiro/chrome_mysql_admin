@@ -56,6 +56,12 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         showAddColumnDialog: function() {
             $rootScope.$broadcast(Events.SHOW_ADD_COLUMN_DIALOG, table);
+        },
+        showAddIndexDialog: function(columnNames) {
+            $rootScope.$broadcast(Events.SHOW_ADD_INDEX_DIALOG, {
+                table: table,
+                columns: columnNames
+            });
         }
     };
 
