@@ -1,3 +1,12 @@
+chromeMyAdmin.directive("addIndexDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/add_index_dialog.html"
+    };
+});
+
 chromeMyAdmin.controller("AddIndexDialogController", ["$scope", "Events", "mySQLClientService", "targetObjectService", function($scope, Events, mySQLClientService, targetObjectService) {
     "use strict";
 

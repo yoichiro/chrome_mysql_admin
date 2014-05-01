@@ -1,3 +1,12 @@
+chromeMyAdmin.directive("createDatabaseDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/create_database_dialog.html"
+    };
+});
+
 chromeMyAdmin.controller("CreateDatabaseDialogController", ["$scope", "Events", "mySQLClientService", "targetObjectService", function($scope, Events, mySQLClientService, targetObjectService) {
     "use strict";
 

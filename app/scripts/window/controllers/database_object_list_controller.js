@@ -1,3 +1,12 @@
+chromeMyAdmin.directive("databaseObjectListPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/database_object_list_panel.html"
+    };
+});
+
 chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", "Events", "Modes", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes) {
     "use strict";
 
