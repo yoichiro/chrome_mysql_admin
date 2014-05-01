@@ -62,6 +62,12 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
                 table: table,
                 columns: columnNames
             });
+        },
+        showCreateDatabaseDialog: function() {
+            $rootScope.$broadcast(Events.SHOW_CREATE_DATABASE_DIALOG, null);
+        },
+        refreshDatabases: function() {
+            $rootScope.$broadcast(Events.REFRESH_DATABASES, null);
         }
     };
 

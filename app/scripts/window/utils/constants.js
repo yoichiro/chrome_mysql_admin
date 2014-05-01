@@ -25,6 +25,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_ERROR_DIALOG: "showErrorDialog",
     SHOW_ADD_COLUMN_DIALOG: "showAddColumnDialog",
     SHOW_ADD_INDEX_DIALOG: "showAddIndexDialog",
+    SHOW_CREATE_DATABASE_DIALOG: "showCreateDatabaseDialog",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
 
@@ -35,6 +36,7 @@ chromeMyAdmin.constant("Events", {
     REQUEST_INSERT_ROW: "requestInsertRow",
     FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
     REFRESH_TABLE_LIST: "refreshTableList",
+    REFRESH_DATABASES: "refreshDatabases",
     REQUEST_DROP_TABLE: "requestDropTable",
     LOGOUT: "logout"
 });
