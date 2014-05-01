@@ -1,3 +1,12 @@
+chromeMyAdmin.directive("addColumnDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/add_column_dialog.html"
+    };
+});
+
 chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService) {
     "use strict";
 

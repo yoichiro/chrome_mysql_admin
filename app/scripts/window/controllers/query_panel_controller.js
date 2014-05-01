@@ -1,3 +1,12 @@
+chromeMyAdmin.directive("queryPanel", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/query_panel.html"
+    };
+});
+
 chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes) {
     "use strict";
 

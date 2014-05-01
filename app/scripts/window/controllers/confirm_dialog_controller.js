@@ -1,3 +1,12 @@
+chromeMyAdmin.directive("confirmDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/confirm_dialog.html"
+    };
+});
+
 chromeMyAdmin.controller("ConfirmDialogController", ["$scope", "Events", function($scope, Events) {
     "use strict";
 
