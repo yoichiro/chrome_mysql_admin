@@ -1,0 +1,74 @@
+chromeMyAdmin.controller("CreateDatabaseDialogController", ["$scope", "Events", "mySQLClientService", "targetObjectService", function($scope, Events, mySQLClientService, targetObjectService) {
+    "use strict";
+
+    var onShowDialog = function() {
+        resetErrorMessage();
+        $("#createDatabaseDialog").modal("show");
+        loadCharacterSet();
+    };
+
+    var loadCharacterSet = function() {
+        mySQLClientService.query("SHOW CHARACTER SET").then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.characterSets = result.resultsetRows;
+                if (result.resultsetRows.length > 0) {
+                    $scope.characterSet = "utf8";
+                } else {
+                    $scope.fatalErrorOccurred("No character set.");
+                }
+            } else {
+                    $scope.fatalErrorOccurred("Fetching character set failed.");
+            }
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
+        });
+    };
+
+    var assignEventHandlers = function() {
+        $scope.$on(Events.SHOW_CREATE_DATABASE_DIALOG, function(event, data) {
+            onShowDialog();
+        });
+
+    };
+
+    var resetErrorMessage = function() {
+        $scope.errorMessage = "";
+    };
+
+    var doCreateDatabase = function() {
+        var sql = "CREATE DATABASE `" + $scope.databaseName + "` CHARACTER SET " + $scope.characterSet;
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.fatalErrorOccurred("Creating table failed.");
+            } else {
+                $("#createDatabaseDialog").modal("hide");
+                targetObjectService.refreshDatabases();
+            }
+        }, function(reason) {
+            var errorMessage = "[Error code:" + reason.errorCode;
+            errorMessage += " SQL state:" + reason.sqlState;
+            errorMessage += "] ";
+            errorMessage += reason.errorMessage;
+            $scope.errorMessage = errorMessage;
+        });
+    };
+
+    $scope.isErrorMessageVisible = function() {
+        return $scope.errorMessage.length > 0;
+    };
+
+    $scope.initialize = function() {
+        resetErrorMessage();
+        assignEventHandlers();
+    };
+
+    $scope.isCreateDatabaseButtonDisabled = function() {
+        return !$scope.databaseName || $scope.databaseName.length == 0;
+    };
+
+    $scope.createDatabase = function() {
+        resetErrorMessage();
+        doCreateDatabase();
+    };
+
+}]);

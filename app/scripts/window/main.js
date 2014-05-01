@@ -245,3 +245,12 @@ chromeMyAdmin.directive("addIndexDialog", function() {
         templateUrl: "templates/add_index_dialog.html"
     };
 });
+
+chromeMyAdmin.directive("createDatabaseDialog", function() {
+    "use strict";
+
+    return {
+        restrict: "E",
+        templateUrl: "templates/create_database_dialog.html"
+    };
+});

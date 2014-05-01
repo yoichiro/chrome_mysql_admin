@@ -41,13 +41,20 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         });
     };
 
-    $scope.initialize = function() {
+    var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, connectionInfo) {
             onConnectionChanged(connectionInfo);
         });
         $scope.$on(Events.LOGOUT, function(event, data) {
             logout();
         });
+        $scope.$on(Events.REFRESH_DATABASES, function(event, data) {
+            loadDatabaseList();
+        });
+    };
+
+    $scope.initialize = function() {
+        assignEventHandlers();
         $scope.selectedDatabase = "[Select database]";
     };
 

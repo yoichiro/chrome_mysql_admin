@@ -29,6 +29,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         return mySQLClientService.isConnected() && modeService.getMode() === Modes.STRUCTURE;
     };
 
+    $scope.isDatabaseButtonsVisible = function() {
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.DATABASE;
+    };
+
     $scope.hasPreviousPage = function() {
         return _hasPrevisouPage();
     };
@@ -85,6 +89,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
 
     $scope.insertRow = function() {
         targetObjectService.requestInsertRow();
+    };
+
+    $scope.createDatabase = function() {
+        targetObjectService.showCreateDatabaseDialog();
     };
 
 }]);
