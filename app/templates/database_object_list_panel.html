@@ -7,13 +7,13 @@
 
   <div class="sidebarFooter">
     <div class="pull-left footerButtonLeft" ng-click="refresh()">
-      <span class="fa fa-refresh"></span>
+      <span class="fa fa-refresh" title="Refresh the table list"></span>
     </div>
     <div class="pull-left footerButtonLeft" ng-class="!isDatabaseSelection() && 'footerButtonDisable'" ng-click="createTable()">
-      <span class="fa fa-plus"></span>
+      <span class="fa fa-plus" title="Create a new table"></span>
     </div>
     <div class="pull-left footerButtonLeft" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="confirmDropSelectedTable()">
-      <span class="fa fa-trash-o"></span>
+      <span class="fa fa-trash-o" title="Drop the selected table"></span>
     </div>
   </div>
 </div>
