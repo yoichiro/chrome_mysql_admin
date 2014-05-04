@@ -23,7 +23,7 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     var databaseChanged = function() {
         targetObjectService.resetTable();
         mySQLClientService.query(
-            "USE " + targetObjectService.getDatabase()).then(function(result) {
+            "USE `" + targetObjectService.getDatabase() + "`").then(function(result) {
                 if (result.hasResultsetRows) {
                     $scope.fatalErrorOccurred("Changing database failed.");
                 } else {
