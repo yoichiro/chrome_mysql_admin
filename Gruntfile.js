@@ -137,7 +137,9 @@ module.exports = function (grunt) {
                         'styles/*.css',
                         'styles/*.map',
                         'scripts/background.js',
-                        'scripts/lib/*.js',
+                        'scripts/lib/bootstrap.min.js',
+                        'scripts/lib/ng-grid-2.0.7.min.js',
+                        'scripts/lib/mysql_js_driver_1.4.1.min.js',
                         'fonts/{,*/}*.*',
                         '*.html',
                         'templates/*.html'
@@ -177,6 +179,14 @@ module.exports = function (grunt) {
                     dest: ''
                 }]
             }
+        },
+        bower: {
+            install: {
+                options: {
+                    targetDir: '<%= yeoman.app %>/scripts/lib',
+                    verbose: true
+                }
+            }
         }
     });
 
@@ -200,6 +210,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean',
+        'bower:install',
         'chromeManifest:dist',
         'useminPrepare',
         'concurrent:dist',
