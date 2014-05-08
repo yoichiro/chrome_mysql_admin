@@ -43,7 +43,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 $(window).height() -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT;
-        $("#queryEditor").height(totalHeight / 3 - 14);
+        $(".queryEditor").height(totalHeight / 3 - 14);
         $("#queryResultGrid").height(totalHeight * 2 / 3 - 32);
     };
 
@@ -126,6 +126,12 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     $scope.isQueryErrorMessageVisible = function() {
         var msg = $scope.queryErrorMessage;
         return msg && msg.length > 0;
+    };
+
+    $scope.aceLoaded = function(editor) {
+        editor.setHighlightActiveLine(false);
+        editor.setShowPrintMargin(false);
+        editor.setShowInvisibles(true);
     };
 
 }]);
