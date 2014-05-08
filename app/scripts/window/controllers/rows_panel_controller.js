@@ -70,7 +70,8 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                 editableCellTemplate: editableCellTemplate,
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
-                    UIConstants.GRID_COLUMN_MAX_WIDTH)
+                    UIConstants.GRID_COLUMN_MAX_WIDTH),
+                cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
             });
         }, columnDefs);
         $scope.rowsColumnDefs = columnDefs;
