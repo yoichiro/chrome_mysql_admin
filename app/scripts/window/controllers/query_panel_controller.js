@@ -47,9 +47,24 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $("#queryResultGrid").height(totalHeight * 2 / 3 - 32);
     };
 
+    var onTableChanged = function(table) {
+        $scope.editor.insert(table);
+        $scope.editor.focus();
+    };
+
+    var onModeChanged = function(mode) {
+        $scope.editor.focus();
+    };
+
     var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
+        });
+        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
+            onTableChanged(table);
+        });
+        $scope.$on(Events.MODE_CHANGED, function(event, mode) {
+            onModeChanged(mode);
         });
     };
 
@@ -130,6 +145,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     $scope.aceLoaded = function(editor) {
+        $scope.editor = editor;
         editor.setHighlightActiveLine(false);
         editor.setShowPrintMargin(false);
         editor.setShowInvisibles(true);
