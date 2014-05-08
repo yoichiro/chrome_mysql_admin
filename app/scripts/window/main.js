@@ -1,4 +1,4 @@
-var chromeMyAdmin = angular.module("chromeMyAdmin", ["ngGrid"]);
+var chromeMyAdmin = angular.module("chromeMyAdmin", ["ngGrid", "ui.ace"]);
 
 chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", function($rootScope, Events, ErrorLevel) {
     "use strict";

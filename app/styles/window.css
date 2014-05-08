@@ -154,23 +154,6 @@ body {
     width: 15%;
 }
 
-/*
-.rowsConditionPanel input {
-    width: 40%;
-    height: 25px;
-}
-
-.rowsConditionPanel button {
-    height: 25px;
-    font-size: 9px;
-}
-*/
-
-#queryPanel textarea {
-    resize: none;
-    font-size: 16px;
-}
-
 .queryMiddlePanel {
     width: 100%;
     height: 32px;
@@ -192,6 +175,10 @@ body {
     background-color: white;
     overflow-y: auto;
     font-size: 13px;
+}
+
+.queryEditor {
+    border-bottom: 1px solid #eee;
 }
 
 .insertPanel {
