@@ -48,8 +48,10 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     var onTableChanged = function(table) {
-        $scope.editor.insert(table);
-        $scope.editor.focus();
+        if (modeService.getMode() === Modes.QUERY) {
+            $scope.editor.insert(table);
+            $scope.editor.focus();
+        }
     };
 
     var onModeChanged = function(mode) {
