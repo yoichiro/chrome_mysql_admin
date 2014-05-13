@@ -104,4 +104,17 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         targetObjectService.showCreateDatabaseDialog();
     };
 
+    $scope.isDatabaseSelection = function() {
+        return targetObjectService.getDatabase();
+    };
+
+    $scope.confirmDeleteSelectedDatabase = function() {
+        $scope.showConfirmDialog(
+            "Would you really like to delete the selected database from MySQL server?",
+            "Yes",
+            "No",
+            Events.DELETE_SELECTED_DATABASE
+        );
+    };
+
 }]);

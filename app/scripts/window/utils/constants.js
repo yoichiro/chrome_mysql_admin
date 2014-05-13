@@ -32,6 +32,7 @@ chromeMyAdmin.constant("Events", {
     DELETE_SELECTED_ROW: "deleteSelectedRow",
     DELETE_SELECTED_COLUMN: "deleteSelectedColumn",
     DELETE_SELECTED_INDEX: "deleteSelectedIndex",
+    DELETE_SELECTED_DATABASE: "deleteSelectedDatabase",
     DROP_SELECTED_TABLE: "dropSelectedTable",
     REQUEST_INSERT_ROW: "requestInsertRow",
     FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
