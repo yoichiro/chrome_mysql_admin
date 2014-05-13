@@ -43,13 +43,30 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 $(window).height() -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT;
-        $("#queryEditor").height(totalHeight / 3 - 14);
+        $(".queryEditor").height(totalHeight / 3 - 14);
         $("#queryResultGrid").height(totalHeight * 2 / 3 - 32);
+    };
+
+    var onTableChanged = function(table) {
+        if (modeService.getMode() === Modes.QUERY) {
+            $scope.editor.insert(table);
+            $scope.editor.focus();
+        }
+    };
+
+    var onModeChanged = function(mode) {
+        $scope.editor.focus();
     };
 
     var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
+        });
+        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
+            onTableChanged(table);
+        });
+        $scope.$on(Events.MODE_CHANGED, function(event, mode) {
+            onModeChanged(mode);
         });
     };
 
@@ -89,7 +106,8 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 displayName: columnDefinition.name,
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
-                    UIConstants.GRID_COLUMN_MAX_WIDTH)
+                    UIConstants.GRID_COLUMN_MAX_WIDTH),
+                cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
             });
         }, columnDefs);
         $scope.queryResultColumnDefs = columnDefs;
@@ -126,6 +144,13 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     $scope.isQueryErrorMessageVisible = function() {
         var msg = $scope.queryErrorMessage;
         return msg && msg.length > 0;
+    };
+
+    $scope.aceLoaded = function(editor) {
+        $scope.editor = editor;
+        editor.setHighlightActiveLine(false);
+        editor.setShowPrintMargin(false);
+        editor.setShowInvisibles(true);
     };
 
 }]);

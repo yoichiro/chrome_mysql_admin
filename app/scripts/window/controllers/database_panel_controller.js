@@ -7,7 +7,7 @@ chromeMyAdmin.directive("databasePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes) {
+chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService) {
     "use strict";
 
     var autoUpdatePromise = null;
@@ -96,7 +96,8 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
                 displayName: columnDefinition.name,
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
-                    UIConstants.GRID_COLUMN_MAX_WIDTH)
+                    UIConstants.GRID_COLUMN_MAX_WIDTH),
+                cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
             });
         }, columnDefs);
         $scope.processListColumnDefs = columnDefs;
@@ -115,13 +116,40 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
         $scope.processListData = rows;
     };
 
-    $scope.initialize = function() {
+    var deleteSelectedDatabase = function() {
+        var database = targetObjectService.getDatabase();
+        if (database) {
+            var sql = "DROP DATABASE `" + database + "`";
+            mySQLClientService.query(sql).then(function(result) {
+                if (result.hasResultsetRows) {
+                    $scope.fatalErrorOccurred("Deleting database failed.");
+                } else {
+                    targetObjectService.refreshDatabases();
+                }
+            }, function(reason) {
+                var errorMessage = "[Error code:" + reason.errorCode;
+                errorMessage += " SQL state:" + reason.sqlState;
+                errorMessage += "] ";
+                errorMessage += reason.errorMessage;
+                $scope.errorMessage = errorMessage;
+            });
+        }
+    };
+
+    var assignEventHandlers = function() {
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
+        $scope.$on(Events.DELETE_SELECTED_DATABASE, function(event, data) {
+            deleteSelectedDatabase();
+        });
+    };
+
+    $scope.initialize = function() {
+        assignEventHandlers();
         initializeProcessListGrid();
         assignWindowResizeEventHandler();
         adjustProcessListHeight();

@@ -67,6 +67,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         if (targetObjectService.getDatabase()) {
             targetObjectService.resetTable();
             loadTables();
+        } else {
+            clearTables();
         }
     };
 
@@ -84,11 +86,15 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         });
     };
 
+    var clearTables = function() {
+        $scope.tables = [];
+    };
+
     $scope.initialize = function() {
         $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             databaseChanged();
         });
-        $scope.tables = [];
+        clearTables();
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
