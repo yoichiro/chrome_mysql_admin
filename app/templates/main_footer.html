@@ -30,5 +30,8 @@
     <div class="pull-left footerButtonRight" ng-click="createDatabase()">
       <span class="fa fa-plus" title="Create a new database"></span>
     </div>
+    <div class="pull-left footerButtonRight" ng-class="!isDatabaseSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedDatabase()">
+      <span class="fa fa-trash-o" title="Delete the database"></span>
+    </div>
   </div>
 </div>

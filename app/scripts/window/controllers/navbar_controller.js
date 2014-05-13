@@ -16,6 +16,8 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
                 $scope.selectedDatabase = "[Select database]";
                 $scope.databases = databases;
                 modeService.changeMode(Modes.DATABASE);
+                targetObjectService.resetDatabase();
+                targetObjectService.refreshTableList();
             });
         });
     };
