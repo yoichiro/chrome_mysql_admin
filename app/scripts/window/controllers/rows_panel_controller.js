@@ -26,8 +26,28 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                     rowsSelectionService.reset();
                 }
             },
+            dblClickFn: $scope.onDoubleClickedRow,
+            plugins: [ngGridDoubleClick],
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
+        };
+    };
+
+    var ngGridDoubleClick = function() {
+        var self = this;
+        self.$scope = null;
+        self.myGrid = null;
+        self.init = function(scope, grid, services) {
+            self.$scope = scope;
+            self.myGrid = grid;
+            self.assignEvents();
+        };
+        self.assignEvents = function() {
+            self.myGrid.$viewport.on('dblclick', self.onDoubleClick);
+        };
+        self.onDoubleClick = function(event) {
+            self.myGrid.config.dblClickFn(self.$scope.selectedItems[0]);
+            self.$scope.$apply();
         };
     };
 
@@ -268,6 +288,10 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         assignWindowResizeEventHandler();
         adjustRowsPanelHeight();
         initializeOptions();
+    };
+
+    $scope.onDoubleClickedRow = function(rowItem) {
+        targetObjectService.requestUpdateRow();
     };
 
     $scope.isRowsPanelVisible = function() {
