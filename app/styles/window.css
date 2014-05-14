@@ -227,3 +227,7 @@ body {
     height: 25px;
     border-top: 1px solid #eee;
 }
+
+label.control-label {
+    word-wrap: break-word;
+}

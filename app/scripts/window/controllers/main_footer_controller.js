@@ -100,6 +100,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         targetObjectService.requestInsertRow();
     };
 
+    $scope.updateRow = function() {
+        targetObjectService.requestUpdateRow();
+    };
+
     $scope.createDatabase = function() {
         targetObjectService.showCreateDatabaseDialog();
     };
