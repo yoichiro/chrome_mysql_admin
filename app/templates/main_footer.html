@@ -5,6 +5,9 @@
     <div class="pull-left footerButtonRight" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="insertRow()">
       <span class="fa fa-plus" title="Insert a new row"></span>
     </div>
+    <div class="pull-left footerButtonRight" ng-class="!isRowSelection() && 'footerButtonDisable'" ng-click="updateRow()">
+      <span class="fa fa-pencil" title="Edit the selected row"></span>
+    </div>
     <div class="pull-left footerButtonRight" ng-class="!isRowSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedRow()">
       <span class="fa fa-trash-o" title="Delete the selected row"></span>
     </div>

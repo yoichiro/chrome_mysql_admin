@@ -1,9 +1,9 @@
-<div id="insertRowDialog" class="modal fade" ng-controller="InsertRowDialogController" ng-init="initialize()">
+<div id="updateRowDialog" class="modal fade" ng-controller="UpdateRowDialogController" ng-init="initialize()">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Insert row</h4>
+        <h4 class="modal-title">Update row</h4>
       </div>
       <div class="modal-body">
         <div ng-show="isErrorMessageVisible()">
@@ -20,7 +20,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" ng-click="insertRow()">Insert</button>
+        <button type="button" class="btn btn-primary" ng-click="updateRow()">Update</button>
       </div>
     </div>
   </div>
