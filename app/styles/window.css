@@ -231,3 +231,7 @@ body {
 label.control-label {
     word-wrap: break-word;
 }
+
+div.form-group textarea {
+    resize: vertical;
+}
