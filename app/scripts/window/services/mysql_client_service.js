@@ -4,6 +4,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
     MySQL.communication.setSocketImpl(new MySQL.ChromeSocket2());
 
     var queryQueue = [];
+    var queryHistory = [];
 
     var _logout = function() {
         $rootScope.showMainStatusMessage("Logging out from MySQL server...");
@@ -44,11 +45,24 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         }
     };
 
+    var _addQueryHistory = function(query) {
+        $rootScope.safeApply(function() {
+            for (var i = 0; i < queryHistory.length; i++) {
+                if (queryHistory[i] === query) {
+                    queryHistory.splice(i, 1);
+                    break;
+                }
+            }
+            queryHistory.unshift(query);
+        });
+    };
+
     var _doQuery = function(task) {
         $rootScope.showMainStatusMessage("Executing query...");
         $rootScope.showProgressBar();
         var deferred = $q.defer();
         console.log("Query: " + task.query);
+        _addQueryHistory(task.query);
         MySQL.client.query(task.query, function(columnDefinitions, resultsetRows) {
             $rootScope.showMainStatusMessage(
                 "No errors. Rows count is " + resultsetRows.length);
@@ -189,6 +203,9 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         },
         getStatistics: function() {
             return _addQueryQueue("getStatistics", null);
+        },
+        getQueryHistory: function() {
+            return queryHistory;
         }
     };
 

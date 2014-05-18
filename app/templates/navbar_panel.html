@@ -19,6 +19,9 @@
         <li ng-class="{active: isStructureActive()}"><a href="#" ng-click="selectStructure()">Structure</a></li>
         <li ng-class="{active: isQueryActive()}"><a href="#" ng-click="selectQuery()">Query</a></li>
         <li>
+          <a href="#"><span class="glyphicon glyphicon-cog" ng-click="configure()" title="Configure"></span></a>
+        </li>
+        <li>
           <a href="#"><span class="glyphicon glyphicon-off" ng-click="logout()" title="Logout"></span></a>
         </li>
       </ul>
