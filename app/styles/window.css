@@ -235,3 +235,12 @@ label.control-label {
 div.form-group textarea {
     resize: vertical;
 }
+
+div.configurationPanel {
+    margin-top: 3px;
+}
+
+div.configurationPanelQueryHistory {
+    height: 300px;
+    overflow-y: auto;
+}

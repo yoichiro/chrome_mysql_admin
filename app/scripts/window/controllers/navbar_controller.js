@@ -119,4 +119,8 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         modeService.changeMode(Modes.DATABASE);
     };
 
+    $scope.configure = function() {
+        $("#configurationDialog").modal("show");
+    };
+
 }]);
