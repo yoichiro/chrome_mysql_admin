@@ -69,7 +69,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         $scope.selectedDatabase = "[Select database]";
     };
 
-    $scope.isNavbarVisible = function() {
+    $scope.isConnected = function() {
         return mySQLClientService.isConnected();
     };
 
