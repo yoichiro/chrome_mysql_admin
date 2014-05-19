@@ -120,7 +120,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
     };
 
     $scope.configure = function() {
-        $("#configurationDialog").modal("show");
+        $scope.showConfigurationDialog();
     };
 
 }]);

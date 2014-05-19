@@ -61,6 +61,10 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", function($rootScope, Ev
         });
     };
 
+    $rootScope.showConfigurationDialog = function() {
+        $rootScope.$broadcast(Events.SHOW_CONFIGURATION_DIALOG, null);
+    };
+
     var adjustMainPanelHeight = function() {
         $("#mainPanel").height($(window).height() - 76);
     };

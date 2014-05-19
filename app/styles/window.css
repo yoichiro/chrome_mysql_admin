@@ -244,3 +244,8 @@ div.configurationPanelQueryHistory {
     height: 300px;
     overflow-y: auto;
 }
+
+div.configurationPanel form {
+    border-top: 1px solid #eee;
+    padding-top: 5px;
+}
