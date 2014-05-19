@@ -2,9 +2,6 @@ chromeMyAdmin.constant("UIConstants", {
     GRID_COLUMN_MAX_WIDTH: 150,
     GRID_COLUMN_FONT_SIZE: 14,
     GRID_ROW_HEIGHT: 25,
-
-    DATABASE_INFO_AUTO_UPDATE_SPAN: 10000,
-
     NAVBAR_HEIGHT: 51,
     FOOTER_HEIGHT: 25
 });
@@ -19,6 +16,7 @@ chromeMyAdmin.constant("Events", {
     ROWS_PAGING_CHANGED: "rowsPagingChanged",
 
     SHOW_INSERT_ROW_DIALOG: "showInsertRowDialog",
+    SHOW_UPDATE_ROW_DIALOG: "showUpdateRowDialog",
     SHOW_MAIN_STATUS_MESSAGE: "showMainStatusMessage",
     SHOW_PROGRESS_BAR: "showProgressBar",
     SHOW_CONFIRM_DIALOG: "showConfirmDialog",
@@ -26,6 +24,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_ADD_COLUMN_DIALOG: "showAddColumnDialog",
     SHOW_ADD_INDEX_DIALOG: "showAddIndexDialog",
     SHOW_CREATE_DATABASE_DIALOG: "showCreateDatabaseDialog",
+    SHOW_CONFIGURATION_DIALOG: "showConfigurationDialog",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
 
@@ -35,6 +34,7 @@ chromeMyAdmin.constant("Events", {
     DELETE_SELECTED_DATABASE: "deleteSelectedDatabase",
     DROP_SELECTED_TABLE: "dropSelectedTable",
     REQUEST_INSERT_ROW: "requestInsertRow",
+    REQUEST_UPDATE_ROW: "requestUpdateRow",
     FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
     REFRESH_TABLE_LIST: "refreshTableList",
     REFRESH_DATABASES: "refreshDatabases",
@@ -205,4 +205,9 @@ chromeMyAdmin.constant("TypeMap", {
         isNumeric: false,
         isDateTime: false
     }
+});
+
+chromeMyAdmin.constant("Configurations", {
+    DATABASE_INFO_AUTO_UPDATE_SPAN: "database_info_auto_update_span",
+    DEFAULT_DATABASE_INFO_AUTO_UPDATE_SPAN: 30000
 });

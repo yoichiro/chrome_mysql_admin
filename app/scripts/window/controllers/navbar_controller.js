@@ -69,7 +69,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         $scope.selectedDatabase = "[Select database]";
     };
 
-    $scope.isNavbarVisible = function() {
+    $scope.isConnected = function() {
         return mySQLClientService.isConnected();
     };
 
@@ -117,6 +117,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.showDatabaseInfo = function() {
         modeService.changeMode(Modes.DATABASE);
+    };
+
+    $scope.configure = function() {
+        $scope.showConfigurationDialog();
     };
 
 }]);

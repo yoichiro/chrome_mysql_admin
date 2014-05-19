@@ -227,3 +227,25 @@ body {
     height: 25px;
     border-top: 1px solid #eee;
 }
+
+label.control-label {
+    word-wrap: break-word;
+}
+
+div.form-group textarea {
+    resize: vertical;
+}
+
+div.configurationPanel {
+    margin-top: 3px;
+}
+
+div.configurationPanelQueryHistory {
+    height: 300px;
+    overflow-y: auto;
+}
+
+div.configurationPanel form {
+    border-top: 1px solid #eee;
+    padding-top: 5px;
+}

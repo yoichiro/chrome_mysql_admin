@@ -7,7 +7,7 @@ chromeMyAdmin.directive("databasePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService) {
+chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService) {
     "use strict";
 
     var autoUpdatePromise = null;
@@ -77,8 +77,9 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
                 $scope.safeApply(function() {
                     updateProcessListColumnDefs(result.columnDefinitions);
                     updateProcessList(result.columnDefinitions, result.resultsetRows);
-                    autoUpdatePromise = $timeout(
-                        loadProcessList, UIConstants.DATABASE_INFO_AUTO_UPDATE_SPAN);
+                    configurationService.getDatabaseInfoAutoUpdateSpan().then(function(span) {
+                        autoUpdatePromise = $timeout(loadProcessList, span);
+                    });
                 });
             } else {
                 $scope.fatalErrorOccurred("Retrieving process list failed.");
