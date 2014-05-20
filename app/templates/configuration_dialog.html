@@ -27,7 +27,7 @@
           <div class="tab-pane" id="configQueryHistory">
             <div class="configurationPanel configurationPanelQueryHistory">
               <table class="table table-striped">
-                <tr ng-repeat="query in getQueryHistory() track by $index"><td>{{query}}</td></tr>
+                <tr ng-repeat="query in getQueryHistory() track by $index"><td>{{query}} <span class="fa fa-pencil text-primary editQuery" ng-click="editQuery(query)"></span></td></tr>
               </table>
             </div>
           </div>

@@ -17,6 +17,10 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
         $("#configurationDialog").modal("show");
     };
 
+    var close = function() {
+        $("#configurationDialog").modal("hide");
+    };
+
     var assignEventHandlers = function() {
         $scope.$on(Events.SHOW_CONFIGURATION_DIALOG, function(event, data) {
             doOpen();
@@ -38,6 +42,11 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
     $scope.changeSpan = function() {
         configurationService.setDatabaseInfoAutoUpdateSpan(
             Number($scope.databaseInfoAutoUpdateSpan) * 1000);
+    };
+
+    $scope.editQuery = function(query) {
+        close();
+        $scope.showQueryPanel(query);
     };
 
 }]);
