@@ -94,4 +94,11 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
         }
     };
 
+    $scope.createInsertStatement = function() {
+        var sql = sqlExpressionService.createInsertStatement(
+            targetObjectService.getTable(), $scope.values);
+        $("#updateRowDialog").modal("hide");
+        $scope.showQueryPanel(sql);
+    };
+
 }]);

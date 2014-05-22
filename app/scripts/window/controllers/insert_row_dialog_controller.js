@@ -7,7 +7,7 @@ chromeMyAdmin.directive("insertRowDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events) {
+chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", "sqlExpressionService", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events, sqlExpressionService) {
     "use strict";
 
     var resetErrorMessage = function() {
@@ -47,20 +47,9 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
 
     $scope.insertRow = function() {
         resetErrorMessage();
-        var targetColumns = [];
-        var targetValues = [];
-        angular.forEach($scope.values, function(value, columnName) {
-            if (value) {
-                targetColumns.push("`" + columnName + "`");
-                targetValues.push("'" + value.replace(/'/g, "\\'") + "'");
-            }
-        });
-        if (targetColumns.length !== 0) {
-            var sql = "INSERT INTO `" + targetObjectService.getTable() + "` (";
-            sql += targetColumns.join(", ");
-            sql += ") VALUES (";
-            sql += targetValues.join(", ");
-            sql += ")";
+        var sql = sqlExpressionService.createInsertStatement(
+            targetObjectService.getTable(), $scope.values);
+        if (sql) {
             mySQLClientService.query(sql).then(function(result) {
                 if (result.hasResultsetRows) {
                     $scope.fatalErrorOccurred("Inserting row failed.");
