@@ -69,6 +69,7 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
     };
 
     var loadProcessList = function() {
+        resetProcessListGrid();
         mySQLClientService.getStatistics().then(function(statistics) {
             $scope.statistics = statistics;
             return mySQLClientService.query("SHOW PROCESSLIST");
