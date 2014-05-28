@@ -52,4 +52,8 @@ chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientServic
         $event.preventDefault();
     };
 
+    $scope.connectFromFavorite = function($event, name) {
+        favoriteService.selectAndLogin(name);
+    };
+
 }]);

@@ -1,6 +1,22 @@
 chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", "Events", function($rootScope, $q, Events) {
     "use strict";
 
+    var doSelect = function(name) {
+        var deferred = $q.defer();
+        chrome.storage.sync.get("favorites", function(items) {
+            var favorites = items.favorites || {};
+            var result = favorites[name];
+            if (result) {
+                result.name = name;
+                $rootScope.$broadcast(Events.FAVORITE_SELECTED, result);
+                deferred.resolve(result);
+            } else {
+                deferred.reject();
+            }
+        });
+        return deferred.promise;
+    };
+
     return {
         set: function(name, hostName, port, userName, password) {
             var deferred = $q.defer();
@@ -20,19 +36,12 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", "Events", function
             return deferred.promise;
         },
         select: function(name) {
-            var deferred = $q.defer();
-            chrome.storage.sync.get("favorites", function(items) {
-                var favorites = items.favorites || {};
-                var result = favorites[name];
-                if (result) {
-                    result.name = name;
-                    $rootScope.$broadcast(Events.FAVORITE_SELECTED, result);
-                    deferred.resolve(result);
-                } else {
-                    deferred.reject();
-                }
+            return doSelect(name);
+        },
+        selectAndLogin: function(name) {
+            doSelect(name).then(function(result) {
+                $rootScope.login();
             });
-            return deferred.promise;
         },
         getAll: function() {
             var deferred = $q.defer();
