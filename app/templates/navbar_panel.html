@@ -17,6 +17,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li ng-class="{active: isRowsActive()}" ng-show="isConnected()"><a href="#" ng-click="selectRows()">Rows</a></li>
         <li ng-class="{active: isStructureActive()}" ng-show="isConnected()"><a href="#" ng-click="selectStructure()">Structure</a></li>
+        <li ng-class="{active: isInformationActive()}" ng-show="isConnected()"><a href="#" ng-click="selectInformation()">Information</a></li>
         <li ng-class="{active: isQueryActive()}" ng-show="isConnected()"><a href="#" ng-click="selectQuery()">Query</a></li>
         <li>
           <a href="#"><span class="glyphicon glyphicon-cog" ng-click="configure()" title="Configure"></span></a>

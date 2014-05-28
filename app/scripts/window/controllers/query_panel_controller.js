@@ -159,6 +159,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         editor.setHighlightActiveLine(false);
         editor.setShowPrintMargin(false);
         editor.setShowInvisibles(true);
+        $scope.createDdl = "CREATE TABLE ... ";
     };
 
 }]);
