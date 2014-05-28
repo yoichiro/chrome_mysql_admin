@@ -7,7 +7,7 @@ chromeMyAdmin.directive("informationPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientService", "modeService", "Events", "Modes", "targetObjectService", "Engines", function($scope, mySQLClientService, modeService, Events, Modes, targetObjectService, Engines) {
+chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientService", "modeService", "Events", "Modes", "targetObjectService", "Engines", "UIConstants", function($scope, mySQLClientService, modeService, Events, Modes, targetObjectService, Engines, UIConstants) {
     "use strict";
 
     var _isInformationPanelVisible = function() {
@@ -21,6 +21,7 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
                 $scope[key] = "";
             }
         }
+        $scope.createDdl = "";
     };
 
     var onConnectionChanged = function() {
@@ -46,11 +47,28 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         });
     };
 
-    var updateTableStatus = function(columnDefinitions, resultsetRows) {
+    var updateTableStatus = function(table, columnDefinitions, resultsetRows) {
         var row = resultsetRows[0];
         angular.forEach(columnDefinitions, function(column, index) {
             console.log(column.name + " " + row.values[index]);
             $scope["tableStatus_" + column.name] = row.values[index];
+        });
+        var sql = "SHOW CREATE TABLE `" + table + "`";
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                var resultsetRows = result.resultsetRows;
+                if (resultsetRows && resultsetRows.length == 1) {
+                    var row = resultsetRows[0];
+                    var ddl = row.values[1];
+                    $scope.createDdl = ddl;
+                } else {
+                    $scope.fatalErrorOccurred("Retrieving create table DDL failed.");
+                }
+            } else {
+                $scope.fatalErrorOccurred("Retrieving create table DDL failed.");
+            }
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
         });
     };
 
@@ -60,7 +78,9 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
             if (result.hasResultsetRows) {
                 var resultsetRows = result.resultsetRows;
                 if (resultsetRows && resultsetRows.length == 1) {
-                    updateTableStatus(result.columnDefinitions, result.resultsetRows);
+                    updateTableStatus(table,
+                                      result.columnDefinitions,
+                                      result.resultsetRows);
                 } else {
                     $scope.fatalErrorOccurred("Retrieving table status failed.");
                 }
@@ -76,10 +96,8 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         if (mode === Modes.INFORMATION) {
             var tableName = targetObjectService.getTable();
             if (tableName) {
-                if ($scope.tableName !== tableName) {
-                    $scope.tableName = tableName;
-                    loadCollations(tableName);
-                }
+                $scope.tableName = tableName;
+                loadCollations(tableName);
             } else {
                 $scope.tableName = null;
             }
@@ -108,9 +126,31 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         });
     };
 
+    var assignWindowResizeEventHandler = function() {
+        $(window).resize(function(evt) {
+            adjustCreateDdlEditorHeight();
+        });
+    };
+
+    var adjustCreateDdlEditorHeight = function() {
+        var totalHeight =
+                $(window).height() -
+                UIConstants.NAVBAR_HEIGHT -
+                UIConstants.FOOTER_HEIGHT;
+        angular.forEach($(".tableStatusPanel"), function(e) {
+            var elem = $(e);
+            if (elem) {
+                totalHeight -= elem.height();
+            }
+        });
+        $(".createDdlEditor").height(totalHeight - 14);
+    };
+
     $scope.initialize = function() {
         assignEventHandlers();
         $scope.engines = Engines;
+        assignWindowResizeEventHandler();
+        adjustCreateDdlEditorHeight();
     };
 
     $scope.isInformationPanelVisible = function() {
@@ -146,6 +186,14 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });
+    };
+
+    $scope.aceLoaded = function(editor) {
+        $scope.editor = editor;
+        editor.setHighlightActiveLine(false);
+        editor.setShowPrintMargin(false);
+        editor.setShowInvisibles(true);
+        editor.setReadOnly(true);
     };
 
 }]);
