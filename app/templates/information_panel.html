@@ -1,0 +1,54 @@
+<div id="informationPanel" ng-controller="InformationPanelController" ng-init="initialize()" ng-show="isInformationPanelVisible()">
+  <div class="tableStatusPanel">
+    <div class="row">
+      <div class="col-sm-3"><label>Row count</label></div>
+      <div class="col-sm-3">{{tableStatus_Rows}}</div>
+      <div class="col-sm-3"><label>Row format</label></div>
+      <div class="col-sm-3">{{tableStatus_Row_format}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"><label>Avg. row length</label></div>
+      <div class="col-sm-3">{{tableStatus_Avg_row_length}}</div>
+      <div class="col-sm-3"><label>Data length</label></div>
+      <div class="col-sm-3">{{tableStatus_Data_length}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"><label>Max data length</label></div>
+      <div class="col-sm-3">{{tableStatus_Max_data_length}}</div>
+      <div class="col-sm-3"><label>Index length</label></div>
+      <div class="col-sm-3">{{tableStatus_Index_length}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"><label>Auto increment</label></div>
+      <div class="col-sm-9">{{tableStatus_Max_data_length}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"><label>Create time</label></div>
+      <div class="col-sm-9">{{tableStatus_Create_time}}</div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"><label>Update time</label></div>
+      <div class="col-sm-9">{{tableStatus_Update_time}}</div>
+    </div>
+  </div>
+  <div class="tableStatusPanel">
+    <div class="row">
+      <div class="col-sm-3">
+        <label for="tableStatusCollations" class="control-label">Character set and Collation</label>
+      </div>
+      <div class="col-sm-9">
+        <select id="tableStatusCollations" class="form-control input-sm" ng-model="tableStatus_Collation" ng-options="collation.values[0] as collation.values[0] for collation in collations" ng-change="onCollationChanged()">
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <label for="tableStatusEngines" class="control-label">Engine</label>
+      </div>
+      <div class="col-sm-9">
+        <select id="tableStatusEngines" class="form-control input-sm" ng-model="tableStatus_Engine" ng-options="engine as engine for engine in engines" ng-change="onEngineChanged()">
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

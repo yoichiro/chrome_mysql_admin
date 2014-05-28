@@ -253,3 +253,12 @@ div.configurationPanel form {
 span.editQuery {
     cursor: pointer;
 }
+
+.tableStatusPanel {
+    width: 100%;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}

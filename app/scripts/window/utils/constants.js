@@ -48,7 +48,8 @@ chromeMyAdmin.constant("Modes", {
     DATABASE: "database",
     ROWS: "rows",
     STRUCTURE: "structure",
-    QUERY: "query"
+    QUERY: "query",
+    INFORMATION: "information"
 });
 
 chromeMyAdmin.constant("ErrorLevel", {
@@ -217,3 +218,7 @@ chromeMyAdmin.constant("Configurations", {
 chromeMyAdmin.constant("MySQLErrorCode", {
     ACCESS_DENIED: 1227
 });
+
+chromeMyAdmin.constant("Engines", [
+    "InnoDB", "MyISAM", "ARCHIVE", "MEMORY"
+]);
