@@ -40,7 +40,8 @@ chromeMyAdmin.constant("Events", {
     REFRESH_TABLE_LIST: "refreshTableList",
     REFRESH_DATABASES: "refreshDatabases",
     REQUEST_DROP_TABLE: "requestDropTable",
-    LOGOUT: "logout"
+    LOGOUT: "logout",
+    LOGIN: "login"
 });
 
 chromeMyAdmin.constant("Modes", {
