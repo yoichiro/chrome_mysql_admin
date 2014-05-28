@@ -213,3 +213,7 @@ chromeMyAdmin.constant("Configurations", {
     DATABASE_INFO_AUTO_UPDATE_SPAN: "database_info_auto_update_span",
     DEFAULT_DATABASE_INFO_AUTO_UPDATE_SPAN: 30000
 });
+
+chromeMyAdmin.constant("MySQLErrorCode", {
+    ACCESS_DENIED: 1227
+});
