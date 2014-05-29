@@ -9,7 +9,7 @@
         <li ng-class="{active: isDatabaseActive()}"><a href="#" rel="popover" ng-click="showDatabaseInfo()"><span class="glyphicon glyphicon-hdd"></span></a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{selectedDatabase}}<b class="caret"></b></a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu databaseDropdownList">
             <li ng-repeat="database in databases" ng-click="selectDatabase($event, database)"><a href="#">{{database}}</a></li>
           </ul>
         </li>
