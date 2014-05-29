@@ -103,6 +103,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         return modeService.getMode() === Modes.DATABASE;
     };
 
+    $scope.isInformationActive = function() {
+        return modeService.getMode() === Modes.INFORMATION;
+    };
+
     $scope.selectRows = function() {
         modeService.changeMode(Modes.ROWS);
     };
@@ -113,6 +117,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.selectQuery = function() {
         modeService.changeMode(Modes.QUERY);
+    };
+
+    $scope.selectInformation = function() {
+        modeService.changeMode(Modes.INFORMATION);
     };
 
     $scope.showDatabaseInfo = function() {

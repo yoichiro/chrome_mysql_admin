@@ -7,7 +7,7 @@ chromeMyAdmin.directive("databasePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService) {
+chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", "MySQLErrorCode", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode) {
     "use strict";
 
     var autoUpdatePromise = null;
@@ -69,6 +69,7 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
     };
 
     var loadProcessList = function() {
+        resetProcessListGrid();
         mySQLClientService.getStatistics().then(function(statistics) {
             $scope.statistics = statistics;
             return mySQLClientService.query("SHOW PROCESSLIST");
@@ -85,7 +86,13 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
                 $scope.fatalErrorOccurred("Retrieving process list failed.");
             }
         }, function(reason) {
-            $scope.fatalErrorOccurred(reason);
+            if (reason["errorCode"] === MySQLErrorCode.ACCESS_DENIED) {
+                configurationService.getDatabaseInfoAutoUpdateSpan().then(function(span) {
+                    autoUpdatePromise = $timeout(loadProcessList, span);
+                });
+            } else {
+                $scope.fatalErrorOccurred(reason);
+            }
         });
     };
 

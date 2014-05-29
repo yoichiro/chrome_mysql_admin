@@ -54,6 +54,9 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 $scope.password = favorite.password;
             });
         });
+        $scope.$on(Events.LOGIN, function(event, data) {
+            doConnect();
+        });
     };
 
     var showAboutMe = function() {
@@ -61,6 +64,20 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         var aboutMe = manifest.name + " version " + manifest.version;
         aboutMe += " (C) " + manifest.author + " 2014, all rights reserved.";
         $scope.aboutMe = aboutMe;
+    };
+
+    var doConnect = function() {
+        hideMessage();
+        mySQLClientService.login(
+            $scope.hostName,
+            Number($scope.portNumber),
+            $scope.userName,
+            $scope.password
+        ).then(function(initialHandshakeRequest) {
+            onConnected(initialHandshakeRequest);
+        }, function(reason) {
+            showErrorMessage("Connection failed: " + reason);
+        });
     };
 
     // Public methods
@@ -73,17 +90,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     };
 
     $scope.connect = function() {
-        hideMessage();
-        mySQLClientService.login(
-            $scope.hostName,
-            Number($scope.portNumber),
-            $scope.userName,
-            $scope.password
-        ).then(function(initialHandshakeRequest) {
-            onConnected(initialHandshakeRequest);
-        }, function(reason) {
-            showErrorMessage("Connection failed: " + reason);
-        });
+        doConnect();
     };
 
     $scope.doTestConnection = function() {

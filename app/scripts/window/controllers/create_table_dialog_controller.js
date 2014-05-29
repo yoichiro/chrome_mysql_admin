@@ -7,7 +7,7 @@ chromeMyAdmin.directive("createTableDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("CreateTableDialogController", ["$scope", "targetObjectService", "mySQLClientService", "Events", "modeService", "Modes", function($scope, targetObjectService, mySQLClientService, Events, modeService, Modes) {
+chromeMyAdmin.controller("CreateTableDialogController", ["$scope", "targetObjectService", "mySQLClientService", "Events", "modeService", "Modes", "Engines", function($scope, targetObjectService, mySQLClientService, Events, modeService, Modes, Engines) {
     "use strict";
 
     var loadCharacterSets = function() {
@@ -71,8 +71,8 @@ chromeMyAdmin.controller("CreateTableDialogController", ["$scope", "targetObject
     $scope.initialize = function() {
         resetErrorMessage();
         assignEventHandlers();
-        $scope.engines = ["InnoDB", "MyISAM", "ARCHIVE", "MEMORY", "MERGE", "NDBCLUSTER"];
-        $scope.engine = "InnoDB";
+        $scope.engines = Engines;
+        $scope.engine = Engines[0];
     };
 
     $scope.createTable = function() {

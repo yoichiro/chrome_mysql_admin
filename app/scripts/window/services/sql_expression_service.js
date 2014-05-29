@@ -30,6 +30,26 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", function($rootScope
                 }, whereConditions);
             }
             return whereConditions;
+        },
+        createInsertStatement: function(table, values) {
+            var targetColumns = [];
+            var targetValues = [];
+            angular.forEach(values, function(value, columnName) {
+                if (value) {
+                    targetColumns.push("`" + columnName + "`");
+                    targetValues.push("'" + value.replace(/'/g, "\\'") + "'");
+                }
+            });
+            if (targetColumns.length !== 0) {
+                var sql = "INSERT INTO `" + table + "` (";
+                sql += targetColumns.join(", ");
+                sql += ") VALUES (";
+                sql += targetValues.join(", ");
+                sql += ")";
+                return sql;
+            } else {
+                return null;
+            }
         }
     };
 }]);

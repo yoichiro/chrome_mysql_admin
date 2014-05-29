@@ -25,6 +25,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_ADD_INDEX_DIALOG: "showAddIndexDialog",
     SHOW_CREATE_DATABASE_DIALOG: "showCreateDatabaseDialog",
     SHOW_CONFIGURATION_DIALOG: "showConfigurationDialog",
+    SHOW_QUERY_PANEL: "showQueryPanel",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
 
@@ -39,14 +40,16 @@ chromeMyAdmin.constant("Events", {
     REFRESH_TABLE_LIST: "refreshTableList",
     REFRESH_DATABASES: "refreshDatabases",
     REQUEST_DROP_TABLE: "requestDropTable",
-    LOGOUT: "logout"
+    LOGOUT: "logout",
+    LOGIN: "login"
 });
 
 chromeMyAdmin.constant("Modes", {
     DATABASE: "database",
     ROWS: "rows",
     STRUCTURE: "structure",
-    QUERY: "query"
+    QUERY: "query",
+    INFORMATION: "information"
 });
 
 chromeMyAdmin.constant("ErrorLevel", {
@@ -211,3 +214,11 @@ chromeMyAdmin.constant("Configurations", {
     DATABASE_INFO_AUTO_UPDATE_SPAN: "database_info_auto_update_span",
     DEFAULT_DATABASE_INFO_AUTO_UPDATE_SPAN: 30000
 });
+
+chromeMyAdmin.constant("MySQLErrorCode", {
+    ACCESS_DENIED: 1227
+});
+
+chromeMyAdmin.constant("Engines", [
+    "InnoDB", "MyISAM", "ARCHIVE", "MEMORY"
+]);
