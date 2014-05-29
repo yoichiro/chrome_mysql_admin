@@ -85,6 +85,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     $scope.initialize = function() {
         $scope.successMessage = "";
         $scope.errorMessage = "";
+        $scope.portNumber = 3306;
         assignEventHandlers();
         showAboutMe();
     };
