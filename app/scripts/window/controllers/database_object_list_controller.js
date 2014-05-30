@@ -17,7 +17,7 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     var adjustObjectListHeight = function() {
-        $("#objectList").height($(window).height() - 51 - 35);
+        $("#objectList").height($(window).height() - 51 - 35 - 35);
     };
 
     var databaseChanged = function() {
