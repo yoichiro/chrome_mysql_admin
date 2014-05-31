@@ -17,6 +17,13 @@ body {
     padding: 0;
 }
 
+.sidebarHeader {
+    padding: 2px;
+    margin-right: 2px;
+    background: white;
+    height: 35px;
+}
+
 .sidebarFooter {
     height: 25px;
     background-color: white;

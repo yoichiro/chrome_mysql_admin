@@ -1,7 +1,11 @@
 <div ng-controller="DatabaseObjectListController" ng-init="initialize()"  ng-show="isDatabaseObjectListVisible()">
+  <div class="sidebarHeader" ng-show="isDatabaseSelection()">
+    <input type="search" placeholder="Type to search" class="form-control input-sm" ng-model="filterValue" ng-trim="true" />
+  </div>
+
   <div id="objectList">
     <div class="list-group">
-      <a href="#" ng-repeat="table in tables" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table)}"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a>
+      <a href="#" ng-repeat="table in tables | filter:filterValue" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table)}"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a>
     </div>
   </div>
 
