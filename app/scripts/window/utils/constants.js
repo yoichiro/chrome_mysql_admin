@@ -23,6 +23,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_ERROR_DIALOG: "showErrorDialog",
     SHOW_ADD_COLUMN_DIALOG: "showAddColumnDialog",
     SHOW_ADD_INDEX_DIALOG: "showAddIndexDialog",
+    SHOW_EDIT_COLUMN_DIALOG: "showEditColumnDialog",
     SHOW_CREATE_DATABASE_DIALOG: "showCreateDatabaseDialog",
     SHOW_CONFIGURATION_DIALOG: "showConfigurationDialog",
     SHOW_QUERY_PANEL: "showQueryPanel",
@@ -169,7 +170,7 @@ chromeMyAdmin.constant("TypeMap", {
         isDateTime: false
     },
     "BLOB": {
-        isString: true,
+        isString: false,
         isNumeric: false,
         isDateTime: false
     },
@@ -179,7 +180,7 @@ chromeMyAdmin.constant("TypeMap", {
         isDateTime: false
     },
     "MEDIUMBLOB": {
-        isString: true,
+        isString: false,
         isNumeric: false,
         isDateTime: false
     },
@@ -189,7 +190,7 @@ chromeMyAdmin.constant("TypeMap", {
         isDateTime: false
     },
     "LONGBLOB": {
-        isString: true,
+        isString: false,
         isNumeric: false,
         isDateTime: false
     },

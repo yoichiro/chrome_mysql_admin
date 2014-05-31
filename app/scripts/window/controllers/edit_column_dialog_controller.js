@@ -1,35 +1,116 @@
-chromeMyAdmin.directive("addColumnDialog", function() {
+chromeMyAdmin.directive("editColumnDialog", function() {
     "use strict";
 
     return {
         restrict: "E",
-        templateUrl: "templates/add_column_dialog.html"
+        templateUrl: "templates/edit_column_dialog.html"
     };
 });
 
-chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService) {
+chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService) {
     "use strict";
 
-    var onShowDialog = function(table) {
+    var onShowDialog = function(table, columnDefs, columnStructure) {
         resetErrorMessage();
         $scope.selectedTable = table;
-        $scope.columnName = "";
-        $scope.length = "";
-        $scope.unsgined = false;
-        $scope.zerofill = false;
-        $scope.binary = false;
-        $scope.allowNull = false;
-        $scope.defaultValue = "";
-        $scope.type = "INT";
-        $scope.extra = "NONE";
-        $scope.key = "PRIMARY";
-        $("#addColumnDialog").modal("show");
-        loadDatabaseData();
+        $scope.originalColumnDefs = columnDefs;
+        $scope.originalColumnStructure = columnStructure;
+        $scope.columnName = columnStructure.Field;
+        var type = columnStructure.Type;
+        var length = getColumnLength(type);
+        if (length) {
+            $scope.length = Number(length);
+        } else {
+            $scope.length = null;
+        }
+        $scope.unsigned = isUnsignedType(type);
+        $scope.zerofill = isZerofillType(type);
+        var collation = columnStructure.Collation;
+        $scope.binary = isBinaryType(collation);
+        $scope.allowNull = isNullType(columnStructure.Null);
+        $scope.defaultValue = columnStructure.Default;
+        $scope.type = getTypeName(type);
+        $scope.extra = getExtra(columnStructure.Extra);
+        $scope.key = getKey(columnStructure.Key);
+        $("#editColumnDialog").modal("show");
+        var characterSet = getCharacterSet(collation);
+        loadDatabaseData(characterSet, collation);
+    };
+
+    var getCharacterSet = function(collation) {
+        var idx = collation.indexOf("_");
+        if (idx !== -1) {
+            return collation.substring(0, idx);
+        } else {
+            return collation;
+        }
+    };
+
+    var getKey = function(key) {
+        if (key === "PRI") {
+            return "PRIMARY";
+        } else if (key === "MUL") {
+            return "INDEX";
+        } else if (key === "UNI") {
+            return "UNIQUE";
+        } else {
+            return null;
+        }
+    };
+
+    var getExtra = function(extra) {
+        if (extra) {
+            return extra.toUpperCase();
+        } else {
+            return "NONE";
+        }
+    };
+
+    var getColumnLength = function(type) {
+        var s = type.indexOf("(");
+        if (s !== -1) {
+            return type.substring(s + 1, type.indexOf(")"));
+        } else {
+            return null;
+        }
+    };
+
+    var isUnsignedType = function(type) {
+        return type.indexOf("unsigned") !== -1;
+    };
+
+    var isZerofillType = function(type) {
+        return type.indexOf("zerofill") !== -1;
+    };
+
+    var isBinaryType = function(collation) {
+        return collation && (collation.indexOf("bin") !== -1);
+    };
+
+    var isNullType = function(nullValue) {
+        return nullValue === "YES";
+    };
+
+    var getTypeName = function(type) {
+        var result = "";
+        var b = type.indexOf("(");
+        var s = type.indexOf(" ");
+        if (b !== -1) {
+            result = type.substring(0, b);
+        } else if (s !== -1) {
+            result = type.substring(0, s);
+        } else {
+            result = type;
+        }
+        return result.toUpperCase();
     };
 
     var assignEventHandlers = function() {
-        $scope.$on(Events.SHOW_ADD_COLUMN_DIALOG, function(event, table) {
-            onShowDialog(table);
+        $scope.$on(Events.SHOW_EDIT_COLUMN_DIALOG, function(event, data) {
+            var table = data.table;
+            var columnDefs = data.columnDefs;
+            var columnStructure = data.columnStructure;
+            onShowDialog(table, columnDefs, columnStructure);
         });
     };
 
@@ -43,12 +124,12 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
         $scope.key = "PRIMARY";
     };
 
-    var loadDatabaseData = function() {
+    var loadDatabaseData = function(characterSet, collation) {
         mySQLClientService.query("SHOW CHARACTER SET").then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.characterSets = result.resultsetRows;
                 if (result.resultsetRows.length > 0) {
-                    $scope.characterSet = "utf8";
+                    $scope.characterSet = characterSet;
                     return mySQLClientService.query("SHOW COLLATION");
                 } else {
                     return $q.reject("No character set.");
@@ -63,7 +144,7 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
             if (result.hasResultsetRows) {
                 $scope.collations = result.resultsetRows;
                 if (result.resultsetRows.length > 0) {
-                    $scope.collation = "utf8_general_ci";
+                    $scope.collation = collation;
                 } else {
                     $scope.fatalErrorOccurred("No collations.");
                 }
@@ -89,20 +170,21 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
         setupItems();
     };
 
-    $scope.addColumn = function() {
+    $scope.editColumn = function() {
         var sql = "ALTER TABLE `" + $scope.selectedTable + "` ";
-        sql += "ADD COLUMN `" + $scope.columnName + "` ";
+        sql += "CHANGE COLUMN `" + $scope.originalColumnStructure.Field + "` `";
+        sql += $scope.columnName + "` ";
         sql += $scope.type;
         if ($scope.length) {
             sql += "(" + $scope.length + ")";
         }
         sql += " ";
         if (typeService.isString($scope.type)) {
+            sql += "CHARACTER SET " + $scope.characterSet + " ";
+            sql += "COLLATE " + $scope.collation + " ";
             if ($scope.binary) {
                 sql += "BINARY ";
             }
-            sql += "CHARACTER SET " + $scope.characterSet + " ";
-            sql += "COLLATE " + $scope.collation + " ";
         } else if (typeService.isNumeric($scope.type)) {
             if ($scope.unsigned) {
                 sql += "UNSIGNED ";
@@ -133,9 +215,9 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
         }
         mySQLClientService.query(sql).then(function(result) {
             if (result.hasResultsetRows) {
-                $scope.fatalErrorOccurred("Adding column failed.");
+                $scope.fatalErrorOccurred("Editing column failed.");
             } else {
-                $("#addColumnDialog").modal("hide");
+                $("#editColumnDialog").modal("hide");
                 targetObjectService.reSelectTable();
             }
         }, function(reason) {
