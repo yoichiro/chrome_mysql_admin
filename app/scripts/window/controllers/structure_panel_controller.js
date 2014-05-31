@@ -156,7 +156,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     };
 
     var loadStructure = function(tableName) {
-        mySQLClientService.query("SHOW COLUMNS FROM `" + tableName + "`").then(function(result) {
+        mySQLClientService.query("SHOW FULL COLUMNS FROM `" + tableName + "`").then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.safeApply(function() {
                     updateStructureColumnDefs(result.columnDefinitions);
@@ -288,6 +288,12 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
 
     $scope.addColumn = function() {
         targetObjectService.showAddColumnDialog();
+    };
+
+    $scope.editColumn = function() {
+        var columnStructure = $scope.selectedColumn;
+        var columnDefs = $scope.structureColumnDefs;
+        targetObjectService.showEditColumnDialog(columnDefs, columnStructure);
     };
 
     $scope.isIndexSelection = function() {

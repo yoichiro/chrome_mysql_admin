@@ -6,6 +6,9 @@
       <div class="pull-left footerButtonRight" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="addColumn()">
         <span class="fa fa-plus" title="Add a new column"></span>
       </div>
+      <div class="pull-left footerButtonRight" ng-class="!isColumnSelection() && 'footerButtonDisable'" ng-click="editColumn()">
+        <span class="fa fa-pencil" title="Edit the selected column"></span>
+      </div>
       <div class="pull-left footerButtonRight" ng-class="!isColumnSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedColumn()">
         <span class="fa fa-trash-o" title="Delete the selected column"></span>
       </div>

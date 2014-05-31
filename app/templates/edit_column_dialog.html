@@ -1,0 +1,116 @@
+<div id="editColumnDialog" class="modal fade" ng-controller="EditColumnDialogController" ng-init="initialize()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Edit column</h4>
+      </div>
+      <div class="modal-body">
+        <div ng-show="isErrorMessageVisible()">
+          <div class="alert alert-danger">{{errorMessage}}</div>
+        </div>
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Table</label>
+            <div class="col-sm-9">
+              <p class="form-control-static">{{selectedTable}}</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnName" class="col-sm-3 control-label">Column name</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" ng-model="columnName" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnType" class="col-sm-3 control-label">Type</label>
+            <div class="col-sm-9">
+              <select id="editColumnType" class="form-control" ng-model="type" ng-options="type for type in types">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnLength" class="col-sm-3 control-label">Length</label>
+            <div class="col-sm-9">
+              <input type="number" class="form-control" ng-model="length" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="unsigned" ng-disabled="isNotNumericTypeSelected()" /> Unsigned
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="zerofill" ng-disabled="isNotNumericTypeSelected()" /> Zerofill
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="binary" ng-disabled="isNotStringTypeSelected()" /> Binary
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="allowNull" /> Allow NULL
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnDefault" class="col-sm-3 control-label">Default value</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="editColumnDefault" rows="2" ng-model="defaultValue" ng-trim="false"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnExtra" class="col-sm-3 control-label">Extra</label>
+            <div class="col-sm-9">
+              <select id="editColumnExtra" class="form-control" ng-model="extra" ng-options="extra for extra in extras">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnKey" class="col-sm-3 control-label">Key</label>
+            <div class="col-sm-9">
+              <select id="editColumnKey" class="form-control" ng-model="key" ng-options="key for key in keys" ng-disabled="isKeyDisabled()">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnCharacterSet" class="col-sm-3 control-label">Character set</label>
+            <div class="col-sm-9">
+              <select id="editColumnCharacterSet" class="form-control" ng-model="characterSet" ng-options="char.values[0] as char.values[1] for char in characterSets" ng-disabled="isNotStringTypeSelected()">
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editColumnCollation" class="col-sm-3 control-label">Collation</label>
+            <div class="col-sm-9">
+              <select id="editColumnCollation" class="form-control" ng-model="collation" ng-options="collation.values[0] as collation.values[0] for collation in collations" ng-disabled="isNotStringTypeSelected()">
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="editColumn()">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
