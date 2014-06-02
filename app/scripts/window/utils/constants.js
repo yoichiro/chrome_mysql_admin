@@ -50,7 +50,8 @@ chromeMyAdmin.constant("Modes", {
     ROWS: "rows",
     STRUCTURE: "structure",
     QUERY: "query",
-    INFORMATION: "information"
+    INFORMATION: "information",
+    RELATION: "relation"
 });
 
 chromeMyAdmin.constant("ErrorLevel", {
