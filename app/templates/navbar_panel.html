@@ -8,7 +8,7 @@
       <ul class="nav navbar-nav navbar-left" ng-show="isConnected()">
         <li ng-class="{active: isDatabaseActive()}"><a href="#" rel="popover" ng-click="showDatabaseInfo()"><span class="glyphicon glyphicon-hdd"></span></a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{selectedDatabase}}<b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle databaseDropdownToggle" data-toggle="dropdown" title="{{selectedDatabase}}"><b class="caret"></b> {{selectedDatabase}}</a>
           <ul class="dropdown-menu databaseDropdownList">
             <li ng-repeat="database in databases" ng-click="selectDatabase($event, database)"><a href="#">{{database}}</a></li>
           </ul>
@@ -18,6 +18,7 @@
         <li ng-class="{active: isRowsActive()}" ng-show="isConnected()"><a href="#" ng-click="selectRows()">Rows</a></li>
         <li ng-class="{active: isStructureActive()}" ng-show="isConnected()"><a href="#" ng-click="selectStructure()">Structure</a></li>
         <li ng-class="{active: isInformationActive()}" ng-show="isConnected()"><a href="#" ng-click="selectInformation()">Information</a></li>
+        <li ng-class="{active: isRelationActive()}" ng-show="isConnected()"><a href="#" ng-click="selectRelation()">Relation</a></li>
         <li ng-class="{active: isQueryActive()}" ng-show="isConnected()"><a href="#" ng-click="selectQuery()">Query</a></li>
         <li>
           <a href="#"><span class="glyphicon glyphicon-cog" ng-click="configure()" title="Configure"></span></a>

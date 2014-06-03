@@ -275,3 +275,9 @@ span.editQuery {
     max-height: 500px;
     overflow-y: auto;
 }
+
+.databaseDropdownToggle {
+    max-width: 230px;
+    white-space: nowrap;
+    overflow-x: hidden;
+}
