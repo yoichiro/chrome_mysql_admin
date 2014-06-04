@@ -42,6 +42,14 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         return mySQLClientService.isConnected() && modeService.getMode() === Modes.DATABASE;
     };
 
+    $scope.isInformationButtonsVisible = function() {
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.INFORMATION;
+    };
+
+    $scope.isRelationButtonsVisible = function() {
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.RELATION;
+    };
+
     $scope.hasPreviousPage = function() {
         return _hasPrevisouPage();
     };
@@ -119,6 +127,14 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
             "No",
             Events.DELETE_SELECTED_DATABASE
         );
+    };
+
+    $scope.refreshInformation = function() {
+        targetObjectService.reSelectTable();
+    };
+
+    $scope.refreshRelation = function() {
+        targetObjectService.reSelectTable();
     };
 
 }]);
