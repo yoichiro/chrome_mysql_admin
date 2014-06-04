@@ -271,6 +271,10 @@ span.editQuery {
     border-bottom: 1px solid #eee;
 }
 
+.tableStatusPanel .row {
+    margin-right: 0;
+}
+
 .databaseDropdownList {
     max-height: 500px;
     overflow-y: auto;
