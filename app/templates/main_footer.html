@@ -37,4 +37,16 @@
       <span class="fa fa-trash-o" title="Delete the database"></span>
     </div>
   </div>
+  <!-- for Information panel -->
+  <div class="pull-right" ng-show="isInformationButtonsVisible()">
+    <div class="pull-left footerButtonRight" ng-click="refreshInformation()">
+      <span class="fa fa-refresh" title="Refresh the information"></span>
+    </div>
+  </div>
+  <!-- for Relation panel -->
+  <div class="pull-right" ng-show="isRelationButtonsVisible()">
+    <div class="pull-left footerButtonRight" ng-click="refreshRelation()">
+      <span class="fa fa-refresh" title="Refresh the foreign keys"></span>
+    </div>
+  </div>
 </div>
