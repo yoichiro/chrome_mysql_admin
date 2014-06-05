@@ -10,19 +10,19 @@
       <div class="form-group">
         <label for="loginFormHostName" class="col-sm-3 control-label">Host name</label>
         <div class="col-sm-9">
-          <input type="text" id="loginFormHostName" class="form-control" ng-model="hostName" required autofocus />
+          <input type="text" id="loginFormHostName" class="form-control" ng-model="hostName" ng-keyup="completePassword()" required autofocus />
         </div>
       </div>
       <div class="form-group">
         <label for="loginFormPort" class="col-sm-3 control-label">Port no.</label>
         <div class="col-sm-9">
-          <input type="number" id="loginFormPort" class="form-control" ng-model="portNumber" required />
+          <input type="number" id="loginFormPort" class="form-control" ng-model="portNumber" ng-keyup="completePassword()" required />
         </div>
       </div>
       <div class="form-group">
         <label for="loginFormUsername" class="col-sm-3 control-label">User name</label>
         <div class="col-sm-9">
-          <input type="text" id="loginFormUsername" class="form-control" ng-model="userName" required />
+          <input type="text" id="loginFormUsername" class="form-control" ng-model="userName" ng-keyup="completePassword()" required />
         </div>
       </div>
       <div class="form-group">

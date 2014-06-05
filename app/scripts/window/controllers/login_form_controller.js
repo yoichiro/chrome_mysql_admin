@@ -7,7 +7,7 @@ chromeMyAdmin.directive("loginForm", function() {
     };
 });
 
-chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", "Events", function($scope, $timeout, mySQLClientService, favoriteService, Events) {
+chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", "Events", "identityKeepService", function($scope, $timeout, mySQLClientService, favoriteService, Events, identityKeepService) {
     "use strict";
 
     // Private methods
@@ -74,6 +74,8 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
             $scope.userName,
             $scope.password
         ).then(function(initialHandshakeRequest) {
+            identityKeepService.set(
+                $scope.hostName, $scope.portNumber, $scope.userName, $scope.password);
             onConnected(initialHandshakeRequest);
         }, function(reason) {
             showErrorMessage("Connection failed: " + reason);
@@ -130,6 +132,14 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     $scope.canConnect = function() {
         return $scope.hostName && $scope.portNumber && $scope.userName;
+    };
+
+    $scope.completePassword = function() {
+        identityKeepService.get($scope.hostName, $scope.portNumber, $scope.userName).then(function(result) {
+            if (!$scope.password) {
+                $scope.password = result.password;
+            }
+        });
     };
 
 }]);
