@@ -50,7 +50,6 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
     var updateTableStatus = function(table, columnDefinitions, resultsetRows) {
         var row = resultsetRows[0];
         angular.forEach(columnDefinitions, function(column, index) {
-            console.log(column.name + " " + row.values[index]);
             $scope["tableStatus_" + column.name] = row.values[index];
         });
         var sql = "SHOW CREATE TABLE `" + table + "`";
