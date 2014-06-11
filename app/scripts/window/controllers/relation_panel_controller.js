@@ -7,7 +7,7 @@ chromeMyAdmin.directive("relationPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events) {
+chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", "relationSelectionService", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events, relationSelectionService) {
     "use strict";
 
     var initializeRelationGrid = function() {
@@ -21,9 +21,9 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
             selectedItems: $scope.selectedRows,
             afterSelectionChange: function(rowItem, event) {
                 if (rowItem.selected) {
-                    //rowsSelectionService.setSelectedRows(rowItem);
+                    relationSelectionService.setSelectedRelation(rowItem);
                 } else {
-                    //rowsSelectionService.reset();
+                    relationSelectionService.reset();
                 }
             },
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
@@ -50,7 +50,7 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
             createColumnDefinition("onUpdate", "On update")
         ];
         $scope.relationData = [];
-        //rowsSelectionService.reset();
+        relationSelectionService.reset();
     };
 
     var assignWindowResizeEventHandler = function() {
@@ -97,12 +97,10 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
             onConnectionChanged();
         });
         $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
-            //rowsPagingService.reset();
             resetRelationGrid();
         });
         $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
             if (_isRelationPanelVisible()) {
-                //rowsPagingService.reset();
                 $scope.tableName = tableName;
                 if (tableName) {
                     loadRelations(tableName);
@@ -113,6 +111,25 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
         });
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
+        });
+        $scope.$on(Events.DELETE_SELECTED_RELATION, function(event, data) {
+            deleteSelectedRelation();
+        });
+    };
+
+    var deleteSelectedRelation = function() {
+        var row = relationSelectionService.getSelectedRelation();
+        var relationName = row.entity.name;
+        var table = targetObjectService.getTable();
+        var sql = "ALTER TABLE `" + table + "` DROP FOREIGN KEY `" + relationName + "`";
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.fatalErrorOccurred("Deleting relation failed.");
+            } else {
+                loadRelations(table);
+            }
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
         });
     };
 

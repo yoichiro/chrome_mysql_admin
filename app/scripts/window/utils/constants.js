@@ -14,6 +14,8 @@ chromeMyAdmin.constant("Events", {
     FAVORITES_CHANGED: "favoritesChanged",
     FAVORITE_SELECTED: "favoriteSelected",
     ROWS_PAGING_CHANGED: "rowsPagingChanged",
+    ROWS_SELECTION_CHANGED: "rowsSelectionChanged",
+    RELATION_SELECTION_CHANGED: "relationSelectionChanged",
 
     SHOW_INSERT_ROW_DIALOG: "showInsertRowDialog",
     SHOW_UPDATE_ROW_DIALOG: "showUpdateRowDialog",
@@ -34,6 +36,7 @@ chromeMyAdmin.constant("Events", {
     DELETE_SELECTED_COLUMN: "deleteSelectedColumn",
     DELETE_SELECTED_INDEX: "deleteSelectedIndex",
     DELETE_SELECTED_DATABASE: "deleteSelectedDatabase",
+    DELETE_SELECTED_RELATION: "deleteSelectedRelation",
     DROP_SELECTED_TABLE: "dropSelectedTable",
     REQUEST_INSERT_ROW: "requestInsertRow",
     REQUEST_UPDATE_ROW: "requestUpdateRow",
