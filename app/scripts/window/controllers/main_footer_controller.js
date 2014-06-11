@@ -7,7 +7,7 @@ chromeMyAdmin.directive("mainFooter", function() {
     };
 });
 
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService) {
     "use strict";
 
     var showMainStatusMessage = function(message) {
@@ -135,6 +135,19 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
 
     $scope.refreshRelation = function() {
         targetObjectService.reSelectTable();
+    };
+
+    $scope.isRelationSelection = function() {
+        return relationSelectionService.getSelectedRelation();
+    };
+
+    $scope.confirmDeleteSelectedRelation = function() {
+        $scope.showConfirmDialog(
+            "Would you really like to delete the selected relation from the database?",
+            "Yes",
+            "No",
+            Events.DELETE_SELECTED_RELATION
+        );
     };
 
 }]);
