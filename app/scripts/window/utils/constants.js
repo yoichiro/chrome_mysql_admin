@@ -29,6 +29,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_CREATE_DATABASE_DIALOG: "showCreateDatabaseDialog",
     SHOW_CONFIGURATION_DIALOG: "showConfigurationDialog",
     SHOW_QUERY_PANEL: "showQueryPanel",
+    SHOW_ADD_RELATION_DIALOG: "showAddRelationDialog",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
 

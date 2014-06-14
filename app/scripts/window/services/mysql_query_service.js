@@ -111,7 +111,7 @@ chromeMyAdmin.factory("mySQLQueryService", ["$q", "$rootScope", "mySQLClientServ
                 if (result.hasResultsetRows) {
                     deferred.resolve(result);
                 } else {
-                    deferred.reject("Retrieving structure failed.");
+                    deferred.reject("Retrieving full columns failed.");
                 }
             }, function(reason) {
                 deferred.reject(reason);

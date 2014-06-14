@@ -81,6 +81,11 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         refreshDatabases: function() {
             $rootScope.$broadcast(Events.REFRESH_DATABASES, null);
+        },
+        showAddRelationDialog: function(table) {
+            $rootScope.$broadcast(Events.SHOW_ADD_RELATION_DIALOG, {
+                table: table
+            });
         }
     };
 
