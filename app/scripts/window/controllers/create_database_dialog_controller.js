@@ -7,7 +7,7 @@ chromeMyAdmin.directive("createDatabaseDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("CreateDatabaseDialogController", ["$scope", "Events", "mySQLClientService", "targetObjectService", function($scope, Events, mySQLClientService, targetObjectService) {
+chromeMyAdmin.controller("CreateDatabaseDialogController", ["$scope", "Events", "mySQLClientService", "targetObjectService", "mySQLQueryService", function($scope, Events, mySQLClientService, targetObjectService, mySQLQueryService) {
     "use strict";
 
     var onShowDialog = function() {
@@ -17,17 +17,9 @@ chromeMyAdmin.controller("CreateDatabaseDialogController", ["$scope", "Events", 
     };
 
     var loadCharacterSet = function() {
-        mySQLClientService.query("SHOW CHARACTER SET").then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.characterSets = result.resultsetRows;
-                if (result.resultsetRows.length > 0) {
-                    $scope.characterSet = "utf8";
-                } else {
-                    $scope.fatalErrorOccurred("No character set.");
-                }
-            } else {
-                    $scope.fatalErrorOccurred("Fetching character set failed.");
-            }
+        mySQLQueryService.showCharacterSet().then(function(result) {
+            $scope.characterSets = result.resultsetRows;
+            $scope.characterSet = "utf8";
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });

@@ -7,24 +7,15 @@ chromeMyAdmin.directive("createTableDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("CreateTableDialogController", ["$scope", "targetObjectService", "mySQLClientService", "Events", "modeService", "Modes", "Engines", function($scope, targetObjectService, mySQLClientService, Events, modeService, Modes, Engines) {
+chromeMyAdmin.controller("CreateTableDialogController", ["$scope", "targetObjectService", "mySQLClientService", "Events", "modeService", "Modes", "Engines", "mySQLQueryService", function($scope, targetObjectService, mySQLClientService, Events, modeService, Modes, Engines, mySQLQueryService) {
     "use strict";
 
     var loadCharacterSets = function() {
-        mySQLClientService.query("SHOW CHARACTER SET").then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.characterSets = result.resultsetRows;
-                if (result.resultsetRows.length > 0) {
-                    $scope.characterSet = "utf8";
-                } else {
-                    $scope.fatalErrorOccurred("No character set.");
-                }
-            } else {
-                $scope.fatalErrorOccurred("Fetching character set failed.");
-            }
+        mySQLQueryService.showCharacterSet().then(function(result) {
+            $scope.characterSets = result.resultsetRows;
+            $scope.characterSet = "utf8";
         }, function(reason) {
-            var errorMessage = reason.errorMessage;
-            $scope.fatalErrorOccurred(errorMessage);
+            $scope.fatalErrorOccurred(reason);
         });
     };
 

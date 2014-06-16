@@ -7,7 +7,7 @@ chromeMyAdmin.directive("addColumnDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService) {
+chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService) {
     "use strict";
 
     var onShowDialog = function(table) {
@@ -44,32 +44,13 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
     };
 
     var loadDatabaseData = function() {
-        mySQLClientService.query("SHOW CHARACTER SET").then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.characterSets = result.resultsetRows;
-                if (result.resultsetRows.length > 0) {
-                    $scope.characterSet = "utf8";
-                    return mySQLClientService.query("SHOW COLLATION");
-                } else {
-                    return $q.reject("No character set.");
-                }
-            } else {
-                return $q.reject("Fetching character set failed.");
-            }
-        }, function(reason) {
-            var errorMessage = reason.errorMessage;
-            $q.reject(errorMessage);
+        mySQLQueryService.showCharacterSet().then(function(result) {
+            $scope.characterSets = result.resultsetRows;
+            $scope.characterSet = "utf8";
+            return mySQLQueryService.showCollations();
         }).then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.collations = result.resultsetRows;
-                if (result.resultsetRows.length > 0) {
-                    $scope.collation = "utf8_general_ci";
-                } else {
-                    $scope.fatalErrorOccurred("No collations.");
-                }
-            } else {
-                $scope.fatalErrorOccurred("Fetching collations failed.");
-            }
+            $scope.collations = result.resultsetRows;
+            $scope.collation = "utf8_general_ci";
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });
