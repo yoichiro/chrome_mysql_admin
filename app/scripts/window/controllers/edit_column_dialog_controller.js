@@ -7,7 +7,7 @@ chromeMyAdmin.directive("editColumnDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService) {
+chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService) {
     "use strict";
 
     var onShowDialog = function(table, columnDefs, columnStructure) {
@@ -38,11 +38,15 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
     };
 
     var getCharacterSet = function(collation) {
-        var idx = collation.indexOf("_");
-        if (idx !== -1) {
-            return collation.substring(0, idx);
+        if (collation) {
+            var idx = collation.indexOf("_");
+            if (idx !== -1) {
+                return collation.substring(0, idx);
+            } else {
+                return collation;
+            }
         } else {
-            return collation;
+            return null;
         }
     };
 
@@ -125,31 +129,20 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
     };
 
     var loadDatabaseData = function(characterSet, collation) {
-        mySQLClientService.query("SHOW CHARACTER SET").then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.characterSets = result.resultsetRows;
-                if (result.resultsetRows.length > 0) {
-                    $scope.characterSet = characterSet;
-                    return mySQLClientService.query("SHOW COLLATION");
-                } else {
-                    return $q.reject("No character set.");
-                }
+        mySQLQueryService.showCharacterSet().then(function(result) {
+            $scope.characterSets = result.resultsetRows;
+            if (characterSet) {
+                $scope.characterSet = characterSet;
             } else {
-                return $q.reject("Fetching character set failed.");
+                $scope.characterSet = "utf8";
             }
-        }, function(reason) {
-            var errorMessage = reason.errorMessage;
-            $q.reject(errorMessage);
+            return mySQLQueryService.showCollations();
         }).then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.collations = result.resultsetRows;
-                if (result.resultsetRows.length > 0) {
-                    $scope.collation = collation;
-                } else {
-                    $scope.fatalErrorOccurred("No collations.");
-                }
+            $scope.collations = result.resultsetRows;
+            if (collation) {
+                $scope.collation = collation;
             } else {
-                $scope.fatalErrorOccurred("Fetching collations failed.");
+                $scope.collation = "utf8_general_ci";
             }
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);

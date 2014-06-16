@@ -7,7 +7,7 @@ chromeMyAdmin.directive("relationPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", "relationSelectionService", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events, relationSelectionService) {
+chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", "relationSelectionService", "mySQLQueryService", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events, relationSelectionService, mySQLQueryService) {
     "use strict";
 
     var initializeRelationGrid = function() {
@@ -195,21 +195,9 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
     };
 
     var loadRelations = function(table) {
-        var sql = "SHOW CREATE TABLE `" + table + "`";
-        mySQLClientService.query(sql).then(function(result) {
-            if (result.hasResultsetRows) {
-                var resultsetRows = result.resultsetRows;
-                if (resultsetRows && resultsetRows.length == 1) {
-                    var row = resultsetRows[0];
-                    var ddl = row.values[1];
-                    resetRelationGrid();
-                    parseForeignKeysFromCreateTableDdl(ddl);
-                } else {
-                    $scope.fatalErrorOccurred("Retrieving create table DDL failed.");
-                }
-            } else {
-                $scope.fatalErrorOccurred("Retrieving create table DDL failed.");
-            }
+        mySQLQueryService.showCreateTable(table).then(function(result) {
+            resetRelationGrid();
+            parseForeignKeysFromCreateTableDdl(result.ddl);
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });

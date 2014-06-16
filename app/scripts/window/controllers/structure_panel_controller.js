@@ -7,7 +7,7 @@ chromeMyAdmin.directive("structurePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes) {
+chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService) {
     "use strict";
 
     var initializeStructureGrid = function() {
@@ -156,16 +156,12 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     };
 
     var loadStructure = function(tableName) {
-        mySQLClientService.query("SHOW FULL COLUMNS FROM `" + tableName + "`").then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.safeApply(function() {
-                    updateStructureColumnDefs(result.columnDefinitions);
-                    updateStructure(result.columnDefinitions, result.resultsetRows);
-                });
-                return mySQLClientService.query("SHOW INDEX FROM `" + tableName + "`");
-            } else {
-                return $q.reject("Retrieving structure failed.");
-            }
+        mySQLQueryService.showFullColumns(tableName).then(function(result) {
+            $scope.safeApply(function() {
+                updateStructureColumnDefs(result.columnDefinitions);
+                updateStructure(result.columnDefinitions, result.resultsetRows);
+            });
+            return mySQLQueryService.showIndex(tableName);
         }).then(function(result) {
             $scope.safeApply(function() {
                 updateIndexesColumnDefs(result.columnDefinitions);

@@ -7,7 +7,7 @@ chromeMyAdmin.directive("informationPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientService", "modeService", "Events", "Modes", "targetObjectService", "Engines", "UIConstants", function($scope, mySQLClientService, modeService, Events, Modes, targetObjectService, Engines, UIConstants) {
+chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientService", "modeService", "Events", "Modes", "targetObjectService", "Engines", "UIConstants", "mySQLQueryService", function($scope, mySQLClientService, modeService, Events, Modes, targetObjectService, Engines, UIConstants, mySQLQueryService) {
     "use strict";
 
     var _isInformationPanelVisible = function() {
@@ -31,17 +31,9 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
     };
 
     var loadCollations = function(table) {
-        mySQLClientService.query("SHOW COLLATION").then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.collations = result.resultsetRows;
-                if (result.resultsetRows.length > 0) {
-                    loadTableStatus(table);
-                } else {
-                    $scope.fatalErrorOccurred("No collations.");
-                }
-            } else {
-                $scope.fatalErrorOccurred("Fetching collations failed.");
-            }
+        mySQLQueryService.showCollations().then(function(result) {
+            $scope.collations = result.resultsetRows;
+            loadTableStatus(table);
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });
@@ -52,40 +44,19 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         angular.forEach(columnDefinitions, function(column, index) {
             $scope["tableStatus_" + column.name] = row.values[index];
         });
-        var sql = "SHOW CREATE TABLE `" + table + "`";
-        mySQLClientService.query(sql).then(function(result) {
-            if (result.hasResultsetRows) {
-                var resultsetRows = result.resultsetRows;
-                if (resultsetRows && resultsetRows.length == 1) {
-                    var row = resultsetRows[0];
-                    var ddl = row.values[1];
-                    $scope.createDdl = ddl;
-                } else {
-                    $scope.fatalErrorOccurred("Retrieving create table DDL failed.");
-                }
-            } else {
-                $scope.fatalErrorOccurred("Retrieving create table DDL failed.");
-            }
+        mySQLQueryService.showCreateTable(table).then(function(result) {
+            $scope.createDdl = result.ddl;
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });
     };
 
     var loadTableStatus = function(table) {
-        var sql = "SHOW TABLE STATUS LIKE '" + table + "'";
-        mySQLClientService.query(sql).then(function(result) {
-            if (result.hasResultsetRows) {
-                var resultsetRows = result.resultsetRows;
-                if (resultsetRows && resultsetRows.length == 1) {
-                    updateTableStatus(table,
-                                      result.columnDefinitions,
-                                      result.resultsetRows);
-                } else {
-                    $scope.fatalErrorOccurred("Retrieving table status failed.");
-                }
-            } else {
-                $scope.fatalErrorOccurred("Retrieving table status failed.");
-            }
+        mySQLQueryService.showTableStatus(table).then(function(result) {
+            var resultsetRows = result.resultsetRows;
+            updateTableStatus(table,
+                              result.columnDefinitions,
+                              result.resultsetRows);
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });

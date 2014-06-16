@@ -7,7 +7,7 @@ chromeMyAdmin.directive("databaseObjectListPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", "Events", "Modes", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes) {
+chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", "Events", "Modes", "mySQLQueryService", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes, mySQLQueryService) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {
@@ -22,28 +22,19 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
 
     var databaseChanged = function() {
         targetObjectService.resetTable();
-        mySQLClientService.query(
-            "USE `" + targetObjectService.getDatabase() + "`").then(function(result) {
-                if (result.hasResultsetRows) {
-                    $scope.fatalErrorOccurred("Changing database failed.");
-                } else {
-                    loadTables();
-                }
-            }, function(reason) {
-                var errorMessage = reason.errorMessage;
-                $scope.fatalErrorOccurred(errorMessage);
-            });
+        var database = targetObjectService.getDatabase();
+        mySQLQueryService.useDatabase(database).then(function() {
+            loadTables();
+        }, function(reason) {
+            $scope.fatalErrorOccurred(reason);
+        });
     };
 
     var loadTables = function() {
-        mySQLClientService.query("SHOW TABLES").then(function(result) {
-            if (result.hasResultsetRows) {
-                updateTableList(
-                    result.columnDefinitions,
-                    result.resultsetRows);
-            } else {
-                $scope.fatalErrorOccurred("Retrieving tables failed.");
-            }
+        mySQLQueryService.showTables().then(function(result) {
+            updateTableList(
+                result.columnDefinitions,
+                result.resultsetRows);
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
         });
