@@ -150,4 +150,8 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         );
     };
 
+    $scope.addRelation = function() {
+        targetObjectService.showAddRelationDialog(targetObjectService.getTable());
+    };
+
 }]);
