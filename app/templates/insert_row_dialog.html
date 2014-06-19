@@ -13,7 +13,13 @@
           <div class="form-group" ng-repeat="column in targetInputColumns(columnDefinitions)">
             <label for="{{column.name}}" class="col-sm-3 control-label">{{column.name}}</label>
             <div class="col-sm-9">
-              <textarea class="form-control" id="{{column.name}}" rows="2" ng-model="values[column.name]" ng-trim="false"></textarea>
+              <textarea class="form-control" id="{{column.name}}" rows="2" ng-model="values[column.name]" ng-trim="false" ng-disabled="isNullValues[column.name]"></textarea>
+              <div class="checkbox" ng-show="!column.isNotNull()">
+                <label>
+                  <input type="checkbox" ng-model="isNullValues[column.name]" ng-change="onChangeIsNullValue(column.name)" />
+                  NULL
+                </label>
+              </div>
             </div>
           </div>
         </form>

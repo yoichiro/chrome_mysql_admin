@@ -39,11 +39,14 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", function($rootScope
             }
             return whereConditions;
         },
-        createInsertStatement: function(table, values) {
+        createInsertStatement: function(table, values, isNullValues) {
             var targetColumns = [];
             var targetValues = [];
             angular.forEach(values, function(value, columnName) {
-                if (value) {
+                if (isNullValues[columnName]) {
+                    targetColumns.push("`" + columnName + "`");
+                    targetValues.push("NULL");
+                } else if (value != null) {
                     targetColumns.push("`" + columnName + "`");
                     targetValues.push("'" + value.replace(/'/g, "\\'") + "'");
                 }

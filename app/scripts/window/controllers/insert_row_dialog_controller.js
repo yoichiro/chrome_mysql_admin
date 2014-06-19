@@ -17,6 +17,11 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
     var doOpen = function(columnDefinitions) {
         resetErrorMessage();
         $scope.values = {};
+        $scope.isNullValues = {};
+        angular.forEach(columnDefinitions, function(column) {
+            $scope.values[column.name] = "";
+            $scope.isNullValues[column.name] = false;
+        });
         $scope.columnDefinitions = columnDefinitions;
         $("#insertRowDialog").modal("show");
     };
@@ -48,7 +53,7 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
     $scope.insertRow = function() {
         resetErrorMessage();
         var sql = sqlExpressionService.createInsertStatement(
-            targetObjectService.getTable(), $scope.values);
+            targetObjectService.getTable(), $scope.values, $scope.isNullValues);
         if (sql) {
             mySQLClientService.query(sql).then(function(result) {
                 if (result.hasResultsetRows) {
@@ -66,6 +71,15 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
             });
         } else {
             $scope.errorMessage = "Any values not filled in.";
+        }
+    };
+
+    $scope.onChangeIsNullValue = function(columnName) {
+        if (!$scope.isNullValues[columnName]) {
+            var value = $scope.values[columnName];
+            if (!value) {
+                $scope.values[columnName] = "";
+            }
         }
     };
 
