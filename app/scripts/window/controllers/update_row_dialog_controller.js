@@ -18,10 +18,13 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
         resetErrorMessage();
         $scope.values = {};
         $scope.originalValues = {};
+        $scope.isNullValues = {};
         $scope.originalRow = row;
         angular.forEach(columnDefinitions, function(column, index) {
-            $scope.values[column.name] = row.values[index];
-            $scope.originalValues[column.name] = row.values[index];
+            var value = row.values[index];
+            $scope.values[column.name] = value;
+            $scope.originalValues[column.name] = value;
+            $scope.isNullValues[column.name] = (value === null);
         });
         $scope.columnDefinitions = columnDefinitions;
         $("#updateRowDialog").modal("show");
@@ -51,16 +54,23 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
         return result;
     };
 
+    $scope.onChangeIsNullValue = function(columnName) {
+        if (!$scope.isNullValues[columnName]) {
+            var value = $scope.values[columnName];
+            if (!value) {
+                $scope.values[columnName] = "";
+            }
+        }
+    };
+
     $scope.updateRow = function() {
         resetErrorMessage();
-        var targetColumns = [];
-        var targetValues = [];
         var sql = "UPDATE `" + targetObjectService.getTable() + "` ";
         var sets = [];
         angular.forEach($scope.values, function(value, columnName) {
-            if (value !== $scope.originalValues[columnName]) {
-                targetColumns.push("`" + columnName + "`");
-                targetValues.push("'" + value.replace(/'/g, "\\'") + "'");
+            if ($scope.isNullValues[columnName] && $scope.originalValues[columnName] !== null) {
+                sets.push("`" + columnName + "` = NULL");
+            } else if (value !== $scope.originalValues[columnName]) {
                 sets.push("`" + columnName + "` = " + "'" + value.replace(/'/g, "\\'") + "'");
             }
         });

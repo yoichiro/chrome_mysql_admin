@@ -1,6 +1,14 @@
 chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", function($rootScope) {
     "use strict";
 
+    var createEqualRightExpression = function(value) {
+        if (value !== null) {
+            return "='" + value.replace(/'/g, "\\'") + "'";
+        } else {
+            return " IS NULL";
+        }
+    };
+
     return {
         getPrimaryKeyColumns: function(columnDefinitions) {
             var primaryKeyColumns = {};
@@ -17,15 +25,15 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", function($rootScope
             if (jQuery.isEmptyObject(primaryKeyColumns)) {
                 angular.forEach(columnDefinitions, function(columnDefinition, index) {
                     var condition =
-                            "`" + columnDefinition.name + "`='" +
-                            originalRow.values[index].replace(/'/g, "\\'") + "'";
+                            "`" + columnDefinition.name + "`" +
+                            createEqualRightExpression(originalRow.values[index]);
                     this.push(condition);
                 }, whereConditions);
             } else {
                 angular.forEach(primaryKeyColumns, function(primaryKeyColumn, index) {
                     var condition =
                             "`" + primaryKeyColumn.name + "`='" +
-                            originalRow.values[index].replace(/'/g, "\\'") + "'";
+                            createEqualRightExpression(originalRow.values[index]);
                     this.push(condition);
                 }, whereConditions);
             }
