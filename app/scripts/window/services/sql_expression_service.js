@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", function($rootScope) {
+chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", "ValueTypes", function($rootScope, ValueTypes) {
     "use strict";
 
     var createEqualRightExpression = function(value) {
@@ -39,16 +39,21 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", function($rootScope
             }
             return whereConditions;
         },
-        createInsertStatement: function(table, values, isNullValues) {
+        createInsertStatement: function(table, values, valueTypes) {
             var targetColumns = [];
             var targetValues = [];
             angular.forEach(values, function(value, columnName) {
-                if (isNullValues[columnName]) {
+                var valueType = valueTypes[columnName];
+                if (valueType === ValueTypes.NULL) {
                     targetColumns.push("`" + columnName + "`");
                     targetValues.push("NULL");
                 } else if (value != null) {
                     targetColumns.push("`" + columnName + "`");
-                    targetValues.push("'" + value.replace(/'/g, "\\'") + "'");
+                    if (valueType === ValueTypes.VALUE) {
+                        targetValues.push("'" + value.replace(/'/g, "\\'") + "'");
+                    } else if (valueType === ValueTypes.EXPRESSION) {
+                        targetValues.push(value);
+                    }
                 }
             });
             if (targetColumns.length !== 0) {

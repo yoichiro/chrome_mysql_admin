@@ -7,7 +7,7 @@ chromeMyAdmin.directive("updateRowDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectService", "Events", "sqlExpressionService", "mySQLClientService", "rowsPagingService", function($scope, targetObjectService, Events, sqlExpressionService, mySQLClientService, rowsPagingService) {
+chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectService", "Events", "sqlExpressionService", "mySQLClientService", "rowsPagingService", "ValueTypes", function($scope, targetObjectService, Events, sqlExpressionService, mySQLClientService, rowsPagingService, ValueTypes) {
     "use strict";
 
     var resetErrorMessage = function() {
@@ -18,13 +18,17 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
         resetErrorMessage();
         $scope.values = {};
         $scope.originalValues = {};
-        $scope.isNullValues = {};
+        $scope.valueTypes = {};
         $scope.originalRow = row;
         angular.forEach(columnDefinitions, function(column, index) {
             var value = row.values[index];
             $scope.values[column.name] = value;
             $scope.originalValues[column.name] = value;
-            $scope.isNullValues[column.name] = (value === null);
+            if (value === null) {
+                $scope.valueTypes[column.name] = ValueTypes.NULL;
+            } else {
+                $scope.valueTypes[column.name] = ValueTypes.VALUE;
+            }
         });
         $scope.columnDefinitions = columnDefinitions;
         $("#updateRowDialog").modal("show");
@@ -54,8 +58,9 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
         return result;
     };
 
-    $scope.onChangeIsNullValue = function(columnName) {
-        if (!$scope.isNullValues[columnName]) {
+    $scope.onChangeValueType = function(columnName) {
+        var valueType = $scope.valueTypes[columnName];
+        if (valueType !== ValueTypes.NULL) {
             var value = $scope.values[columnName];
             if (!value) {
                 $scope.values[columnName] = "";
@@ -63,15 +68,23 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
         }
     };
 
+    $scope.isDisabledValueField = function(columnName) {
+        return $scope.valueTypes[columnName] === ValueTypes.NULL;
+    };
+
     $scope.updateRow = function() {
         resetErrorMessage();
         var sql = "UPDATE `" + targetObjectService.getTable() + "` ";
         var sets = [];
         angular.forEach($scope.values, function(value, columnName) {
-            if ($scope.isNullValues[columnName] && $scope.originalValues[columnName] !== null) {
+            if ($scope.valueTypes[columnName] === ValueTypes.NULL && $scope.originalValues[columnName] !== null) {
                 sets.push("`" + columnName + "` = NULL");
             } else if (value !== $scope.originalValues[columnName]) {
-                sets.push("`" + columnName + "` = " + "'" + value.replace(/'/g, "\\'") + "'");
+                if ($scope.valueTypes[columnName] === ValueTypes.VALUE) {
+                    sets.push("`" + columnName + "` = " + "'" + value.replace(/'/g, "\\'") + "'");
+                } else if ($scope.valueTypes[columnName] === ValueTypes.EXPRESSION) {
+                    sets.push("`" + columnName + "` = " + value);
+                }
             }
         });
         if (sets.length !== 0) {
@@ -106,7 +119,7 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
 
     $scope.createInsertStatement = function() {
         var sql = sqlExpressionService.createInsertStatement(
-            targetObjectService.getTable(), $scope.values);
+            targetObjectService.getTable(), $scope.values, $scope.valueTypes);
         $("#updateRowDialog").modal("hide");
         $scope.showQueryPanel(sql);
     };
