@@ -228,3 +228,9 @@ chromeMyAdmin.constant("MySQLErrorCode", {
 chromeMyAdmin.constant("Engines", [
     "InnoDB", "MyISAM", "ARCHIVE", "MEMORY"
 ]);
+
+chromeMyAdmin.constant("ValueTypes", {
+    VALUE: "value",
+    NULL: "NULL",
+    EXPRESSION: "expression"
+});

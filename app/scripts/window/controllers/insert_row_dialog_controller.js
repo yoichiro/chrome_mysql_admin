@@ -7,7 +7,7 @@ chromeMyAdmin.directive("insertRowDialog", function() {
     };
 });
 
-chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", "sqlExpressionService", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events, sqlExpressionService) {
+chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", "sqlExpressionService", "ValueTypes", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events, sqlExpressionService, ValueTypes) {
     "use strict";
 
     var resetErrorMessage = function() {
@@ -17,10 +17,10 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
     var doOpen = function(columnDefinitions) {
         resetErrorMessage();
         $scope.values = {};
-        $scope.isNullValues = {};
+        $scope.valueTypes = {};
         angular.forEach(columnDefinitions, function(column) {
             $scope.values[column.name] = "";
-            $scope.isNullValues[column.name] = false;
+            $scope.valueTypes[column.name] = ValueTypes.VALUE;
         });
         $scope.columnDefinitions = columnDefinitions;
         $("#insertRowDialog").modal("show");
@@ -53,7 +53,7 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
     $scope.insertRow = function() {
         resetErrorMessage();
         var sql = sqlExpressionService.createInsertStatement(
-            targetObjectService.getTable(), $scope.values, $scope.isNullValues);
+            targetObjectService.getTable(), $scope.values, $scope.valueTypes);
         if (sql) {
             mySQLClientService.query(sql).then(function(result) {
                 if (result.hasResultsetRows) {
@@ -74,13 +74,18 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
         }
     };
 
-    $scope.onChangeIsNullValue = function(columnName) {
-        if (!$scope.isNullValues[columnName]) {
+    $scope.onChangeValueType = function(columnName) {
+        var valueType = $scope.valueTypes[columnName];
+        if (valueType !== ValueTypes.NULL) {
             var value = $scope.values[columnName];
             if (!value) {
                 $scope.values[columnName] = "";
             }
         }
+    };
+
+    $scope.isDisabledValueField = function(columnName) {
+        return $scope.valueTypes[columnName] === ValueTypes.NULL;
     };
 
 }]);
