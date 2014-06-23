@@ -1,7 +1,8 @@
 <div id="queryPanel" ng-controller="QueryPanelController" ng-init="initialize()" ng-show="isQueryPanelVisible()">
   <div ui-ace="{mode: 'sql', theme: 'clouds', onLoad: aceLoaded}" ng-model="query" class="queryEditor"></div>
-  <div class="queryMiddlePanel">
-    <button type="button" class="btn btn-default btn-xs pull-right" ng-click="executeQuery()">Execute</button>
+  <div class="form-group queryMiddlePanel">
+    <select class="form-control" ng-model="queryInHistory" ng-options="query for query in queryHistory" ng-change="onChangeQueryInHistory()"></select>
+    <button type="button" class="form-control btn btn-default btn-xs" ng-click="executeQuery()">Execute</button>
   </div>
   <div id="queryResultGrid" class="gridStyle" ng-grid="queryResultGrid">
   </div>
