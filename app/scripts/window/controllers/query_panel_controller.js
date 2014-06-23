@@ -7,7 +7,7 @@ chromeMyAdmin.directive("queryPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -44,7 +44,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT;
         $(".queryEditor").height(totalHeight / 3 - 14);
-        $("#queryResultGrid").height(totalHeight * 2 / 3 - 32);
+        $("#queryResultGrid").height(totalHeight * 2 / 3 - 53);
     };
 
     var onTableChanged = function(table) {
@@ -56,6 +56,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
 
     var onModeChanged = function(mode) {
         $scope.editor.focus();
+        loadQueryHistory();
     };
 
     var onShowQueryPanel = function(query) {
@@ -95,6 +96,10 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 $scope.safeApply(function() {
                     updateQueryResultColumnDefs(result.columnDefinitions);
                     updateQueryResult(result.columnDefinitions, result.resultsetRows);
+                    queryHistoryService.add(query).then(function() {
+                        loadQueryHistory();
+                    });
+                    $scope.editor.focus();
                 });
             }
         }, function(reason) {
@@ -103,6 +108,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             errorMessage += "] ";
             errorMessage += reason.errorMessage;
             $scope.queryErrorMessage = errorMessage;
+            $scope.editor.focus();
         });
     };
 
@@ -134,6 +140,14 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.queryResultData = rows;
     };
 
+    var loadQueryHistory = function() {
+        queryHistoryService.getAll().then(function(result) {
+            result.push("");
+            $scope.queryHistory = result.reverse();
+            $scope.queryInHistory = result[0];
+        });
+    };
+
     $scope.initialize = function() {
         assignEventHandlers();
         initializeQueryResultGrid();
@@ -160,6 +174,13 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         editor.setShowPrintMargin(false);
         editor.setShowInvisibles(true);
         $scope.createDdl = "CREATE TABLE ... ";
+    };
+
+    $scope.onChangeQueryInHistory = function() {
+        var target = $scope.queryInHistory;
+        if (target) {
+            $scope.query = target;
+        }
     };
 
 }]);
