@@ -121,7 +121,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
                     UIConstants.GRID_COLUMN_MAX_WIDTH),
-                cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
+                cellTemplate: "<div class=\"ngCellText {{getDisplayValueClass(row.getProperty(col.field))}}\" title=\"{{row.getProperty(col.field)}}\">{{getDisplayValue(row.getProperty(col.field))}}</div>"
             });
         }, columnDefs);
         $scope.queryResultColumnDefs = columnDefs;
@@ -180,6 +180,22 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         var target = $scope.queryInHistory;
         if (target) {
             $scope.query = target;
+        }
+    };
+
+    $scope.getDisplayValue = function(value) {
+        if (value === null) {
+            return "NULL";
+        } else {
+            return value;
+        }
+    };
+
+    $scope.getDisplayValueClass = function(value) {
+        if (value === null) {
+            return "nullValueOnCell";
+        } else {
+            return "";
         }
     };
 
