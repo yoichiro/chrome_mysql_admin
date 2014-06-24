@@ -278,3 +278,7 @@ span.editQuery {
     white-space: nowrap;
     overflow-x: hidden;
 }
+
+.nullValueOnCell {
+    color: lightgray;
+}
