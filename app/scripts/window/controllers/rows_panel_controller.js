@@ -7,7 +7,7 @@ chromeMyAdmin.directive("rowsPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", "sqlExpressionService", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes, sqlExpressionService) {
+chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", "sqlExpressionService", "Templates", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes, sqlExpressionService, Templates) {
     "use strict";
 
     var initializeRowsGrid = function() {
@@ -17,6 +17,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             columnDefs: "rowsColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
+            enablePinning: true,
             multiSelect: false,
             selectedItems: $scope.selectedRows,
             afterSelectionChange: function(rowItem, event) {
@@ -86,7 +87,9 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
                     UIConstants.GRID_COLUMN_MAX_WIDTH),
-                cellTemplate: "<div class=\"ngCellText {{getDisplayValueClass(row.getProperty(col.field))}}\" title=\"{{row.getProperty(col.field)}}\">{{getDisplayValue(row.getProperty(col.field))}}</div>"
+                cellTemplate: Templates.CELL_TEMPLATE,
+                headerCellTemplate: Templates.HEADER_CELL_TEMPLATE,
+                pinnable: true
             });
         }, columnDefs);
         $scope.rowsColumnDefs = columnDefs;
@@ -301,22 +304,6 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     $scope.filter = function() {
         rowsPagingService.reset();
         doQueryAndReload();
-    };
-
-    $scope.getDisplayValue = function(value) {
-        if (value === null) {
-            return "NULL";
-        } else {
-            return value;
-        }
-    };
-
-    $scope.getDisplayValueClass = function(value) {
-        if (value === null) {
-            return "nullValueOnCell";
-        } else {
-            return "";
-        }
     };
 
 }]);

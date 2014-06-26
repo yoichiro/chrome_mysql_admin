@@ -73,6 +73,22 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", f
         $rootScope.$broadcast(Events.LOGIN, null);
     };
 
+    $rootScope.getDisplayValue = function(value) {
+        if (value === null) {
+            return "NULL";
+        } else {
+            return value;
+        }
+    };
+
+    $rootScope.getDisplayValueClass = function(value) {
+        if (value === null) {
+            return "nullValueOnCell";
+        } else {
+            return "";
+        }
+    };
+
     var adjustMainPanelHeight = function() {
         $("#mainPanel").height($(window).height() - 76);
     };

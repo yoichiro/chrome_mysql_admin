@@ -7,7 +7,7 @@ chromeMyAdmin.directive("databasePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", "MySQLErrorCode", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode) {
+chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", "MySQLErrorCode", "Templates", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode, Templates) {
     "use strict";
 
     var autoUpdatePromise = null;
@@ -24,6 +24,7 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
             columnDefs: "processListColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
+            enablePinning: true,
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
@@ -105,7 +106,9 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
                     UIConstants.GRID_COLUMN_MAX_WIDTH),
-                cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
+                cellTemplate: Templates.CELL_TEMPLATE,
+                headerCellTemplate: Templates.HEADER_CELL_TEMPLATE,
+                pinnable: true
             });
         }, columnDefs);
         $scope.processListColumnDefs = columnDefs;

@@ -7,7 +7,7 @@ chromeMyAdmin.directive("structurePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService) {
+chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", "Templates", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService, Templates) {
     "use strict";
 
     var initializeStructureGrid = function() {
@@ -102,7 +102,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
                     UIConstants.GRID_COLUMN_MAX_WIDTH),
-                cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
+                cellTemplate: Templates.CELL_TEMPLATE,
+                headerCellTemplate: Templates.HEADER_CELL_TEMPLATE
             });
         }, columnDefs);
         $scope.structureColumnDefs = columnDefs;
@@ -118,7 +119,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
                     width: Math.min(
                         Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
                         UIConstants.GRID_COLUMN_MAX_WIDTH),
-                    cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
+                    cellTemplate: Templates.CELL_TEMPLATE,
+                    headerCellTemplate: Templates.HEADER_CELL_TEMPLATE
                 });
             }
         }, columnDefs);
