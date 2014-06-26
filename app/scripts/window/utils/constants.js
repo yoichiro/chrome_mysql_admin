@@ -234,3 +234,8 @@ chromeMyAdmin.constant("ValueTypes", {
     NULL: "NULL",
     EXPRESSION: "expression"
 });
+
+chromeMyAdmin.constant("Templates", {
+    CELL_TEMPLATE: "<div class=\"ngCellText {{getDisplayValueClass(row.getProperty(col.field))}}\" title=\"{{row.getProperty(col.field)}}\">{{getDisplayValue(row.getProperty(col.field))}}</div>",
+    HEADER_CELL_TEMPLATE: "<div class=\"ngHeaderSortColumn {{col.headerClass}}\" ng-style=\"{'cursor': col.cursor}\" ng-class=\"{ 'ngSorted': !noSortVisible }\"><div ng-click=\"col.sort($event)\" ng-class=\"'colt' + col.index\" class=\"ngHeaderText\" title=\"{{col.displayName}}\">{{col.displayName}}</div><div class=\"ngSortButtonDown\" ng-show=\"col.showSortButtonDown()\"></div><div class=\"ngSortButtonUp\" ng-show=\"col.showSortButtonUp()\"></div><div class=\"ngSortPriority\">{{col.sortPriority}}</div><div ng-class=\"{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }\" ng-click=\"togglePin(col)\" ng-show=\"col.pinnable\"></div></div><div ng-show=\"col.resizable\" class=\"ngHeaderGrip\" ng-click=\"col.gripClick($event)\" ng-mousedown=\"col.gripOnMouseDown($event)\"></div>"
+});

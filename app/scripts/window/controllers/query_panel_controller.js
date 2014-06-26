@@ -7,7 +7,7 @@ chromeMyAdmin.directive("queryPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -17,6 +17,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             columnDefs: "queryResultColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
+            enablePinning: true,
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
@@ -121,7 +122,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 width: Math.min(
                     Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
                     UIConstants.GRID_COLUMN_MAX_WIDTH),
-                cellTemplate: "<div class=\"ngCellText {{getDisplayValueClass(row.getProperty(col.field))}}\" title=\"{{row.getProperty(col.field)}}\">{{getDisplayValue(row.getProperty(col.field))}}</div>"
+                cellTemplate: Templates.CELL_TEMPLATE,
+                headerCellTemplate: Templates.HEADER_CELL_TEMPLATE,
+                pinnable: true
             });
         }, columnDefs);
         $scope.queryResultColumnDefs = columnDefs;

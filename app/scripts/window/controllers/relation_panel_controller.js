@@ -7,7 +7,7 @@ chromeMyAdmin.directive("relationPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", "relationSelectionService", "mySQLQueryService", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events, relationSelectionService, mySQLQueryService) {
+chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", "relationSelectionService", "mySQLQueryService", "Templates", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events, relationSelectionService, mySQLQueryService, Templates) {
     "use strict";
 
     var initializeRelationGrid = function() {
@@ -36,7 +36,8 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
             field: field,
             displayName: displayName,
             width: Number(displayName.length) * UIConstants.GRID_COLUMN_FONT_SIZE,
-            cellTemplate: "<div class=\"ngCellText\" title=\"{{row.getProperty(col.field)}}\">{{row.getProperty(col.field)}}</div>"
+            cellTemplate: Templates.CELL_TEMPLATE,
+            headerCellTemplate: Templates.HEADER_CELL_TEMPLATE
         };
     };
 
