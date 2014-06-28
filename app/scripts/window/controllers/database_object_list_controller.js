@@ -7,7 +7,7 @@ chromeMyAdmin.directive("databaseObjectListPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", "Events", "Modes", "mySQLQueryService", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes, mySQLQueryService) {
+chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", "Events", "Modes", "mySQLQueryService", "UIConstants", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes, mySQLQueryService, UIConstants) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {
@@ -17,7 +17,11 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     var adjustObjectListHeight = function() {
-        $("#objectList").height($(window).height() - 51 - 35 - 35);
+        $("#objectList").height(
+            $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
+                UIConstants.NAVBAR_HEIGHT -
+                35 - 35);
     };
 
     var databaseChanged = function() {

@@ -63,6 +63,7 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
     var adjustRelationPanelHeight = function() {
         $("#relationGrid").height(
             $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT);
     };

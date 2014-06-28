@@ -1,6 +1,6 @@
 var chromeMyAdmin = angular.module("chromeMyAdmin", ["ngGrid", "ui.ace"]);
 
-chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", function($rootScope, Events, ErrorLevel, mySQLClientService) {
+chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "$q", "UIConstants", function($rootScope, Events, ErrorLevel, mySQLClientService, $q, UIConstants) {
     "use strict";
 
     $rootScope.connected = false;
@@ -90,7 +90,11 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", f
     };
 
     var adjustMainPanelHeight = function() {
-        $("#mainPanel").height($(window).height() - 76);
+        $("#mainPanel").height(
+            $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
+                UIConstants.NAVBAR_HEIGHT -
+                UIConstants.FOOTER_HEIGHT);
     };
 
     var assignWindowResizeEventHandler = function() {
@@ -99,16 +103,7 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", f
         });
     };
 
-    var assignEventHandlers = function() {
-        chrome.app.window.onClosed.addListener(function() {
-            if (mySQLClientService.isConnected()) {
-                mySQLClientService.logout();
-            }
-        });
-    };
-
     assignWindowResizeEventHandler();
-    assignEventHandlers();
     adjustMainPanelHeight();
 }]);
 

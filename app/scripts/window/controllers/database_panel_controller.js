@@ -44,6 +44,7 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
     var adjustProcessListHeight = function() {
         $("#processListGrid").height(
             $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT - 50);
     };

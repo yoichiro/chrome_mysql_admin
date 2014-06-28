@@ -81,16 +81,18 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     var adjustStructurePanelHeight = function() {
         $("#structureGrid").height(
             ($(window).height() -
-                UIConstants.NAVBAR_HEIGHT -
-                UIConstants.FOOTER_HEIGHT) * (2 / 3) -
+             UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
+             UIConstants.NAVBAR_HEIGHT -
+             UIConstants.FOOTER_HEIGHT) * (2 / 3) -
                 UIConstants.FOOTER_HEIGHT * 2); // Footer area x2 for columns table
     };
 
     var adjustIndexesPanelHeight = function() {
         $("#indexesGrid").height(
             ($(window).height() -
-                UIConstants.NAVBAR_HEIGHT -
-                UIConstants.FOOTER_HEIGHT) * (1 / 3) - 25);
+             UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
+             UIConstants.NAVBAR_HEIGHT -
+             UIConstants.FOOTER_HEIGHT) * (1 / 3) - 25);
     };
 
     var updateStructureColumnDefs = function(columnDefinitions) {
