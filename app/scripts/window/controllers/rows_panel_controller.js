@@ -269,6 +269,11 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         $scope.$on(Events.REQUEST_UPDATE_ROW, function(event, table) {
             showUpdateRowDialog();
         });
+        $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
+            if (modeService.getMode() === Modes.ROWS) {
+                doQueryAndReload();
+            }
+        });
     };
 
     var doQueryAndReload = function() {

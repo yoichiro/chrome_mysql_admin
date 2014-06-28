@@ -1,6 +1,6 @@
 var chromeMyAdmin = angular.module("chromeMyAdmin", ["ngGrid", "ui.ace"]);
 
-chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "$q", "UIConstants", function($rootScope, Events, ErrorLevel, mySQLClientService, $q, UIConstants) {
+chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "$q", "UIConstants", "KeyCodes", function($rootScope, Events, ErrorLevel, mySQLClientService, $q, UIConstants, KeyCodes) {
     "use strict";
 
     $rootScope.connected = false;
@@ -86,6 +86,12 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
             return "nullValueOnCell";
         } else {
             return "";
+        }
+    };
+
+    $rootScope.onKeyUp = function($event) {
+        if ($event.keyCode === KeyCodes.F5) {
+            $rootScope.$broadcast(Events.REQUEST_REFRESH, null);
         }
     };
 
