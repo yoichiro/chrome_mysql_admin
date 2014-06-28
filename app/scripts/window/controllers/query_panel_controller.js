@@ -177,6 +177,17 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         editor.setHighlightActiveLine(false);
         editor.setShowPrintMargin(false);
         editor.setShowInvisibles(true);
+        editor.commands.addCommand({
+            name: "executeQuery",
+            bindKey: {
+                win: "Ctrl-Enter",
+                mac: "Command-Enter"
+            },
+            exec: function(editor) {
+                doExecuteQuery();
+            },
+            readOnly: false
+        });
         $scope.createDdl = "CREATE TABLE ... ";
     };
 
