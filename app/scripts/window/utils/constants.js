@@ -2,6 +2,7 @@ chromeMyAdmin.constant("UIConstants", {
     GRID_COLUMN_MAX_WIDTH: 150,
     GRID_COLUMN_FONT_SIZE: 14,
     GRID_ROW_HEIGHT: 25,
+    WINDOW_TITLE_PANEL_HEIGHT: 20,
     NAVBAR_HEIGHT: 51,
     FOOTER_HEIGHT: 25
 });

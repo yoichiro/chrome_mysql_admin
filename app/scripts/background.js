@@ -17,14 +17,30 @@
 "use strict";
 
 function createWindow() {
-    chrome.app.window.create("window.html", {
-        bounds: {
-            width: 800,
-            height: 600
-        },
-        minWidth: 800,
-        minHeight: 600,
-        resizable: true
+    chrome.storage.sync.get("windowSize", function(items) {
+        var params = {};
+        if (items.windowSize) {
+            var windowSize = items.windowSize;
+            var state = "normal";
+            if (windowSize.isFullscreen) {
+                state = "fullscreen";
+            } else if (windowSize.isMaximized) {
+                state = "maximized";
+            }
+            params.bounds = windowSize.bounds;
+            params.state = state;
+        } else {
+            params.bounds = {
+                width: 800,
+                height: 600
+            };
+            params.state = "normal";
+        }
+        params.minWidth = 800;
+        params.minHeight = 600;
+        params.resizable = true;
+        params.frame = "none";
+        chrome.app.window.create("window.html", params);
     });
 }
 

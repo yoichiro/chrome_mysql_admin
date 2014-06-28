@@ -42,6 +42,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     var adjustQueryPanelHeight = function() {
         var totalHeight =
                 $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT;
         $(".queryEditor").height(totalHeight / 3 - 14);

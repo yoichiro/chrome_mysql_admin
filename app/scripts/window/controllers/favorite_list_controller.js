@@ -7,7 +7,7 @@ chromeMyAdmin.directive("favoriteListPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientService", "favoriteService", "Events", function($scope, mySQLClientService, favoriteService, Events) {
+chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientService", "favoriteService", "Events", "UIConstants", function($scope, mySQLClientService, favoriteService, Events, UIConstants) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {
@@ -17,7 +17,11 @@ chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientServic
     };
 
     var adjustFavoriteListHeight = function() {
-        $("#favoriteList").height($(window).height() - 51 - 35);
+        $("#favoriteList").height(
+            $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
+                UIConstants.NAVBAR_HEIGHT -
+                35);
     };
 
     var loadFavorites = function() {

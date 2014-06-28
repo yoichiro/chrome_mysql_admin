@@ -105,6 +105,7 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
     var adjustCreateDdlEditorHeight = function() {
         var totalHeight =
                 $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT;
         angular.forEach($(".tableStatusPanel"), function(e) {
