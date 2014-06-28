@@ -226,6 +226,18 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         });
     };
 
+    var onTableChanged = function(tableName) {
+        if (_isStructurePanelVisible()) {
+            $scope.tableName = tableName;
+            if (tableName) {
+                loadStructure(tableName);
+            } else {
+                resetStructureGrid();
+                resetIndexesGrid();
+            }
+        }
+    };
+
     var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
@@ -235,15 +247,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             resetIndexesGrid();
         });
         $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
-            if (_isStructurePanelVisible()) {
-                $scope.tableName = tableName;
-                if (tableName) {
-                    loadStructure(tableName);
-                } else {
-                    resetStructureGrid();
-                    resetIndexesGrid();
-                }
-            }
+            onTableChanged(tableName);
         });
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
@@ -253,6 +257,9 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         });
         $scope.$on(Events.DELETE_SELECTED_INDEX, function(event, data) {
             deleteIndex();
+        });
+        $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
+            onTableChanged(targetObjectService.getTable());
         });
     };
 

@@ -94,6 +94,17 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
         }
     };
 
+    var onTableChanged = function(tableName) {
+        if (_isRelationPanelVisible()) {
+            $scope.tableName = tableName;
+            if (tableName) {
+                loadRelations(tableName);
+            } else {
+                resetRelationGrid();
+            }
+        }
+    };
+
     var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
@@ -102,20 +113,16 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
             resetRelationGrid();
         });
         $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
-            if (_isRelationPanelVisible()) {
-                $scope.tableName = tableName;
-                if (tableName) {
-                    loadRelations(tableName);
-                } else {
-                    resetRelationGrid();
-                }
-            }
+            onTableChanged(tableName);
         });
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
         $scope.$on(Events.DELETE_SELECTED_RELATION, function(event, data) {
             deleteSelectedRelation();
+        });
+        $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
+            onTableChanged(targetObjectService.getTable());
         });
     };
 

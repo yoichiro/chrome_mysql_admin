@@ -79,6 +79,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.$on(Events.SHOW_QUERY_PANEL, function(event, data) {
             onShowQueryPanel(data.query);
         });
+        $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
+            doExecuteQuery();
+        });
     };
 
     var onConnectionChanged = function() {
