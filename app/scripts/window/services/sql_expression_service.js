@@ -32,7 +32,7 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", "ValueTypes", funct
             } else {
                 angular.forEach(primaryKeyColumns, function(primaryKeyColumn, index) {
                     var condition =
-                            "`" + primaryKeyColumn.name + "`='" +
+                            "`" + primaryKeyColumn.name + "`" +
                             createEqualRightExpression(originalRow.values[index]);
                     this.push(condition);
                 }, whereConditions);
