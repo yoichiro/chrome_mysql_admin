@@ -11,12 +11,19 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     "use strict";
 
     var initializeRowsGrid = function() {
+        $scope.sortOptions = {
+            fields: [],
+            directions: [],
+            columns: []
+        };
         resetRowsGrid();
         $scope.rowsGrid = {
             data: "rowsData",
             columnDefs: "rowsColumnDefs",
             enableColumnResize: true,
-            enableSorting: false,
+            enableSorting: true,
+            useExternalSorting: true,
+            sortInfo: $scope.sortOptions,
             enablePinning: true,
             multiSelect: false,
             selectedItems: $scope.selectedRows,
@@ -32,6 +39,12 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
+    };
+
+    var clearSortInfo = function () {
+        $scope.sortOptions.fields = [];
+        $scope.sortOptions.directions = [];
+        $scope.sortOptions.columns = [];
     };
 
     var ngGridDoubleClick = function() {
@@ -62,6 +75,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         $scope.rowsColumnDefs = [];
         $scope.rowsData = [];
         $scope.lastQueryResult = null;
+        clearSortInfo();
         rowsSelectionService.reset();
     };
 
@@ -82,7 +96,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     var updateRowsColumnDefs = function(columnDefinitions) {
         var columnDefs = [];
         angular.forEach(columnDefinitions, function(columnDefinition, index) {
-            this.push({
+            var params = {
                 field: "column" + index,
                 displayName: columnDefinition.name,
                 width: Math.min(
@@ -91,7 +105,8 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                 cellTemplate: Templates.CELL_TEMPLATE,
                 headerCellTemplate: Templates.HEADER_CELL_TEMPLATE,
                 pinnable: true
-            });
+            };
+            this.push(params);
         }, columnDefs);
         $scope.rowsColumnDefs = columnDefs;
     };
@@ -166,6 +181,29 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         });
     };
 
+    var isDifferentColumnDefinitions = function(newColumnDefinitions) {
+        if ($scope.lastQueryResult) {
+            var oldColumnDefinitions = $scope.lastQueryResult.columnDefinitions;
+            if (oldColumnDefinitions.length !== newColumnDefinitions.length) {
+                return true;
+            }
+            for (var i = 0; i < oldColumnDefinitions.length; i++) {
+                var oldColumn = oldColumnDefinitions[i];
+                var newColumn = newColumnDefinitions[i];
+                if (oldColumn.name !== newColumn.name ||
+                    oldColumn.orgName !== newColumn.orgName ||
+                    oldColumn.characterSet !== newColumn.characterSet ||
+                    oldColumn.columnLength !== newColumn.columnLength ||
+                    oldColumn.columnType !== newColumn.columnType) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return true;
+        }
+    };
+
     var loadRows = function(tableName) {
         rowsSelectionService.reset();
         var rowsCount = 0;
@@ -174,17 +212,26 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             if (result.hasResultsetRows) {
                 rowsCount = result.resultsetRows[0].values[0];
                 rowsPagingService.updateTotalRowCount(rowsCount);
-                return mySQLClientService.query("SELECT * FROM `" + tableName + "` " + where + createSqlLimitSection());
+                var order = "";
+                if ($scope.sortOptions.columns.length > 0) {
+                    order += " ORDER BY `";
+                    order += $scope.sortOptions.columns[0].displayName;
+                    order += "` " + $scope.sortOptions.directions[0].toUpperCase();
+                }
+                return mySQLClientService.query("SELECT * FROM `" + tableName + "` " + where + order + createSqlLimitSection());
             } else {
                 return $q.reject("Retrieving rows count failed.");
             }
         }).then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.safeApply(function() {
-                    $scope.lastQueryResult = result;
-                    updateRowsColumnDefs(result.columnDefinitions);
+                    if (isDifferentColumnDefinitions(result.columnDefinitions)) {
+                        clearSortInfo();
+                        updateRowsColumnDefs(result.columnDefinitions);
+                    }
                     updateColumnNames(result.columnDefinitions);
                     updateRows(result.columnDefinitions, result.resultsetRows);
+                    $scope.lastQueryResult = result;
                 });
             } else {
                 $scope.fatalErrorOccurred("Retrieving rows failed.");
@@ -245,6 +292,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
             if (_isRowsPanelVisible()) {
                 rowsPagingService.reset();
+                clearSortInfo();
                 $scope.tableName = tableName;
                 if (tableName) {
                     initializeOptions();
@@ -274,6 +322,11 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                 doQueryAndReload();
             }
         });
+        $scope.$watch("sortOptions", function(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                doQueryAndReload();
+            }
+        }, true);
     };
 
     var doQueryAndReload = function() {
@@ -292,11 +345,11 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     };
 
     $scope.initialize = function() {
-        assignEventHandlers();
+        initializeOptions();
         initializeRowsGrid();
+        assignEventHandlers();
         assignWindowResizeEventHandler();
         adjustRowsPanelHeight();
-        initializeOptions();
     };
 
     $scope.onDoubleClickedRow = function(rowItem) {
