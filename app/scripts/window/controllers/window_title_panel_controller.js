@@ -7,7 +7,7 @@ chromeMyAdmin.directive("windowTitlePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientService", "$q", function($scope, mySQLClientService, $q) {
+chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientService", "$q", "Events", function($scope, mySQLClientService, $q, Events) {
     "use strict";
 
     var storeWindowSize = function() {
@@ -27,6 +27,28 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
             deferred.resolve();
         });
         return deferred.promise;
+    };
+
+    var assignEventHandlers = function() {
+        $scope.$on(Events.CONNECTION_CHANGED, function(event, connectionInfo) {
+            onConnectionChanged(connectionInfo);
+        });
+    };
+
+    var resetTitleText = function() {
+        $scope.titleText = "";
+    };
+
+    var onConnectionChanged = function(info) {
+        if (mySQLClientService.isConnected()) {
+            $scope.safeApply(function() {
+                $scope.titleText = info.hostName + ":" + info.port +
+                    " | " + info.userName +
+                    " | " + info.initialHandshakeRequest.serverVersion;
+            });
+        } else {
+            resetTitleText();
+        }
     };
 
     $scope.close = function() {
@@ -61,6 +83,11 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
         } else {
             chrome.app.window.current().fullscreen();
         }
+    };
+
+    $scope.initialize = function() {
+        assignEventHandlers();
+        resetTitleText();
     };
 
 }]);

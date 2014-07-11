@@ -19,6 +19,11 @@ body {
     cursor: pointer;
 }
 
+.windowTitlePanel div.titleText {
+    margin-top: 0;
+    margin-left: 10px;
+}
+
 .navbar-fixed-top {
     top: 20px;
     border-width: 0 0 1px;
