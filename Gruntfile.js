@@ -139,7 +139,7 @@ module.exports = function (grunt) {
                         'scripts/background.js',
                         'scripts/lib/bootstrap.min.js',
                         'scripts/lib/ng-grid-2.0.7.min.js',
-                        'scripts/lib/mysql_js_driver_1.4.1.min.js',
+                        'scripts/lib/mysql_js_driver_1.4.2.min.js',
                         'scripts/lib/ace-builds/src-min-noconflict/{,*/}*.js',
                         'fonts/{,*/}*.*',
                         '*.html',
