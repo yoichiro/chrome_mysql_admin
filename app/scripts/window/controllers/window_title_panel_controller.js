@@ -90,4 +90,10 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
         resetTitleText();
     };
 
+    $scope.openNewWindow = function() {
+        chrome.runtime.getBackgroundPage(function(bg) {
+            bg.createWindow();
+        });
+    };
+
 }]);
