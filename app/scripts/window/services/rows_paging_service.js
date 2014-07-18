@@ -1,9 +1,19 @@
-chromeMyAdmin.factory("rowsPagingService", ["$rootScope", "Events", function($rootScope, Events) {
+chromeMyAdmin.factory("rowsPagingService", ["$rootScope", "Events", "configurationService", "Configurations", function($rootScope, Events, configurationService, Configurations) {
     "use strict";
 
-    var ROW_COUNT_PER_PAGE = 100;
+    var rowCountPerPage = 100;
     var currentPageIndex = 0;
     var totalRowCount = 0;
+
+    configurationService.addConfigurationChangeListener(function(name, value) {
+        if (name === Configurations.ROW_COUNT_PER_PAGE_IN_ROWS_PANEL) {
+            rowCountPerPage = value;
+        }
+    });
+
+    configurationService.getRowCountPerPageInRowsPanel().then(function(rowCount) {
+        rowCountPerPage = rowCount;
+    });
 
     return {
         reset: function() {
@@ -19,7 +29,7 @@ chromeMyAdmin.factory("rowsPagingService", ["$rootScope", "Events", function($ro
         },
         hasNext: function() {
             var nextPageIndex = currentPageIndex + 1;
-            var start = nextPageIndex * ROW_COUNT_PER_PAGE;
+            var start = nextPageIndex * rowCountPerPage;
             return (totalRowCount - 1) >= start;
         },
         next: function() {
@@ -33,14 +43,14 @@ chromeMyAdmin.factory("rowsPagingService", ["$rootScope", "Events", function($ro
             }
         },
         current: function() {
-            var start = currentPageIndex * ROW_COUNT_PER_PAGE;
+            var start = currentPageIndex * rowCountPerPage;
             return {
                 offset: start,
-                count: ROW_COUNT_PER_PAGE
+                count: rowCountPerPage
             };
         },
         getTotalPageCount: function() {
-            return Math.ceil(totalRowCount / ROW_COUNT_PER_PAGE);
+            return Math.ceil(totalRowCount / rowCountPerPage);
         },
         getCurrentPageIndex: function() {
             return currentPageIndex;
