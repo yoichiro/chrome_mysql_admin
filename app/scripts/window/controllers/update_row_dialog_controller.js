@@ -81,7 +81,8 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
                 sets.push("`" + columnName + "` = NULL");
             } else if (value !== $scope.originalValues[columnName]) {
                 if ($scope.valueTypes[columnName] === ValueTypes.VALUE) {
-                    sets.push("`" + columnName + "` = " + "'" + value.replace(/'/g, "\\'") + "'");
+console.log(value);
+                    sets.push("`" + columnName + "` = " + "'" + sqlExpressionService.replaceValue(value) + "'");
                 } else if ($scope.valueTypes[columnName] === ValueTypes.EXPRESSION) {
                     sets.push("`" + columnName + "` = " + value);
                 }
