@@ -3,10 +3,14 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", "ValueTypes", funct
 
     var createEqualRightExpression = function(value) {
         if (value !== null) {
-            return "='" + value.replace(/'/g, "\\'") + "'";
+            return "='" + _replaceValue(value) + "'";
         } else {
             return " IS NULL";
         }
+    };
+
+    var _replaceValue = function(value) {
+        return value.replace(/'/g, "''").replace(/\\/g, "\\\\");
     };
 
     return {
@@ -50,7 +54,7 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", "ValueTypes", funct
                 } else if (value != null) {
                     targetColumns.push("`" + columnName + "`");
                     if (valueType === ValueTypes.VALUE) {
-                        targetValues.push("'" + value.replace(/'/g, "\\'") + "'");
+                        targetValues.push("'" + _replaceValue(value) + "'");
                     } else if (valueType === ValueTypes.EXPRESSION) {
                         targetValues.push(value);
                     }
@@ -66,6 +70,9 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", "ValueTypes", funct
             } else {
                 return null;
             }
+        },
+        replaceValue: function(value) {
+            return _replaceValue(value);
         }
     };
 }]);
