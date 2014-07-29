@@ -164,13 +164,10 @@ body {
     margin-bottom: 25px;
 }
 
-#progressPanel .progress {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -25px;
-    margin-left: -150px;
-    width: 300px;
+#progressPanel div {
+    position: relative;
+    top: 200px;
+    width: 700px;
 }
 
 .rowsConditionPanel {

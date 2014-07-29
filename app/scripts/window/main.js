@@ -35,6 +35,10 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
         $rootScope.$broadcast(Events.CONNECTION_CHANGED, connectionInfo);
     };
 
+    $rootScope.notifyExecutingQuery = function(query) {
+        $rootScope.$broadcast(Events.EXECUTING_QUERY, query);
+    };
+
     $rootScope.showMainStatusMessage = function(message) {
         $rootScope.$broadcast(Events.SHOW_MAIN_STATUS_MESSAGE, message);
     };

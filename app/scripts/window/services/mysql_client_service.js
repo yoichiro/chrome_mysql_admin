@@ -63,6 +63,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         var deferred = $q.defer();
         console.log("Query: " + task.query);
         _addQueryHistory(task.query);
+        $rootScope.notifyExecutingQuery(task.query);
         MySQL.client.query(task.query, function(columnDefinitions, resultsetRows) {
             $rootScope.showMainStatusMessage(
                 "No errors. Rows count is " + resultsetRows.length);
