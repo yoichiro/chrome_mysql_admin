@@ -1,3 +1,6 @@
 <div id="progressPanel" ng-controller="ProgressBarController" ng-show="isVisibleProgressBar()" ng-init="initialize()">
-  <div class="well center-block">{{query}}</div>
+  <div class="well center-block">
+    <div class="executingTitle">Now communicating with MySQL server...</div>
+    <div class="executingQuery">{{query}}</div>
+  </div>
 </div>
