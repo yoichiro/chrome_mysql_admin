@@ -10,6 +10,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         $rootScope.showMainStatusMessage("Logging out from MySQL server...");
         $rootScope.showProgressBar();
         var deferred = $q.defer();
+        $rootScope.notifyExecutingQuery("Logging out from MySQL server.");
         MySQL.client.logout(function() {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Logged out from MySQL server.");
@@ -114,6 +115,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         $rootScope.showProgressBar();
         var deferred = $q.defer();
         console.log("Get databases");
+        $rootScope.notifyExecutingQuery("Retrieving database list.");
         MySQL.client.getDatabases(function(databases) {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Retrieved database list.");
@@ -141,6 +143,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         $rootScope.showProgressBar();
         var deferred = $q.defer();
         console.log("Get statistics");
+        $rootScope.notifyExecutingQuery("Retrieving statistics.");
         MySQL.client.getStatistics(function(statistics) {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Retrieved statistics.");
@@ -167,6 +170,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             $rootScope.showMainStatusMessage("Logging in to MySQL server...");
             $rootScope.showProgressBar();
             var deferred = $q.defer();
+            $rootScope.notifyExecutingQuery("Logging in to MySQL server.");
             MySQL.client.login(
                 hostName,
                 Number(portNumber),

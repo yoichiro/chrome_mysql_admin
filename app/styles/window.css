@@ -156,7 +156,7 @@ body {
 #progressPanel {
     position: fixed;
     left: 0;
-    top: 0;
+    top: 21px;
     width: 100%;
     height: 100%;
     background: rgba(45,45,45, 0.2);
@@ -164,10 +164,19 @@ body {
     margin-bottom: 25px;
 }
 
-#progressPanel div {
+#progressPanel>div {
     position: relative;
     top: 200px;
     width: 700px;
+}
+
+#progressPanel>div .executingTitle {
+    font-weight: bold;
+}
+
+#progressPanel>div .executingQuery {
+    margin-left: 10px;
+    margin-top: 5px;
 }
 
 .rowsConditionPanel {
