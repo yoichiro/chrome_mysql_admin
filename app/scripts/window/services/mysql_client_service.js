@@ -14,6 +14,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         MySQL.client.logout(function() {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Logged out from MySQL server.");
+            queryQueue = [];
             deferred.resolve();
         });
         return deferred.promise;
@@ -40,6 +41,8 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             return _getDatabases(task);
         } else if (task.type === "getStatistics") {
             return _getStatistics(task);
+        } else if (task.type === "ping") {
+            return _doPing(task);
         } else {
             $rootScope.fatalErrorOccurred("Unknown query type: " + task.type);
             return null;
@@ -162,6 +165,35 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         return deferred.promise;
     };
 
+    var _doPing = function(task) {
+        $rootScope.showMainStatusMessage("Ping...");
+        // $rootScope.showProgressBar();
+        var deferred = $q.defer();
+        console.log("Ping");
+        $rootScope.notifyExecutingQuery("Ping.");
+        MySQL.client.ping(function(result) {
+            // $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("");
+            if (result.isSuccess()) {
+                queryQueue.shift();
+                var remaining = queryQueue.length;
+                task.deferred.resolve();
+                if (remaining > 0) {
+                    _consumeQuery();
+                }
+            } else {
+                _logout();
+                deferred.reject("Fatal error: Ping failed (Server returned error).");
+            }
+        }, function() {
+            // $rootScope.hideProgressBar();
+            $rootScope.showMainStatusMessage("");
+            $rootScope.fatalErrorOccurred(
+                "Fatal error: Ping failed.");
+        });
+        return deferred.promise;
+    };
+
     return {
         isConnected: function() {
             return MySQL.communication.isConnected();
@@ -211,6 +243,9 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         },
         getQueryHistory: function() {
             return queryHistory;
+        },
+        ping: function() {
+            return _addQueryQueue("ping", null);
         }
     };
 
