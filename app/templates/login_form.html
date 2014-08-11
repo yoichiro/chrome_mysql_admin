@@ -2,33 +2,50 @@
   <div class="center-block loginPanel">
     <form novalidate class="form-horizontal" role="form">
       <div class="form-group">
-        <label for="loginFormName" class="col-sm-3 control-label">Name</label>
-        <div class="col-sm-9">
+        <label for="loginFormName" class="col-sm-4 control-label">Name</label>
+        <div class="col-sm-8">
           <input type="text" id="loginFormName" class="form-control" ng-model="name" />
         </div>
       </div>
       <div class="form-group">
-        <label for="loginFormHostName" class="col-sm-3 control-label">Host name</label>
-        <div class="col-sm-9">
+        <label for="loginFormHostName" class="col-sm-4 control-label">Host name</label>
+        <div class="col-sm-8">
           <input type="text" id="loginFormHostName" class="form-control" ng-model="hostName" ng-keyup="completePassword()" required autofocus />
         </div>
       </div>
       <div class="form-group">
-        <label for="loginFormPort" class="col-sm-3 control-label">Port no.</label>
-        <div class="col-sm-9">
+        <label for="loginFormPort" class="col-sm-4 control-label">Port no.</label>
+        <div class="col-sm-8">
           <input type="number" id="loginFormPort" class="form-control" ng-model="portNumber" ng-keyup="completePassword()" required />
         </div>
       </div>
       <div class="form-group">
-        <label for="loginFormUsername" class="col-sm-3 control-label">User name</label>
-        <div class="col-sm-9">
+        <label for="loginFormUsername" class="col-sm-4 control-label">User name</label>
+        <div class="col-sm-8">
           <input type="text" id="loginFormUsername" class="form-control" ng-model="userName" ng-keyup="completePassword()" required />
         </div>
       </div>
       <div class="form-group">
-        <label for="loginFormPassword" class="col-sm-3 control-label">Password</label>
-        <div class="col-sm-9">
+        <label for="loginFormPassword" class="col-sm-4 control-label">Password</label>
+        <div class="col-sm-8">
           <input type="password" id="loginFormPassword" class="form-control" ng-model="password" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="loginFormUseSSL" class="col-sm-4 control-label">Use SSL</label>
+        <div class="col-sm-8">
+          <label class="radio-inline">
+            <input type="radio" ng-model="useSSL" value="no" ng-change="onChangeValueUseSSL()" /> No<br />
+          </label>
+          <label class="radio-inline">
+            <input type="radio" ng-model="useSSL" value="yes" ng-change="onChangeValueUseSSL()" /> Yes<br />
+          </label>
+        </div>
+      </div>
+      <div class="form-group" ng-show="isCACertificateVisible()">
+        <label for="loginFormUseSSL" class="col-sm-4 control-label">CA certificate</label>
+        <div class="col-sm-8">
+          <textarea class="form-control" ng-model="caCert"></textarea>
         </div>
       </div>
     </form>

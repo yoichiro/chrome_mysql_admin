@@ -18,7 +18,7 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", "Events", function
     };
 
     return {
-        set: function(name, hostName, port, userName, password) {
+        set: function(name, hostName, port, userName, password, useSSL, caCert) {
             var deferred = $q.defer();
             chrome.storage.sync.get("favorites", function(items) {
                 var favorites = items.favorites || {};
@@ -27,6 +27,8 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", "Events", function
                 favorite.port = port;
                 favorite.userName = userName;
                 favorite.password = password;
+                favorite.useSSL = useSSL;
+                favorite.caCert = caCert;
                 favorites[name] = favorite;
                 chrome.storage.sync.set({favorites: favorites}, function() {
                     $rootScope.$broadcast(Events.FAVORITES_CHANGED, favorites);
