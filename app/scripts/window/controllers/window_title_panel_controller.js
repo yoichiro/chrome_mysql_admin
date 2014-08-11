@@ -42,7 +42,8 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
     var onConnectionChanged = function(info) {
         if (mySQLClientService.isConnected()) {
             $scope.safeApply(function() {
-                $scope.titleText = info.hostName + ":" + info.port +
+                var tls = info.useSSL ? " (SSL)" : "";
+                $scope.titleText = info.hostName + ":" + info.port + tls +
                     " | " + info.userName +
                     " | " + info.initialHandshakeRequest.serverVersion;
             });

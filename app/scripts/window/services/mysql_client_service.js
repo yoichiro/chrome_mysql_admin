@@ -229,6 +229,38 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             );
             return deferred.promise;
         },
+        loginWithSSL: function(hostName, portNumber, userName, password, ca) {
+            $rootScope.showMainStatusMessage("Logging in to MySQL server with SSL...");
+            $rootScope.showProgressBar();
+            var deferred = $q.defer();
+            $rootScope.notifyExecutingQuery("Logging in to MySQL server with SSL.");
+            MySQL.client.loginWithSSL(
+                hostName,
+                Number(portNumber),
+                userName,
+                password,
+                ca,
+                function(initialHandshakeRequest, result) {
+                    $rootScope.hideProgressBar();
+                    if (result.isSuccess()) {
+                        $rootScope.showMainStatusMessage("Logged in to MySQL server with SSL.");
+                        deferred.resolve(initialHandshakeRequest);
+                    } else {
+                        _logout();
+                        deferred.reject(result.errorMessage);
+                    }
+                }, function(errorCode) {
+                    $rootScope.hideProgressBar();
+                    $rootScope.showMainStatusMessage("");
+                    deferred.reject(errorCode);
+                }, function(result) {
+                    $rootScope.hideProgressBar();
+                    $rootScope.showMainStatusMessage("");
+                    deferred.reject(result);
+                }
+            );
+            return deferred.promise;
+        },
         logout: function() {
             return _logout();
         },

@@ -34,8 +34,9 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
                     html: true,
                     content: function() {
                         var info = $scope.connectionInfo;
+                        var tls = info.useSSL ? " (SSL)" : "";
                         return "Server: " +
-                            info.hostName + ":" + info.port + "<br />" +
+                            info.hostName + ":" + info.port + tls + "<br />" +
                             "MySQL version: " +
                             info.initialHandshakeRequest.serverVersion;
                     },

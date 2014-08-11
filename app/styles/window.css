@@ -112,8 +112,16 @@ body {
 }
 
 .loginPanel {
-    width: 400px;
-    padding-top: 70px;
+    width: 450px;
+    padding-top: 20px;
+}
+
+.loginPanel .form-group {
+    margin-bottom: 12px;
+}
+
+.loginPanel .form-group textarea {
+    resize: none;
 }
 
 .loginPanelAlertBlock {

@@ -38,7 +38,8 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 hostName: $scope.hostName,
                 port: $scope.portNumber,
                 userName: $scope.userName,
-                initialHandshakeRequest: initialHandshakeRequest
+                initialHandshakeRequest: initialHandshakeRequest,
+                useSSL: isUseSSLConnection()
             };
             $scope.notifyConnectionChanged(connectionInfo);
         });
@@ -52,6 +53,8 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 $scope.portNumber = favorite.port;
                 $scope.userName = favorite.userName;
                 $scope.password = favorite.password;
+                $scope.useSSL = favorite.useSSL || "no";
+                $scope.caCert = favorite.caCert;
             });
         });
         $scope.$on(Events.LOGIN, function(event, data) {
@@ -68,18 +71,40 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     var doConnect = function() {
         hideMessage();
-        mySQLClientService.login(
-            $scope.hostName,
-            Number($scope.portNumber),
-            $scope.userName,
-            $scope.password
-        ).then(function(initialHandshakeRequest) {
-            identityKeepService.set(
-                $scope.hostName, $scope.portNumber, $scope.userName, $scope.password);
-            onConnected(initialHandshakeRequest);
-        }, function(reason) {
-            showErrorMessage("Connection failed: " + reason);
-        });
+        if (isUseSSLConnection()) {
+            mySQLClientService.loginWithSSL(
+                $scope.hostName,
+                Number($scope.portNumber),
+                $scope.userName,
+                $scope.password,
+                $scope.caCert
+            ).then(function(initialHandshakeRequest) {
+                identityKeepService.set(
+                    $scope.hostName, $scope.portNumber, $scope.userName, $scope.password);
+                onConnected(initialHandshakeRequest);
+            }, function(reason) {
+                showErrorMessage("Connection failed: " + reason);
+                mySQLClientService.logout();
+            });
+        } else {
+            mySQLClientService.login(
+                $scope.hostName,
+                Number($scope.portNumber),
+                $scope.userName,
+                $scope.password
+            ).then(function(initialHandshakeRequest) {
+                identityKeepService.set(
+                    $scope.hostName, $scope.portNumber, $scope.userName, $scope.password);
+                onConnected(initialHandshakeRequest);
+            }, function(reason) {
+                showErrorMessage("Connection failed: " + reason);
+                mySQLClientService.logout();
+            });
+        }
+    };
+
+    var isUseSSLConnection = function() {
+        return $scope.useSSL === "yes";
     };
 
     // Public methods
@@ -88,6 +113,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         $scope.successMessage = "";
         $scope.errorMessage = "";
         $scope.portNumber = 3306;
+        $scope.useSSL = "no";
         assignEventHandlers();
         showAboutMe();
     };
@@ -98,17 +124,34 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     $scope.doTestConnection = function() {
         hideMessage();
-        mySQLClientService.login(
-            $scope.hostName,
-            Number($scope.portNumber),
-            $scope.userName,
-            $scope.password
-        ).then(function(initialHandshakeRequest) {
-            showSuccessMessage("Connection was successfully.");
-            mySQLClientService.logout();
-        }, function(reason) {
-            showErrorMessage("Connection failed: " + reason);
-        });
+        if (isUseSSLConnection()) {
+            mySQLClientService.loginWithSSL(
+                $scope.hostName,
+                Number($scope.portNumber),
+                $scope.userName,
+                $scope.password,
+                $scope.caCert
+            ).then(function(initialHandshakeRequest) {
+                showSuccessMessage("Connection was successfully.");
+                mySQLClientService.logout();
+            }, function(reason) {
+                showErrorMessage("Connection failed: " + reason);
+                mySQLClientService.logout();
+            });
+        } else {
+            mySQLClientService.login(
+                $scope.hostName,
+                Number($scope.portNumber),
+                $scope.userName,
+                $scope.password
+            ).then(function(initialHandshakeRequest) {
+                showSuccessMessage("Connection was successfully.");
+                mySQLClientService.logout();
+            }, function(reason) {
+                showErrorMessage("Connection failed: " + reason);
+                mySQLClientService.logout();
+            });
+        }
     };
 
     $scope.isErrorMessageVisible = function() {
@@ -126,7 +169,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     $scope.addFavorite = function() {
         var name = $scope.name || $scope.hostName;
         if (name) {
-            favoriteService.set(name, $scope.hostName, Number($scope.portNumber), $scope.userName, $scope.password);
+            favoriteService.set(name, $scope.hostName, Number($scope.portNumber), $scope.userName, $scope.password, $scope.useSSL, $scope.caCert);
         }
     };
 
@@ -140,6 +183,10 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 $scope.password = result.password;
             }
         });
+    };
+
+    $scope.isCACertificateVisible = function() {
+        return isUseSSLConnection();
     };
 
 }]);
