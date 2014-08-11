@@ -28,4 +28,5 @@ Dependent libraries
 
 * [encoding.js](http://code.google.com/p/stringencoding/)
 * [crypto-js](https://code.google.com/p/crypto-js/)
+* [Forge](https://github.com/digitalbazaar/forge)
 * [mysql_js_driver](https://github.com/yoichiro/mysql_js_driver)
