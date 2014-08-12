@@ -31,6 +31,15 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
         });
     };
 
+    $rootScope.showCustomErrorDialog = function(title, message, reason) {
+        $rootScope.$broadcast(Events.SHOW_ERROR_DIALOG, {
+            errorLevel: ErrorLevel.ERROR,
+            title: title,
+            message: message,
+            reason: reason
+        });
+    };
+
     $rootScope.notifyConnectionChanged = function(connectionInfo) {
         $rootScope.$broadcast(Events.CONNECTION_CHANGED, connectionInfo);
     };

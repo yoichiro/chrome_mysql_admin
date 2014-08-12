@@ -36,7 +36,14 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
     };
 
     var resetTitleText = function() {
-        $scope.titleText = "";
+        $scope.titleText = getAboutMe();
+    };
+
+    var getAboutMe = function() {
+        var manifest = chrome.runtime.getManifest();
+        var aboutMe = manifest.name + " version " + manifest.version;
+        aboutMe += " (C) " + manifest.author + " 2014, all rights reserved.";
+        return aboutMe;
     };
 
     var onConnectionChanged = function(info) {
