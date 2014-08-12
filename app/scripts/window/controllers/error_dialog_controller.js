@@ -32,7 +32,7 @@ chromeMyAdmin.controller("ErrorDialogController", ["$scope", "mySQLClientService
                     $scope.message1 = "Fatal error occurred. Go back to login screen.";
                     $scope.message2 = data.reason;
                 } else {
-                    $scope.title = "Error";
+                    $scope.title = data.title || "Error";
                     $scope.message1 = data.message;
                     $scope.message2 = data.reason;
                 }

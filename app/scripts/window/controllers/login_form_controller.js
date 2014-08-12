@@ -12,25 +12,6 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     // Private methods
 
-    var showErrorMessage = function(message) {
-        $scope.safeApply(function() {
-            $scope.errorMessage = message;
-        });
-    };
-
-    var hideMessage = function() {
-        $scope.safeApply(function() {
-            $scope.successMessage = "";
-            $scope.errorMessage = "";
-        });
-    };
-
-    var showSuccessMessage = function(message) {
-        $scope.safeApply(function() {
-            $scope.successMessage = message;
-        });
-    };
-
     var onConnected = function(initialHandshakeRequest) {
         $scope.safeApply(function() {
             var connectionInfo = {
@@ -55,6 +36,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 $scope.password = favorite.password;
                 $scope.useSSL = favorite.useSSL || "no";
                 $scope.caCert = favorite.caCert;
+                $scope.checkCN = favorite.checkCN || "yes";
             });
         });
         $scope.$on(Events.LOGIN, function(event, data) {
@@ -62,28 +44,21 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         });
     };
 
-    var showAboutMe = function() {
-        var manifest = chrome.runtime.getManifest();
-        var aboutMe = manifest.name + " version " + manifest.version;
-        aboutMe += " (C) " + manifest.author + " 2014, all rights reserved.";
-        $scope.aboutMe = aboutMe;
-    };
-
     var doConnect = function() {
-        hideMessage();
         if (isUseSSLConnection()) {
             mySQLClientService.loginWithSSL(
                 $scope.hostName,
                 Number($scope.portNumber),
                 $scope.userName,
                 $scope.password,
-                $scope.caCert
+                $scope.caCert,
+                isCheckCN()
             ).then(function(initialHandshakeRequest) {
                 identityKeepService.set(
                     $scope.hostName, $scope.portNumber, $scope.userName, $scope.password);
                 onConnected(initialHandshakeRequest);
             }, function(reason) {
-                showErrorMessage("Connection failed: " + reason);
+                $scope.showErrorDialog("Connection failed.", reason);
                 mySQLClientService.logout();
             });
         } else {
@@ -97,7 +72,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                     $scope.hostName, $scope.portNumber, $scope.userName, $scope.password);
                 onConnected(initialHandshakeRequest);
             }, function(reason) {
-                showErrorMessage("Connection failed: " + reason);
+                $scope.showErrorDialog("Connection failed.", reason);
                 mySQLClientService.logout();
             });
         }
@@ -107,15 +82,17 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         return $scope.useSSL === "yes";
     };
 
+    var isCheckCN = function() {
+        return $scope.checkCN === "yes";
+    };
+
     // Public methods
 
     $scope.initialize = function() {
-        $scope.successMessage = "";
-        $scope.errorMessage = "";
         $scope.portNumber = 3306;
         $scope.useSSL = "no";
+        $scope.checkCN = "yes";
         assignEventHandlers();
-        showAboutMe();
     };
 
     $scope.connect = function() {
@@ -123,19 +100,19 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     };
 
     $scope.doTestConnection = function() {
-        hideMessage();
         if (isUseSSLConnection()) {
             mySQLClientService.loginWithSSL(
                 $scope.hostName,
                 Number($scope.portNumber),
                 $scope.userName,
                 $scope.password,
-                $scope.caCert
+                $scope.caCert,
+                isCheckCN()
             ).then(function(initialHandshakeRequest) {
-                showSuccessMessage("Connection was successfully.");
+                $scope.showCustomErrorDialog("Test connection", "Connection was successfully.", "");
                 mySQLClientService.logout();
             }, function(reason) {
-                showErrorMessage("Connection failed: " + reason);
+                $scope.showCustomErrorDialog("Test connection", "Connection failed.", reason);
                 mySQLClientService.logout();
             });
         } else {
@@ -145,10 +122,10 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 $scope.userName,
                 $scope.password
             ).then(function(initialHandshakeRequest) {
-                showSuccessMessage("Connection was successfully.");
+                $scope.showCustomErrorDialog("Test connection", "Connection was successfully.", "");
                 mySQLClientService.logout();
             }, function(reason) {
-                showErrorMessage("Connection failed: " + reason);
+                $scope.showCustomErrorDialog("Test connection", "Connection failed.", reason);
                 mySQLClientService.logout();
             });
         }
@@ -169,7 +146,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     $scope.addFavorite = function() {
         var name = $scope.name || $scope.hostName;
         if (name) {
-            favoriteService.set(name, $scope.hostName, Number($scope.portNumber), $scope.userName, $scope.password, $scope.useSSL, $scope.caCert);
+            favoriteService.set(name, $scope.hostName, Number($scope.portNumber), $scope.userName, $scope.password, $scope.useSSL, $scope.caCert, $scope.checkCN);
         }
     };
 

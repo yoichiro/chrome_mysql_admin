@@ -229,7 +229,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             );
             return deferred.promise;
         },
-        loginWithSSL: function(hostName, portNumber, userName, password, ca) {
+        loginWithSSL: function(hostName, portNumber, userName, password, ca, checkCN) {
             $rootScope.showMainStatusMessage("Logging in to MySQL server with SSL...");
             $rootScope.showProgressBar();
             var deferred = $q.defer();
@@ -240,6 +240,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                 userName,
                 password,
                 ca,
+                checkCN,
                 function(initialHandshakeRequest, result) {
                     $rootScope.hideProgressBar();
                     if (result.isSuccess()) {

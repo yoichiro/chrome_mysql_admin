@@ -22,6 +22,9 @@ body {
 .windowTitlePanel div.titleText {
     margin-top: 0;
     margin-left: 10px;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    cursor: default;
 }
 
 .navbar-fixed-top {
@@ -117,7 +120,7 @@ body {
 }
 
 .loginPanel .form-group {
-    margin-bottom: 12px;
+/*    margin-bottom: 15px; */
 }
 
 .loginPanel .form-group textarea {
