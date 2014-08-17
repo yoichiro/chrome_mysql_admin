@@ -1,5 +1,5 @@
 html, body {
-    mergin: 0;
+    margin: 0;
     padding: 0;
 }
 
@@ -11,6 +11,9 @@ body {
     width: 100%;
     height: 20px;
     -webkit-app-region: drag;
+    border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
 }
 
 .windowTitlePanel div {
@@ -57,6 +60,8 @@ body {
     height: 25px;
     background-color: white;
     border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 
 .footerButtonLeft {
@@ -150,6 +155,7 @@ body {
     height: 25px;
     background-color: white;
     border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     padding-left: 5px;
 }
 
