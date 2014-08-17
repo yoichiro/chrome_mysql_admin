@@ -8,7 +8,15 @@ chromeMyAdmin.factory("configurationService", ["$rootScope", "$q", "Configuratio
         chrome.storage.sync.get("configurations", function(items) {
             var configurations = items.configurations || {};
             var result = configurations[name];
-            if (result) {
+            if (typeof result === "string") {
+                if (result) {
+                    deferred.resolve(result);
+                } else {
+                    deferred.resolve(defaultValue);
+                }
+            } else if (typeof result === "boolean") {
+                deferred.resolve(result);
+            } else if (typeof result === "number") {
                 deferred.resolve(result);
             } else {
                 deferred.resolve(defaultValue);
@@ -59,6 +67,16 @@ chromeMyAdmin.factory("configurationService", ["$rootScope", "$q", "Configuratio
             return setConfigurationValue(
                 Configurations.ROW_COUNT_PER_PAGE_IN_ROWS_PANEL,
                 rowCount);
+        },
+        getQueryEditorWrapMode: function() {
+            return getConfigurationValue(
+                Configurations.QUERY_EDITOR_WRAP_MODE,
+                Configurations.DEFAULT_QUERY_EDITOR_WRAP_MODE);
+        },
+        setQueryEditorWrapMode: function(wrap) {
+            return setConfigurationValue(
+                Configurations.QUERY_EDITOR_WRAP_MODE,
+                wrap);
         }
     };
 }]);
