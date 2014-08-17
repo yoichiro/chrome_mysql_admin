@@ -7,7 +7,7 @@ chromeMyAdmin.directive("queryPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -81,6 +81,11 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         });
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
             doExecuteQuery();
+        });
+        configurationService.addConfigurationChangeListener(function(name, value) {
+            if (name === Configurations.QUERY_EDITOR_WRAP_MODE) {
+                $scope.editor.getSession().setUseWrapMode(value);
+            }
         });
     };
 
@@ -180,6 +185,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         editor.setHighlightActiveLine(false);
         editor.setShowPrintMargin(false);
         editor.setShowInvisibles(true);
+        configurationService.getQueryEditorWrapMode().then(function(mode) {
+            editor.getSession().setUseWrapMode(mode);
+        });
         editor.commands.addCommand({
             name: "executeQuery",
             bindKey: {

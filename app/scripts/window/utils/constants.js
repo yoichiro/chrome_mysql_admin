@@ -224,7 +224,14 @@ chromeMyAdmin.constant("Configurations", {
     DEFAULT_DATABASE_INFO_AUTO_UPDATE_SPAN: 30000,
     ROW_COUNT_PER_PAGE_IN_ROWS_PANEL: "row_count_per_page_in_rows_panel",
     DEFAULT_ROW_COUNT_PER_PAGE_IN_ROWS_PANEL: 100,
-    DEFAULT_PING_SPAN: 30000
+    DEFAULT_PING_SPAN: 30000,
+    QUERY_EDITOR_WRAP_MODE: "query_editor_wrap_mode",
+    DEFAULT_QUERY_EDITOR_WRAP_MODE: true
+});
+
+chromeMyAdmin.constant("QueryEditorWrapMode", {
+    WRAP: "Wrap",
+    NOT_WRAP: "Not wrap"
 });
 
 chromeMyAdmin.constant("MySQLErrorCode", {
