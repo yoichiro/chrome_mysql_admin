@@ -96,12 +96,23 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
     $scope.initialize = function() {
         assignEventHandlers();
         resetTitleText();
+        $scope.alwaysOnTop = false;
     };
 
     $scope.openNewWindow = function() {
         chrome.runtime.getBackgroundPage(function(bg) {
             bg.createWindow();
         });
+    };
+
+    $scope.getAlwaysOnTopClass = function() {
+        return $scope.alwaysOnTop ? "fa-circle" : "fa-circle-o";
+    };
+
+    $scope.changeAlwaysOnTop = function() {
+        $scope.alwaysOnTop = !$scope.alwaysOnTop;
+        var appWindow = chrome.app.window.current();
+        appWindow.setAlwaysOnTop($scope.alwaysOnTop);
     };
 
 }]);
