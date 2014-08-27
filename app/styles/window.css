@@ -211,6 +211,21 @@ body {
 }
 
 .queryMiddlePanel {
+    background-color: #e7e7e7;
+    height: 22px;
+}
+
+.queryMiddlePanel .selectedQuery {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    line-height: 1.8em;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#queryPanel nav {
     margin-bottom: 0;
 }
 

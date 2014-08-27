@@ -7,7 +7,7 @@ chromeMyAdmin.directive("queryPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", "$timeout", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations, $timeout) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -26,6 +26,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     var resetQueryResultGrid = function() {
         $scope.queryResultColumnDefs = [];
         $scope.queryResultData = [];
+        $scope.selectedQuery = "";
     };
 
     var _isQueryPanelVisible = function() {
@@ -45,15 +46,8 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
                 UIConstants.NAVBAR_HEIGHT -
                 UIConstants.FOOTER_HEIGHT;
-        $(".queryEditor").height(totalHeight / 3 - 14);
-        $("#queryResultGrid").height(totalHeight * 2 / 3 - 53);
-    };
-
-    var onTableChanged = function(table) {
-        if (modeService.getMode() === Modes.QUERY) {
-            $scope.editor.insert(table);
-            $scope.editor.focus();
-        }
+        $(".queryEditor").height(totalHeight / 3);
+        $("#queryResultGrid").height(totalHeight * 2 / 3 - 74);
     };
 
     var onModeChanged = function(mode) {
@@ -70,9 +64,6 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
-        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
-            onTableChanged(table);
-        });
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
@@ -80,7 +71,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             onShowQueryPanel(data.query);
         });
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
-            doExecuteQuery();
+            doExecuteQueries();
         });
         configurationService.addConfigurationChangeListener(function(name, value) {
             if (name === Configurations.QUERY_EDITOR_WRAP_MODE) {
@@ -97,29 +88,81 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         }
     };
 
-    var doExecuteQuery = function() {
+    var doShowQueryResult = function(index) {
         resetQueryResultGrid();
-        $scope.queryErrorMessage = "";
-        var query = $scope.query;
-        mySQLClientService.query(query).then(function(result) {
+        var queryResult = $scope.queryResults[index];
+        $scope.selectedQuery = queryResult.query;
+        if (queryResult.success) {
+            var result = queryResult.result;
             if (result.hasResultsetRows) {
                 $scope.safeApply(function() {
+                    $scope.queryErrorMessage = "";
                     updateQueryResultColumnDefs(result.columnDefinitions);
                     updateQueryResult(result.columnDefinitions, result.resultsetRows);
-                    queryHistoryService.add(query).then(function() {
-                        loadQueryHistory();
-                    });
+                    $scope.editor.focus();
+                });
+            } else {
+                $scope.safeApply(function() {
+                    var message =
+                            "No errors. Affected rows count is " +
+                            result.result.affectedRows;
+                    $scope.queryErrorMessage = message;
                     $scope.editor.focus();
                 });
             }
+        } else {
+            $scope.queryErrorMessage = queryResult.errorMessage;
+            $scope.editor.focus();
+        }
+    };
+
+    var doExecuteQuery = function(queries) {
+        if (queries.length === 0) {
+            doShowQueryResult(0);
+            return;
+        }
+        var query = queries.shift();
+        mySQLClientService.query(query).then(function(result) {
+            $scope.queryResults.push({
+                query: query,
+                result: result,
+                success: true
+            });
+            doExecuteQuery(queries);
+            queryHistoryService.add(query).then(function() {
+                loadQueryHistory();
+            });
         }, function(reason) {
             var errorMessage = "[Error code:" + reason.errorCode;
             errorMessage += " SQL state:" + reason.sqlState;
             errorMessage += "] ";
             errorMessage += reason.errorMessage;
-            $scope.queryErrorMessage = errorMessage;
-            $scope.editor.focus();
+            $scope.queryResults.push({
+                query: query,
+                errorMessage: errorMessage,
+                sucess: false
+            });
+            doExecuteQuery([]);
         });
+    };
+
+    var doExecuteQueries = function() {
+        resetQueryResultGrid();
+        $scope.queryErrorMessage = "";
+        $scope.queryResults = [];
+        var query = $scope.query;
+        if (query) {
+            var parseResult = new MySQL.QueryDivider().parse(query);
+            if (parseResult.success) {
+                if (parseResult.result.length > 0) {
+                    doExecuteQuery(parseResult.result);
+                }
+            } else {
+                var errorMessage = "ParseError: " + parseResult.error.message;
+                $scope.queryErrorMessage = errorMessage;
+                $scope.editor.focus();
+            }
+        }
     };
 
     var updateQueryResultColumnDefs = function(columnDefinitions) {
@@ -154,17 +197,17 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
 
     var loadQueryHistory = function() {
         queryHistoryService.getAll().then(function(result) {
-            result.push("");
             $scope.queryHistory = result.reverse();
-            $scope.queryInHistory = result[0];
         });
     };
 
     $scope.initialize = function() {
+        $scope.queryResults = [];
         assignEventHandlers();
         initializeQueryResultGrid();
         assignWindowResizeEventHandler();
         adjustQueryPanelHeight();
+        $scope.clearQuery();
     };
 
     $scope.isQueryPanelVisible = function() {
@@ -172,7 +215,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     $scope.executeQuery = function() {
-        doExecuteQuery();
+        doExecuteQueries();
     };
 
     $scope.isQueryErrorMessageVisible = function() {
@@ -195,18 +238,38 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 mac: "Command-Enter"
             },
             exec: function(editor) {
-                doExecuteQuery();
+                doExecuteQueries();
             },
             readOnly: false
         });
         $scope.createDdl = "CREATE TABLE ... ";
     };
 
-    $scope.onChangeQueryInHistory = function() {
-        var target = $scope.queryInHistory;
-        if (target) {
-            $scope.query = target;
+    $scope.setQuery = function(query) {
+        $scope.query = query;
+        $scope.editor.focus();
+    };
+
+    $scope.insertQuery = function(query) {
+        var current = $scope.editor.getCursorPosition();
+        var pos = 0;
+        var lines = $scope.query.split("\n");
+        for (var i = 0; i < current.row; i++) {
+            pos += lines[i].length + 1;
         }
+        pos += current.column;
+        $scope.query =
+            $scope.query.substring(0, pos) +
+            query +
+            $scope.query.substring(pos);
+        $scope.editor.focus();
+        $timeout(function() {
+            $scope.editor.getSelection().moveCursorToPosition(current);
+        }, 100);
+    };
+
+    $scope.clearQuery = function() {
+        $scope.query = "";
     };
 
     $scope.getDisplayValue = function(value) {
@@ -223,6 +286,10 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         } else {
             return "";
         }
+    };
+
+    $scope.showQueryResult = function(index) {
+        doShowQueryResult(index);
     };
 
 }]);
