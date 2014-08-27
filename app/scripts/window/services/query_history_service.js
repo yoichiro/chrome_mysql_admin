@@ -1,19 +1,24 @@
 chromeMyAdmin.factory("queryHistoryService", ["$rootScope", "$q", "Events", function($rootScope, $q, Events) {
     "use strict";
 
+    var trim = function(str) {
+        return str.replace(/^[ 　\t\r\n]+|[ 　\t\r\n]+$/g, "");
+    };
+
     return {
         add: function(query) {
+            var trimed = trim(query);
             var deferred = $q.defer();
             chrome.storage.sync.get("queries", function(items) {
                 var queries = items.queries || [];
                 var exists = false;
                 angular.forEach(queries, function(target) {
-                    if (target === query) {
+                    if (target === trimed) {
                         exists = true;
                     }
                 });
                 if (!exists) {
-                    queries.push(query);
+                    queries.push(trimed);
                     if (queries.length > 30) {
                         queries = queries.slice(-30);
                     }

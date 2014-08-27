@@ -1,9 +1,42 @@
 <div id="queryPanel" ng-controller="QueryPanelController" ng-init="initialize()" ng-show="isQueryPanelVisible()">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">History <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li ng-repeat="query in queryHistory">
+                <a href="#" ng-click="insertQuery(query)">{{query}}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <button type="submit" class="btn btn-default btn-sm" ng-click="clearQuery()">Clear</button>
+          <button type="submit" class="btn btn-default btn-sm" ng-click="executeQuery()">Execute</button>
+        </form>
+      </div>
+    </div>
+  </nav>
   <div ui-ace="{mode: 'sql', theme: 'clouds', onLoad: aceLoaded}" ng-model="query" class="queryEditor"></div>
-  <div class="form-group queryMiddlePanel">
-    <select class="form-control" ng-model="queryInHistory" ng-options="query for query in queryHistory" ng-change="onChangeQueryInHistory()"></select>
-    <button type="button" class="form-control btn btn-default btn-xs" ng-click="executeQuery()">Execute</button>
+
+  <div class="queryMiddlePanel">
+    <div class="dropdown pull-left">
+      <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="queryResultSelector" data-toggle="dropdown">
+        Result ({{queryResults.length}})
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="queryResultSelector">
+      <li role="<p></p>resentation" ng-repeat="result in queryResults">
+        <a role="menuitem" tabindex="-1" href="#" ng-click="showQueryResult($index)">{{$index + 1}}. {{result.query}}</a>
+      </li>
+      </ul>
+    </div>
+
+    <div class="selectedQuery">{{selectedQuery}}</div>
   </div>
+
   <div id="queryResultGrid" class="gridStyle" ng-grid="queryResultGrid">
   </div>
   <div class="queryErrorMessage" ng-model="queryError" ng-show="isQueryErrorMessageVisible()">{{queryErrorMessage}}</div>

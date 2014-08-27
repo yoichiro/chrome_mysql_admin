@@ -208,6 +208,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                 Number(portNumber),
                 userName,
                 password,
+                false,
                 function(initialHandshakeRequest, result) {
                     $rootScope.hideProgressBar();
                     if (result.isSuccess()) {
@@ -239,6 +240,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                 Number(portNumber),
                 userName,
                 password,
+                false,
                 ca,
                 checkCN,
                 function(initialHandshakeRequest, result) {
