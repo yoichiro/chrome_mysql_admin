@@ -124,6 +124,15 @@ module.exports = function (grunt) {
             }
         },
         copy: {
+            angular_csp_css: {
+                files: [{
+                    expand: false,
+                    dest: '<%= yeoman.app %>/styles/angular-csp.css',
+                    src: [
+                        'bower_components/angular/angular-csp.css'
+                    ]
+                }]
+            },
             dist: {
                 files: [{
                     expand: true,
@@ -213,12 +222,13 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean',
         'bower:install',
+        'copy:angular_csp_css',
         'chromeManifest:dist',
         'useminPrepare',
         'concurrent:dist',
         'concat',
         'uglify',
-        'copy',
+        'copy:dist',
         'usemin',
         'preprocess',
         'compress'
