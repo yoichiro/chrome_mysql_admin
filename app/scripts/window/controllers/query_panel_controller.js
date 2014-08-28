@@ -224,6 +224,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     $scope.aceLoaded = function(editor) {
+        ace.require("ace/ext/language_tools");
         $scope.editor = editor;
         editor.setHighlightActiveLine(false);
         editor.setShowPrintMargin(false);
@@ -241,6 +242,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 doExecuteQueries();
             },
             readOnly: false
+        });
+        editor.setOptions({
+            enableBasicAutocompletion: true
         });
         $scope.createDdl = "CREATE TABLE ... ";
     };
