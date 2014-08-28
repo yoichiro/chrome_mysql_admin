@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" ng-app="chromeMyAdmin" ng-csp>
 
 <head>
 
 <meta charset="UTF-8" />
 
+<link rel="stylesheet" type="text/css" href="styles/angular-csp.css" />
 <link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="styles/window.css" />
 <link rel="stylesheet" type="text/css" href="styles/ng-grid.min.css" />
@@ -83,7 +84,7 @@
 
 </head>
 
-<body ng-app="chromeMyAdmin" ng-csp ng-keyup="onKeyUp($event)">
+<body ng-keyup="onKeyUp($event)">
 
 <progress_panel></progress_panel>
 
