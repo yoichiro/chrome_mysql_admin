@@ -256,3 +256,10 @@ chromeMyAdmin.constant("Templates", {
 chromeMyAdmin.constant("KeyCodes", {
     F5: 116
 });
+
+chromeMyAdmin.constant("TableTypes", {
+    BASE_TABLE: "BASE TABLE",
+    VIEW: "VIEW",
+    SYSTEM_VIEW: "SYSTEM VIEW",
+    TEMPORARY: "TEMPORARY"
+});

@@ -74,7 +74,7 @@ chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectSe
 
     $scope.updateRow = function() {
         resetErrorMessage();
-        var sql = "UPDATE `" + targetObjectService.getTable() + "` ";
+        var sql = "UPDATE `" + targetObjectService.getTable().name + "` ";
         var sets = [];
         angular.forEach($scope.values, function(value, columnName) {
             if ($scope.valueTypes[columnName] === ValueTypes.NULL && $scope.originalValues[columnName] !== null) {
@@ -120,7 +120,7 @@ console.log(value);
 
     $scope.createInsertStatement = function() {
         var sql = sqlExpressionService.createInsertStatement(
-            targetObjectService.getTable(), $scope.values, $scope.valueTypes);
+            targetObjectService.getTable().name, $scope.values, $scope.valueTypes);
         $("#updateRowDialog").modal("hide");
         $scope.showQueryPanel(sql);
     };

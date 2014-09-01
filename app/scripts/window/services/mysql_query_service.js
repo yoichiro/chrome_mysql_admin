@@ -51,7 +51,7 @@ chromeMyAdmin.factory("mySQLQueryService", ["$q", "$rootScope", "mySQLClientServ
         },
         showTables: function() {
             var deferred = $q.defer();
-            mySQLClientService.query("SHOW TABLES").then(function(result) {
+            mySQLClientService.query("SHOW /*!50002 FULL*/ TABLES").then(function(result) {
                 if (result.hasResultsetRows) {
                     deferred.resolve(result);
                 } else {

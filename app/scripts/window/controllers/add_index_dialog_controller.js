@@ -109,16 +109,16 @@ chromeMyAdmin.controller("AddIndexDialogController", ["$scope", "Events", "mySQL
         var sql = "";
         var columnListString = "(" + createColumnListString($scope.selectedColumns) + ")";
         if ($scope.keyType === "PRIMARY") {
-            sql += "ALTER TABLE `" + $scope.selectedTable + "` ADD PRIMARY KEY ";
+            sql += "ALTER TABLE `" + $scope.selectedTable.name + "` ADD PRIMARY KEY ";
             sql += columnListString;
         } else if ($scope.keyType === "INDEX") {
-            sql += "ALTER TABLE `" + $scope.selectedTable + "` ADD INDEX ";
+            sql += "ALTER TABLE `" + $scope.selectedTable.name + "` ADD INDEX ";
             if ($scope.keyName) {
                 sql += "`" + $scope.keyName + "` ";
             }
             sql += columnListString;
         } else if ($scope.keyType === "UNIQUE") {
-            sql += "ALTER TABLE `" + $scope.selectedTable + "` ADD UNIQUE INDEX ";
+            sql += "ALTER TABLE `" + $scope.selectedTable.name + "` ADD UNIQUE INDEX ";
             if ($scope.keyName) {
                 sql += "`" + $scope.keyName + "` ";
             }

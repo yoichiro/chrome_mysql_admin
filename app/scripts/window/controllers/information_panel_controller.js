@@ -7,7 +7,7 @@ chromeMyAdmin.directive("informationPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientService", "modeService", "Events", "Modes", "targetObjectService", "Engines", "UIConstants", "mySQLQueryService", function($scope, mySQLClientService, modeService, Events, Modes, targetObjectService, Engines, UIConstants, mySQLQueryService) {
+chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientService", "modeService", "Events", "Modes", "targetObjectService", "Engines", "UIConstants", "mySQLQueryService", "TableTypes", function($scope, mySQLClientService, modeService, Events, Modes, targetObjectService, Engines, UIConstants, mySQLQueryService, TableTypes) {
     "use strict";
 
     var _isInformationPanelVisible = function() {
@@ -64,22 +64,23 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
 
     var onModeChanged = function(mode) {
         if (mode === Modes.INFORMATION) {
-            var tableName = targetObjectService.getTable();
-            if (tableName) {
-                $scope.tableName = tableName;
-                loadCollations(tableName);
+            var table = targetObjectService.getTable();
+            if (table) {
+                $scope.selectedTable = table;
+                loadCollations(table.name);
             } else {
-                $scope.tableName = null;
+                $scope.selectedTable = null;
             }
         }
     };
 
-    var onTableChanged = function(tableName) {
+    var onTableChanged = function(table) {
         if (_isInformationPanelVisible()) {
-            $scope.tableName = tableName;
-            if (tableName) {
-                loadCollations(tableName);
+            if (table) {
+                $scope.selectedTable = table;
+                loadCollations(table.name);
             } else {
+                $scope.selectedTable = null;
                 resetDiplayedValues();
             }
         }
@@ -92,8 +93,8 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             resetDiplayedValues();
         });
-        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
-            onTableChanged(tableName);
+        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
+            onTableChanged(table);
         });
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
@@ -138,13 +139,13 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
     $scope.onCollationChanged = function() {
         var collation = $scope["tableStatus_Collation"];
         var encoding = collation.split("_")[0];
-        var sql = "ALTER TABLE `" + targetObjectService.getTable() + "` " +
+        var sql = "ALTER TABLE `" + targetObjectService.getTable().name + "` " +
                 "CHARACTER SET " + encoding + " COLLATE " + collation;
         mySQLClientService.query(sql).then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.fatalErrorOccurred("Changing table character set and collation failed.");
             } else {
-                loadCollations(targetObjectService.getTable());
+                loadCollations(targetObjectService.getTable().name);
             }
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
@@ -153,13 +154,13 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
 
     $scope.onEngineChanged = function() {
         var engine = $scope["tableStatus_Engine"];
-        var sql = "ALTER TABLE `" + targetObjectService.getTable() + "` " +
+        var sql = "ALTER TABLE `" + targetObjectService.getTable().name + "` " +
                 "ENGINE = " + engine;
         mySQLClientService.query(sql).then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.fatalErrorOccurred("Changing table engine failed.");
             } else {
-                loadCollations(targetObjectService.getTable());
+                loadCollations(targetObjectService.getTable().name);
             }
         }, function(reason) {
             $scope.fatalErrorOccurred(reason);
@@ -172,6 +173,15 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         editor.setShowPrintMargin(false);
         editor.setShowInvisibles(true);
         editor.setReadOnly(true);
+        editor.getSession().setUseWrapMode(true);
+    };
+
+    $scope.isTable = function() {
+        if ($scope.selectedTable) {
+            return $scope.selectedTable.type === TableTypes.BASE_TABLE;
+        } else {
+            return false;
+        }
     };
 
 }]);

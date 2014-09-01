@@ -37,7 +37,7 @@
         <label for="tableStatusCollations" class="control-label">Charset,Collation</label>
       </div>
       <div class="col-sm-9">
-        <select id="tableStatusCollations" class="form-control input-sm" ng-model="tableStatus_Collation" ng-options="collation.values[0] as collation.values[0] for collation in collations" ng-change="onCollationChanged()">
+        <select id="tableStatusCollations" class="form-control input-sm" ng-model="tableStatus_Collation" ng-options="collation.values[0] as collation.values[0] for collation in collations" ng-change="onCollationChanged()" ng-disabled="!isTable()">
         </select>
       </div>
     </div>
@@ -46,7 +46,7 @@
         <label for="tableStatusEngines" class="control-label">Engine</label>
       </div>
       <div class="col-sm-9">
-        <select id="tableStatusEngines" class="form-control input-sm" ng-model="tableStatus_Engine" ng-options="engine as engine for engine in engines" ng-change="onEngineChanged()">
+        <select id="tableStatusEngines" class="form-control input-sm" ng-model="tableStatus_Engine" ng-options="engine as engine for engine in engines" ng-change="onEngineChanged()" ng-disabled="!isTable()">
         </select>
       </div>
     </div>

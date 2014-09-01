@@ -165,7 +165,7 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         var columnDefinitions = $scope.lastQueryResult.columnDefinitions;
         var primaryKeyColumns =
                 sqlExpressionService.getPrimaryKeyColumns(columnDefinitions);
-        var sql = "DELETE FROM `" + targetObjectService.getTable() + "` WHERE ";
+        var sql = "DELETE FROM `" + targetObjectService.getTable().name + "` WHERE ";
         var whereConditions = sqlExpressionService.createWhereConditionsForUpdate(
             primaryKeyColumns, columnDefinitions, originalRow);
         sql += whereConditions.join(" AND ");
@@ -243,12 +243,12 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
 
     var onModeChanged = function(mode) {
         if (mode === Modes.ROWS) {
-            var tableName = targetObjectService.getTable();
-            if (tableName) {
-                if ($scope.tableName !== tableName) {
-                    $scope.tableName = tableName;
+            var table = targetObjectService.getTable();
+            if (table) {
+                if ($scope.tableName !== table.name) {
+                    $scope.tableName = table.name;
                     initializeOptions();
-                    loadRows(tableName);
+                    loadRows(table.name);
                 }
             } else {
                 resetRowsGrid();
@@ -289,15 +289,16 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
             rowsPagingService.reset();
             resetRowsGrid();
         });
-        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
+        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
             if (_isRowsPanelVisible()) {
                 rowsPagingService.reset();
                 clearSortInfo();
-                $scope.tableName = tableName;
-                if (tableName) {
+                if (table) {
+                    $scope.tableName = table.name;
                     initializeOptions();
-                    loadRows(tableName);
+                    loadRows(table.name);
                 } else {
+                    $scope.tableName = null;
                     resetRowsGrid();
                 }
             }
@@ -330,9 +331,9 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
     };
 
     var doQueryAndReload = function() {
-        var tableName = targetObjectService.getTable();
-        if (tableName) {
-            loadRows(tableName);
+        var table = targetObjectService.getTable();
+        if (table) {
+            loadRows(table.name);
         }
     };
 
