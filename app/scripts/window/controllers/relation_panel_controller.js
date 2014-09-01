@@ -75,11 +75,11 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
 
     var onModeChanged = function(mode) {
         if (mode === Modes.RELATION) {
-            var tableName = targetObjectService.getTable();
-            if (tableName) {
-                if ($scope.tableName !== tableName) {
-                    $scope.tableName = tableName;
-                    loadRelations(tableName);
+            var table = targetObjectService.getTable();
+            if (table) {
+                if ($scope.tableName !== table.name) {
+                    $scope.tableName = table.name;
+                    loadRelations(table.name);
                 }
             } else {
                 resetRelationGrid();
@@ -94,12 +94,13 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
         }
     };
 
-    var onTableChanged = function(tableName) {
+    var onTableChanged = function(table) {
         if (_isRelationPanelVisible()) {
-            $scope.tableName = tableName;
-            if (tableName) {
-                loadRelations(tableName);
+            if (table) {
+                $scope.tableName = table.name;
+                loadRelations(table.name);
             } else {
+                $scope.tableName = null;
                 resetRelationGrid();
             }
         }
@@ -112,8 +113,8 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
         $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             resetRelationGrid();
         });
-        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
-            onTableChanged(tableName);
+        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
+            onTableChanged(table);
         });
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
@@ -129,7 +130,7 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
     var deleteSelectedRelation = function() {
         var row = relationSelectionService.getSelectedRelation();
         var relationName = row.entity.name;
-        var table = targetObjectService.getTable();
+        var table = targetObjectService.getTable().name;
         var sql = "ALTER TABLE `" + table + "` DROP FOREIGN KEY `" + relationName + "`";
         mySQLClientService.query(sql).then(function(result) {
             if (result.hasResultsetRows) {

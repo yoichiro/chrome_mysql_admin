@@ -164,7 +164,7 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
     };
 
     $scope.editColumn = function() {
-        var sql = "ALTER TABLE `" + $scope.selectedTable + "` ";
+        var sql = "ALTER TABLE `" + $scope.selectedTable.name + "` ";
         sql += "CHANGE COLUMN `" + $scope.originalColumnStructure.Field + "` `";
         sql += $scope.columnName + "` ";
         sql += $scope.type;

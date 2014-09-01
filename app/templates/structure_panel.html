@@ -3,13 +3,13 @@
   </div>
   <div class="middleFooter">
     <div class="pull-right">
-      <div class="pull-left footerButtonRight" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="addColumn()">
+      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isTableSelection()) && 'footerButtonDisable'" ng-click="addColumn()">
         <span class="fa fa-plus" title="Add a new column"></span>
       </div>
-      <div class="pull-left footerButtonRight" ng-class="!isColumnSelection() && 'footerButtonDisable'" ng-click="editColumn()">
+      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isColumnSelection()) && 'footerButtonDisable'" ng-click="editColumn()">
         <span class="fa fa-pencil" title="Edit the selected column"></span>
       </div>
-      <div class="pull-left footerButtonRight" ng-class="!isColumnSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedColumn()">
+      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isColumnSelection()) && 'footerButtonDisable'" ng-click="confirmDeleteSelectedColumn()">
         <span class="fa fa-trash-o" title="Delete the selected column"></span>
       </div>
     </div>
@@ -19,10 +19,10 @@
   </div>
   <div class="middleFooter">
     <div class="pull-right">
-      <div class="pull-left footerButtonRight" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="addIndex()">
+      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isTableSelection()) && 'footerButtonDisable'" ng-click="addIndex()">
         <span class="fa fa-plus" title="Create a new index"></span>
       </div>
-      <div class="pull-left footerButtonRight" ng-class="!isIndexSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedIndex()">
+      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isIndexSelection()) && 'footerButtonDisable'" ng-click="confirmDeleteSelectedIndex()">
         <span class="fa fa-trash-o" title="Delete the selected index"></span>
       </div>
     </div>

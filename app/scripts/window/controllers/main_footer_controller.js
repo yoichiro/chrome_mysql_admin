@@ -7,7 +7,7 @@ chromeMyAdmin.directive("mainFooter", function() {
     };
 });
 
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes) {
     "use strict";
 
     var showMainStatusMessage = function(message) {
@@ -92,24 +92,39 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     };
 
     $scope.confirmDeleteSelectedRow = function() {
-        $scope.showConfirmDialog(
-            "Would you really like to delete the selected row from MySQL server?",
-            "Yes",
-            "No",
-            Events.DELETE_SELECTED_ROW
-        );
+        if ($scope.isTable() && $scope.isRowSelection()) {
+            $scope.showConfirmDialog(
+                "Would you really like to delete the selected row from MySQL server?",
+                "Yes",
+                "No",
+                Events.DELETE_SELECTED_ROW
+            );
+        }
     };
 
     $scope.isTableSelection = function() {
         return targetObjectService.getTable();
     };
 
+    $scope.isTable = function() {
+        var table = targetObjectService.getTable();
+        if (table) {
+            return table.type === TableTypes.BASE_TABLE;
+        } else {
+            return false;
+        }
+    };
+
     $scope.insertRow = function() {
-        targetObjectService.requestInsertRow();
+        if ($scope.isTable()) {
+            targetObjectService.requestInsertRow();
+        }
     };
 
     $scope.updateRow = function() {
-        targetObjectService.requestUpdateRow();
+        if ($scope.isTable() && $scope.isRowSelection()) {
+            targetObjectService.requestUpdateRow();
+        }
     };
 
     $scope.createDatabase = function() {
@@ -142,16 +157,21 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     };
 
     $scope.confirmDeleteSelectedRelation = function() {
-        $scope.showConfirmDialog(
-            "Would you really like to delete the selected relation from the database?",
-            "Yes",
-            "No",
-            Events.DELETE_SELECTED_RELATION
-        );
+        if ($scope.isTable() && $scope.isRelationSelection()) {
+            $scope.showConfirmDialog(
+                "Would you really like to delete the selected relation from the database?",
+                "Yes",
+                "No",
+                Events.DELETE_SELECTED_RELATION
+            );
+        }
     };
 
     $scope.addRelation = function() {
-        targetObjectService.showAddRelationDialog(targetObjectService.getTable());
+        var table = targetObjectService.getTable();
+        if (table && table.type === TableTypes.BASE_TABLE) {
+            targetObjectService.showAddRelationDialog(table.name);
+        }
     };
 
 }]);

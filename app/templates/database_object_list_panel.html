@@ -5,7 +5,7 @@
 
   <div id="objectList">
     <div class="list-group">
-      <a href="#" ng-repeat="table in tables | filter:filterValue" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table)}"><span class="glyphicon glyphicon-th-large"></span> {{table}}</a>
+      <a href="#" ng-repeat="table in tables | filter:filterValue" class="list-group-item tableLink" ng-click="selectTable(table)" ng-class="{active: isTableActive(table.name)}"><span class="glyphicon {{table.className}}"></span> {{table.name}}</a>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
     <div class="pull-left footerButtonLeft" ng-class="!isDatabaseSelection() && 'footerButtonDisable'" ng-click="createTable()">
       <span class="fa fa-plus" title="Create a new table"></span>
     </div>
-    <div class="pull-left footerButtonLeft" ng-class="!isTableSelection() && 'footerButtonDisable'" ng-click="confirmDropSelectedTable()">
+    <div class="pull-left footerButtonLeft" ng-class="(!isTableSelection() || !canDelete()) && 'footerButtonDisable'" ng-click="confirmDropSelectedTable()">
       <span class="fa fa-trash-o" title="Drop the selected table"></span>
     </div>
   </div>

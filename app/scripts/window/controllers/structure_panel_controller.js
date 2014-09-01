@@ -7,7 +7,7 @@ chromeMyAdmin.directive("structurePanel", function() {
     };
 });
 
-chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", "Templates", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService, Templates) {
+chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", "Templates", "TableTypes", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService, Templates, TableTypes) {
     "use strict";
 
     var initializeStructureGrid = function() {
@@ -178,15 +178,15 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
 
     var onModeChanged = function(mode) {
         if (mode === Modes.STRUCTURE) {
-            var tableName = targetObjectService.getTable();
-            if (tableName) {
-                if ($scope.tableName !== tableName) {
-                    $scope.tableName = tableName;
-                    loadStructure(tableName);
+            var table = targetObjectService.getTable();
+            if (table) {
+                if (!$scope.selectedTable || ($scope.selectedTable.name !== table.name)) {
+                    $scope.selectedTable = table;
+                    loadStructure(table.name);
                 }
             } else {
                 resetStructureGrid();
-                $scope.tableName = null;
+                $scope.selectedTable = null;
             }
         }
     };
@@ -197,7 +197,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     };
 
     var deleteColumn = function() {
-        var table = targetObjectService.getTable();
+        var table = targetObjectService.getTable().name;
         var column = $scope.selectedColumn.Field;
         var sql = "ALTER TABLE `" + table + "` DROP COLUMN `" + column + "`";
         mySQLClientService.query(sql).then(function(result) {
@@ -212,7 +212,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     };
 
     var deleteIndex = function() {
-        var table = targetObjectService.getTable();
+        var table = targetObjectService.getTable().name;
         var indexName = $scope.selectedIndex.Key_name;
         var sql = "DROP INDEX `" + indexName + "` ON `" + table + "`";
         mySQLClientService.query(sql).then(function(result) {
@@ -226,12 +226,13 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         });
     };
 
-    var onTableChanged = function(tableName) {
+    var onTableChanged = function(table) {
         if (_isStructurePanelVisible()) {
-            $scope.tableName = tableName;
-            if (tableName) {
-                loadStructure(tableName);
+            if (table) {
+                $scope.selectedTable = table;
+                loadStructure(table.name);
             } else {
+                $scope.selectedTable = null;
                 resetStructureGrid();
                 resetIndexesGrid();
             }
@@ -246,8 +247,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             resetStructureGrid();
             resetIndexesGrid();
         });
-        $scope.$on(Events.TABLE_CHANGED, function(event, tableName) {
-            onTableChanged(tableName);
+        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
+            onTableChanged(table);
         });
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
@@ -280,27 +281,42 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         return targetObjectService.getTable() !== null;
     };
 
+    $scope.isTable = function() {
+        var table = targetObjectService.getTable();
+        if (table) {
+            return table.type === TableTypes.BASE_TABLE;
+        } else {
+            return false;
+        }
+    };
+
     $scope.isColumnSelection = function() {
         return $scope.selectedColumn !== null;
     };
 
     $scope.confirmDeleteSelectedColumn = function() {
-        $scope.showConfirmDialog(
-            "Would you really like to delete the selected column?",
-            "Yes",
-            "No",
-            Events.DELETE_SELECTED_COLUMN
-        );
+        if ($scope.isTable() && $scope.isColumnSelection()) {
+            $scope.showConfirmDialog(
+                "Would you really like to delete the selected column?",
+                "Yes",
+                "No",
+                Events.DELETE_SELECTED_COLUMN
+            );
+        }
     };
 
     $scope.addColumn = function() {
-        targetObjectService.showAddColumnDialog();
+        if ($scope.isTable() && $scope.isTableSelection()) {
+            targetObjectService.showAddColumnDialog();
+        }
     };
 
     $scope.editColumn = function() {
-        var columnStructure = $scope.selectedColumn;
-        var columnDefs = $scope.structureColumnDefs;
-        targetObjectService.showEditColumnDialog(columnDefs, columnStructure);
+        if ($scope.isTable() && $scope.isColumnSelection()) {
+            var columnStructure = $scope.selectedColumn;
+            var columnDefs = $scope.structureColumnDefs;
+            targetObjectService.showEditColumnDialog(columnDefs, columnStructure);
+        }
     };
 
     $scope.isIndexSelection = function() {
@@ -308,20 +324,24 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     };
 
     $scope.confirmDeleteSelectedIndex = function() {
-        $scope.showConfirmDialog(
-            "Would you really like to delete the selected index?",
-            "Yes",
-            "No",
-            Events.DELETE_SELECTED_INDEX
-        );
+        if ($scope.isTable() && $scope.isIndexSelection()) {
+            $scope.showConfirmDialog(
+                "Would you really like to delete the selected index?",
+                "Yes",
+                "No",
+                Events.DELETE_SELECTED_INDEX
+            );
+        }
     };
 
     $scope.addIndex = function() {
-        var columnNames = [];
-        angular.forEach($scope.structureData, function(column) {
-            this.push(column.Field);
-        }, columnNames);
-        targetObjectService.showAddIndexDialog(columnNames);
+        if ($scope.isTable()) {
+            var columnNames = [];
+            angular.forEach($scope.structureData, function(column) {
+                this.push(column.Field);
+            }, columnNames);
+            targetObjectService.showAddIndexDialog(columnNames);
+        }
     };
 
 }]);

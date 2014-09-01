@@ -53,7 +53,7 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
     $scope.insertRow = function() {
         resetErrorMessage();
         var sql = sqlExpressionService.createInsertStatement(
-            targetObjectService.getTable(), $scope.values, $scope.valueTypes);
+            targetObjectService.getTable().name, $scope.values, $scope.valueTypes);
         if (sql) {
             mySQLClientService.query(sql).then(function(result) {
                 if (result.hasResultsetRows) {

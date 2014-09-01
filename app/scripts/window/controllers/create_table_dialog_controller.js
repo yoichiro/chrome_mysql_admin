@@ -47,7 +47,11 @@ chromeMyAdmin.controller("CreateTableDialogController", ["$scope", "targetObject
             } else {
                 $("#createTableDialog").modal("hide");
                 targetObjectService.refreshTableList();
-                targetObjectService.changeTable(tableName);
+                targetObjectService.changeTable({
+                    name: tableName,
+                    type: "BASE TABLE",
+                    className: "glyphicon-th-large"
+                });
                 modeService.changeMode(Modes.STRUCTURE);
             }
         }, function(reason) {

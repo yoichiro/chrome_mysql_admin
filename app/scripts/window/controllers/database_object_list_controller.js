@@ -7,7 +7,7 @@ chromeMyAdmin.directive("databaseObjectListPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", "Events", "Modes", "mySQLQueryService", "UIConstants", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes, mySQLQueryService, UIConstants) {
+chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClientService", "targetObjectService", "modeService", "Events", "Modes", "mySQLQueryService", "UIConstants", "TableTypes", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes, mySQLQueryService, UIConstants, TableTypes) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {
@@ -47,7 +47,18 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     var updateTableList = function(columnDefinition, resultsetRows) {
         var tables = [];
         for (var i = 0; i < resultsetRows.length; i++) {
-            tables.push(resultsetRows[i].values[0]);
+            var type = resultsetRows[i].values[1];
+            var className;
+            if (type === "VIEW") {
+                className = "glyphicon-eye-open";
+            } else {
+                className = "glyphicon-th-large";
+            }
+            tables.push({
+                name: resultsetRows[i].values[0],
+                type: type,
+                className: className
+            });
         }
         $scope.tables = tables;
     };
@@ -68,15 +79,25 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     var doDropTable = function() {
-        var sql = "DROP TABLE `" + targetObjectService.getTable() + "`";
+        var table = targetObjectService.getTable();
+        var type;
+        if (table.type === TableTypes.BASE_TABLE) {
+            type = "TABLE";
+        } else if (table.type === TableTypes.VIEW) {
+            type = "VIEW";
+        } else {
+            console.log("Warning: Invalid table type: " + table.type);
+            type = table.type;
+        }
+        var sql = "DROP " + type + " `" + table.name + "`";
         mySQLClientService.query(sql).then(function(result) {
             if (result.hasResultsetRows) {
-                $scope.fatalErrorOccurred("Dropping table failed.");
+                $scope.fatalErrorOccurred("Dropping " + type + " failed.");
             } else {
                 doRefresh();
             }
         }, function(reason) {
-            $scope.showErrorDialog("Dropping table failed.", reason);
+            $scope.showErrorDialog("Dropping " + type + " failed.", reason);
             doRefresh();
         });
     };
@@ -103,8 +124,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         adjustObjectListHeight();
     };
 
-    $scope.selectTable = function(tableName) {
-        targetObjectService.changeTable(tableName);
+    $scope.selectTable = function(table) {
+        targetObjectService.changeTable(table);
         if (modeService.getMode() === Modes.DATABASE ||
            modeService.getMode() === Modes.QUERY) {
             modeService.changeMode(Modes.ROWS);
@@ -112,7 +133,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     $scope.isTableActive = function(tableName) {
-        return tableName === targetObjectService.getTable();
+        var table = targetObjectService.getTable();
+        return table && tableName === table.name;
     };
 
     $scope.refresh = function() {
@@ -132,12 +154,30 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     };
 
     $scope.isTableSelection = function() {
-        return targetObjectService.getTable() !== null;
+        var table = targetObjectService.getTable();
+        return table && table.name !== null;
+    };
+
+    $scope.canDelete = function() {
+        var table = targetObjectService.getTable();
+        if (table) {
+            return table.type === TableTypes.BASE_TABLE ||
+                table.type === TableTypes.VIEW;
+        } else {
+            return false;
+        }
     };
 
     $scope.confirmDropSelectedTable = function() {
+        var table = targetObjectService.getTable();
+        var type;
+        if (table.type === TableTypes.BASE_TABLE) {
+            type = "table";
+        } else if (table.type === TableTypes.VIEW) {
+            type = "view";
+        }
         $scope.showConfirmDialog(
-            "Would you really like to drop the selected table from MySQL server?",
+            "Would you really like to drop the selected " + type + " from MySQL server?",
             "Yes",
             "No",
             Events.DROP_SELECTED_TABLE
