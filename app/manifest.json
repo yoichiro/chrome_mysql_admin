@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "ChromeMyAdmin",
+    "name": "Chrome MySQL Admin",
     "short_name": "MyAdmin",
     "description": "This application provides you 'MySQL GUI Admin console' windows.",
-    "version": "2.5.4",
+    "version": "2.5.5",
     "author": "Yoichiro Tanaka",
     "app": {
         "background": {
