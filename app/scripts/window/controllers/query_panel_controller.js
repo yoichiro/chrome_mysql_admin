@@ -71,7 +71,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             onShowQueryPanel(data.query);
         });
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
-            doExecuteQueries();
+            doExecuteQueries($scope.wasExplainExecuted);
         });
         configurationService.addConfigurationChangeListener(function(name, value) {
             if (name === Configurations.QUERY_EDITOR_WRAP_MODE) {
@@ -146,7 +146,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         });
     };
 
-    var doExecuteQueries = function() {
+    var doExecuteQueries = function(explain) {
         resetQueryResultGrid();
         $scope.queryErrorMessage = "";
         $scope.queryResults = [];
@@ -155,6 +155,11 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             var parseResult = new MySQL.QueryDivider().parse(query);
             if (parseResult.success) {
                 if (parseResult.result.length > 0) {
+                    if (explain) {
+                        angular.forEach(parseResult.result, function(query, index) {
+                            this[index] = "EXPLAIN " + query;
+                        }, parseResult.result);
+                    }
                     doExecuteQuery(parseResult.result);
                 }
             } else {
@@ -162,6 +167,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 $scope.queryErrorMessage = errorMessage;
                 $scope.editor.focus();
             }
+            $scope.wasExplainExecuted = explain;
         }
     };
 
@@ -215,7 +221,11 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     $scope.executeQuery = function() {
-        doExecuteQueries();
+        doExecuteQueries(false);
+    };
+
+    $scope.executeExplain = function() {
+        doExecuteQueries(true);
     };
 
     $scope.isQueryErrorMessageVisible = function() {
@@ -239,7 +249,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 mac: "Command-Enter"
             },
             exec: function(editor) {
-                doExecuteQueries();
+                doExecuteQueries(false);
             },
             readOnly: false
         });
