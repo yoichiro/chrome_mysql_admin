@@ -41,7 +41,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
                             info.initialHandshakeRequest.serverVersion;
                     },
                     container: "body",
-                    selector: "[rel=\"popover\"]"
+                    selector: "[rel=\"popover_database\"]"
                 });
             });
         }
@@ -67,6 +67,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.initialize = function() {
         assignEventHandlers();
+        $("[rel=tooltip]").tooltip();
         $scope.selectedDatabase = "[Select database]";
     };
 
@@ -112,6 +113,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         return modeService.getMode() === Modes.RELATION;
     };
 
+    $scope.isProcsFuncsActive = function() {
+        return modeService.getMode() === Modes.PROCS_FUNCS;
+    };
+
     $scope.selectRows = function() {
         modeService.changeMode(Modes.ROWS);
     };
@@ -138,6 +143,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.selectRelation = function() {
         modeService.changeMode(Modes.RELATION);
+    };
+
+    $scope.selectProcsFuncs = function() {
+        modeService.changeMode(Modes.PROCS_FUNCS);
     };
 
 }]);

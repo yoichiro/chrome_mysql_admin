@@ -50,6 +50,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         return mySQLClientService.isConnected() && modeService.getMode() === Modes.RELATION;
     };
 
+    $scope.isProceduresFunctionsButtonsVisible = function() {
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.PROCS_FUNCS;
+    };
+
     $scope.hasPreviousPage = function() {
         return _hasPrevisouPage();
     };
@@ -172,6 +176,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         if (table && table.type === TableTypes.BASE_TABLE) {
             targetObjectService.showAddRelationDialog(table.name);
         }
+    };
+
+    $scope.refreshProceduresFunctions = function() {
+        targetObjectService.refreshProceduresFunctions();
     };
 
 }]);

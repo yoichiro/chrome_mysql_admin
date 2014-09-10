@@ -130,6 +130,32 @@ chromeMyAdmin.factory("mySQLQueryService", ["$q", "$rootScope", "mySQLClientServ
                 deferred.reject(reason);
             });
             return deferred.promise;
+        },
+        showProcedureStatus: function(database) {
+            var deferred = $q.defer();
+            mySQLClientService.query("SHOW PROCEDURE STATUS WHERE db = '" + database + "'").then(function(result) {
+                if (result.hasResultsetRows) {
+                    deferred.resolve(result);
+                } else {
+                    deferred.reject("Retrieving procedures failed.");
+                }
+            }, function(reason) {
+                deferred.reject(reason);
+            });
+            return deferred.promise;
+        },
+        showFunctionStatus: function(database) {
+            var deferred = $q.defer();
+            mySQLClientService.query("SHOW FUNCTION STATUS WHERE db = '" + database + "'").then(function(result) {
+                if (result.hasResultsetRows) {
+                    deferred.resolve(result);
+                } else {
+                    deferred.reject("Retrieving functions failed.");
+                }
+            }, function(reason) {
+                deferred.reject(reason);
+            });
+            return deferred.promise;
         }
     };
 

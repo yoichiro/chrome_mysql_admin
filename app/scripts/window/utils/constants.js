@@ -39,12 +39,15 @@ chromeMyAdmin.constant("Events", {
     DELETE_SELECTED_INDEX: "deleteSelectedIndex",
     DELETE_SELECTED_DATABASE: "deleteSelectedDatabase",
     DELETE_SELECTED_RELATION: "deleteSelectedRelation",
+    DELETE_SELECTED_PROCEDURE: "deleteSelectedProcedure",
+    DELETE_SELECTED_FUNCTION: "deleteSelectedFunction",
     DROP_SELECTED_TABLE: "dropSelectedTable",
     REQUEST_INSERT_ROW: "requestInsertRow",
     REQUEST_UPDATE_ROW: "requestUpdateRow",
     FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
     REFRESH_TABLE_LIST: "refreshTableList",
     REFRESH_DATABASES: "refreshDatabases",
+    REFRESH_PROCEDURES_FUNCTIONS: "refreshProceduresFunctions",
     REQUEST_DROP_TABLE: "requestDropTable",
     REQUEST_REFRESH: "requestRefresh",
     EXECUTING_QUERY: "executingQuery",
@@ -58,7 +61,8 @@ chromeMyAdmin.constant("Modes", {
     STRUCTURE: "structure",
     QUERY: "query",
     INFORMATION: "information",
-    RELATION: "relation"
+    RELATION: "relation",
+    PROCS_FUNCS: "procs_funcs"
 });
 
 chromeMyAdmin.constant("ErrorLevel", {
