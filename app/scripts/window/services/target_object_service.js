@@ -86,6 +86,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
             $rootScope.$broadcast(Events.SHOW_ADD_RELATION_DIALOG, {
                 table: table
             });
+        },
+        refreshProceduresFunctions: function() {
+            $rootScope.$broadcast(Events.REFRESH_PROCEDURES_FUNCTIONS, null);
         }
     };
 
