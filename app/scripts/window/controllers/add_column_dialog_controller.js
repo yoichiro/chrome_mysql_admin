@@ -71,7 +71,7 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
     };
 
     $scope.addColumn = function() {
-        var sql = "ALTER TABLE `" + $scope.selectedTable + "` ";
+        var sql = "ALTER TABLE `" + $scope.selectedTable.name + "` ";
         sql += "ADD COLUMN `" + $scope.columnName + "` ";
         sql += $scope.type;
         if ($scope.length) {
