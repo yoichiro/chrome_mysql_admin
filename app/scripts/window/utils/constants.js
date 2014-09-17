@@ -51,6 +51,7 @@ chromeMyAdmin.constant("Events", {
     REQUEST_DROP_TABLE: "requestDropTable",
     REQUEST_REFRESH: "requestRefresh",
     EXECUTING_QUERY: "executingQuery",
+    QUERY_EXECUTED: "queryExecuted",
     LOGOUT: "logout",
     LOGIN: "login"
 });

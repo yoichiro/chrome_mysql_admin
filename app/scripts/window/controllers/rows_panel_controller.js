@@ -328,6 +328,9 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                 doQueryAndReload();
             }
         }, true);
+        $scope.$on(Events.QUERY_EXECUTED, function(event, data) {
+            $scope.tableName = null;
+        });
     };
 
     var doQueryAndReload = function() {

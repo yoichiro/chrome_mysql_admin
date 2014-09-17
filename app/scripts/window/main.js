@@ -48,6 +48,10 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
         $rootScope.$broadcast(Events.EXECUTING_QUERY, query);
     };
 
+    $rootScope.notifyQueryExecuted = function() {
+        $rootScope.$broadcast(Events.QUERY_EXECUTED, null);
+    };
+
     $rootScope.showMainStatusMessage = function(message) {
         $rootScope.$broadcast(Events.SHOW_MAIN_STATUS_MESSAGE, message);
     };

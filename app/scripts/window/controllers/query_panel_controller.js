@@ -119,6 +119,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     var doExecuteQuery = function(queries) {
         if (queries.length === 0) {
             doShowQueryResult(0);
+            $scope.notifyQueryExecuted();
             return;
         }
         var query = queries.shift();
