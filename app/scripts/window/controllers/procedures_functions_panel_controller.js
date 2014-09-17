@@ -7,85 +7,58 @@ chromeMyAdmin.directive("proceduresFunctionsPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "Modes", "Events", "mySQLQueryService", "Templates", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, Modes, Events, mySQLQueryService, Templates) {
+chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "Modes", "Events", "mySQLQueryService", "Templates", "routineSelectionService", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, Modes, Events, mySQLQueryService, Templates, routineSelectionService) {
     "use strict";
 
-    var initializeProceduresGrid = function() {
-        resetProceduresGrid();
-        $scope.proceduresGrid = {
-            data: "proceduresData",
-            columnDefs: "proceduresColumnDefs",
+    var initializeRoutinesGrid = function() {
+        resetRoutinesGrid();
+        $scope.routinesGrid = {
+            data: "routinesData",
+            columnDefs: "routinesColumnDefs",
             enableColumnResize: true,
             enableSorting: false,
             multiSelect: false,
-            selectedItems: $scope.selectedProcedures,
+            selectedItems: $scope.selectedRoutines,
             afterSelectionChange: function(rowItem, event) {
                 if (rowItem.selected) {
-                    $scope.selectedProcedure = rowItem.entity;
+                    routineSelectionService.setSelectedRoutine(rowItem);
                 } else {
-                    $scope.selectedProcedure = null;
+                    routineSelectionService.reset();
                 }
             },
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
-        $scope.selectedProcedure = null;
     };
 
-    var initializeFunctionsGrid = function() {
-        resetFunctionsGrid();
-        $scope.functionsGrid = {
-            data: "functionsData",
-            columnDefs: "functionsColumnDefs",
-            enableColumnResize: true,
-            enableSorting: false,
-            multiSelect: false,
-            selectedItems: $scope.selectedFunctions,
-            afterSelectionChange: function(rowItem, event) {
-                if (rowItem.selected) {
-                    $scope.selectedFunction = rowItem.entity;
-                } else {
-                    $scope.selectedFunction = null;
-                }
-            },
-            headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
-            rowHeight: UIConstants.GRID_ROW_HEIGHT
-        };
-        $scope.selectedFunction = null;
-    };
-
-    var resetProceduresGrid = function() {
-        $scope.proceduresColumnDefs = [];
-        $scope.proceduresData = [];
-    };
-
-    var resetFunctionsGrid = function() {
-        $scope.functionsColumnDefs = [];
-        $scope.functionsData = [];
+    var resetRoutinesGrid = function() {
+        $scope.routinesColumnDefs = [];
+        $scope.routinesData = [];
+        routineSelectionService.reset();
     };
 
     var assignWindowResizeEventHandler = function() {
         $(window).resize(function(evt) {
-            adjustProceduresPanelHeight();
-            adjustFunctionsPanelHeight();
+            adjustRoutinesPanelHeight();
+            adjustRoutineCodeEditorHeight();
         });
     };
 
-    var adjustProceduresPanelHeight = function() {
-        $("#proceduresGrid").height(
+    var adjustRoutinesPanelHeight = function() {
+        $("#routinesGrid").height(
             ($(window).height() -
              UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
              UIConstants.NAVBAR_HEIGHT -
-             UIConstants.FOOTER_HEIGHT) * 0.5 -
-                UIConstants.FOOTER_HEIGHT * 2); // Footer area x2 for columns table
+             UIConstants.FOOTER_HEIGHT) * 0.5);
     };
 
-    var adjustFunctionsPanelHeight = function() {
-        $("#functionsGrid").height(
-            ($(window).height() -
-             UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
-             UIConstants.NAVBAR_HEIGHT -
-             UIConstants.FOOTER_HEIGHT) * 0.5 - 50);
+    var adjustRoutineCodeEditorHeight = function() {
+        var totalHeight =
+                $(window).height() -
+                UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
+                UIConstants.NAVBAR_HEIGHT -
+                UIConstants.FOOTER_HEIGHT;
+        $(".routineCodeEditor").height(totalHeight * 0.5 - 1);
     };
 
     var _isProceduresFunctionsPanelVisible = function() {
@@ -95,8 +68,7 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
 
     var onConnectionChanged = function() {
         if (!mySQLClientService.isConnected()) {
-            resetProceduresGrid();
-            resetFunctionsGrid();
+            resetRoutinesGrid();
         }
     };
 
@@ -104,13 +76,13 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
         var database = targetObjectService.getDatabase();
         mySQLQueryService.showProcedureStatus(database).then(function(result) {
             $scope.safeApply(function() {
-                updateProceduresColumnDefs(result.columnDefinitions);
+                resetRoutinesGrid();
+                updateRoutinesColumnDefs(result.columnDefinitions);
                 updateProcedures(result.columnDefinitions, result.resultsetRows);
             });
             return mySQLQueryService.showFunctionStatus(database);
         }).then(function(result) {
             $scope.safeApply(function() {
-                updateFunctionsColumnDefs(result.columnDefinitions);
                 updateFunctions(result.columnDefinitions, result.resultsetRows);
             });
         }, function(reason) {
@@ -118,7 +90,7 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
         });
     };
 
-    var updateProceduresColumnDefs = function(columnDefinitions) {
+    var updateRoutinesColumnDefs = function(columnDefinitions) {
         var columnDefs = [];
         angular.forEach(columnDefinitions, function(columnDefinition) {
             this.push({
@@ -131,23 +103,7 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
                 headerCellTemplate: Templates.HEADER_CELL_TEMPLATE
             });
         }, columnDefs);
-        $scope.proceduresColumnDefs = columnDefs;
-    };
-
-    var updateFunctionsColumnDefs = function(columnDefinitions) {
-        var columnDefs = [];
-        angular.forEach(columnDefinitions, function(columnDefinition) {
-            this.push({
-                field: columnDefinition.orgName,
-                displayName: columnDefinition.name,
-                width: Math.min(
-                    Number(columnDefinition.columnLength) * UIConstants.GRID_COLUMN_FONT_SIZE,
-                    UIConstants.GRID_COLUMN_MAX_WIDTH),
-                cellTemplate: Templates.CELL_TEMPLATE,
-                headerCellTemplate: Templates.HEADER_CELL_TEMPLATE
-            });
-        }, columnDefs);
-        $scope.functionsColumnDefs = columnDefs;
+        $scope.routinesColumnDefs = columnDefs;
     };
 
     var updateProcedures = function(columnDefinitions, resultsetRows) {
@@ -160,12 +116,11 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
             });
             rows.push(row);
         });
-        $scope.proceduresData = rows;
-        $scope.selectedProcedure = null;
+        $scope.routinesData = rows;
     };
 
     var updateFunctions = function(columnDefinitions, resultsetRows) {
-        var rows = [];
+        var rows = $scope.routinesData;
         angular.forEach(resultsetRows, function(resultsetRow) {
             var values = resultsetRow.values;
             var row = {};
@@ -174,8 +129,7 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
             });
             rows.push(row);
         });
-        $scope.functionsData = rows;
-        $scope.selectedFunction = null;
+        $scope.routinesData = rows;
     };
 
     var onModeChanged = function(mode) {
@@ -187,8 +141,7 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
                     loadProceduresAndFunctions();
                 }
             } else {
-                resetProceduresGrid();
-                resetFunctionsGrid();
+                resetRoutinesGrid();
                 $scope.selectedDatabase = null;
             }
         }
@@ -200,41 +153,46 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
             if (database) {
                 loadProceduresAndFunctions();
             } else {
-                resetProceduresGrid();
-                resetFunctionsGrid();
+                resetRoutinesGrid();
             }
         } else {
-            resetProceduresGrid();
-            resetFunctionsGrid();
+            resetRoutinesGrid();
         }
     };
 
-    var deleteProcedure = function() {
-        var proc = $scope.selectedProcedure.ROUTINE_NAME;
-        var sql = "DROP PROCEDURE `" + proc + "`";
-        mySQLClientService.query(sql).then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.fatalErrorOccurred("Deleting procedure failed.");
-            } else {
-                loadProceduresAndFunctions();
-            }
-        }, function(reason) {
-            $scope.showErrorDialog("Deleting procedure failed.", reason);
-        });
+    var deleteRoutine = function() {
+        var selectedRoutine = routineSelectionService.getSelectedRoutine();
+        if (selectedRoutine) {
+            var routineName = selectedRoutine.entity.ROUTINE_NAME;
+            var routineType = selectedRoutine.entity.ROUTINE_TYPE;
+            var sql = "DROP " + routineType + " `" + routineName + "`";
+            mySQLClientService.query(sql).then(function(result) {
+                if (result.hasResultsetRows) {
+                    $scope.fatalErrorOccurred("Deleting routine failed.");
+                } else {
+                    loadProceduresAndFunctions();
+                }
+            }, function(reason) {
+                $scope.showErrorDialog("Deleting routine failed.", reason);
+            });
+        }
     };
 
-    var deleteFunction = function() {
-        var proc = $scope.selectedFunction.ROUTINE_NAME;
-        var sql = "DROP FUNCTION `" + proc + "`";
-        mySQLClientService.query(sql).then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.fatalErrorOccurred("Deleting function failed.");
-            } else {
-                loadProceduresAndFunctions();
-            }
-        }, function(reason) {
-            $scope.showErrorDialog("Deleting function failed.", reason);
-        });
+    var routineSelectionChanged = function() {
+        var selectedRoutine = routineSelectionService.getSelectedRoutine();
+        if (selectedRoutine) {
+            var database = targetObjectService.getDatabase();
+            var routineName = selectedRoutine.entity.ROUTINE_NAME;
+            var routineType = selectedRoutine.entity.ROUTINE_TYPE;
+            mySQLQueryService.showCreateRoutine(database, routineName, routineType).then(function(result) {
+                var routineCode = result.resultsetRows[0].values[2];
+                $scope.routineCode = routineCode;
+            }, function(reason) {
+                $scope.showErrorDialog("Retrieving routine code failed.", reason);
+            });
+        } else {
+            $scope.routineCode = "";
+        }
     };
 
     var assignEventHandlers = function() {
@@ -247,25 +205,24 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
         });
-        $scope.$on(Events.DELETE_SELECTED_PROCEDURE, function(event, data) {
-            deleteProcedure();
-        });
-        $scope.$on(Events.DELETE_SELECTED_FUNCTION, function(event, data) {
-            deleteFunction();
+        $scope.$on(Events.DELETE_SELECTED_ROUTINE, function(event, data) {
+            deleteRoutine();
         });
         $scope.$on(Events.REFRESH_PROCEDURES_FUNCTIONS, function(event, data) {
             if (targetObjectService.getDatabase()) {
                 loadProceduresAndFunctions();
             }
         });
+        $scope.$on(Events.ROUTINE_SELECTION_CHANGED, function(event, data) {
+            routineSelectionChanged();
+        });
     };
 
     $scope.initialize = function() {
-        initializeProceduresGrid();
-        initializeFunctionsGrid();
+        initializeRoutinesGrid();
         assignWindowResizeEventHandler();
-        adjustProceduresPanelHeight();
-        adjustFunctionsPanelHeight();
+        adjustRoutinesPanelHeight();
+        adjustRoutineCodeEditorHeight();
         assignEventHandlers();
     };
 
@@ -273,34 +230,17 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
         return _isProceduresFunctionsPanelVisible();
     };
 
-    $scope.isProcedureSelection = function() {
-        return $scope.selectedProcedure !== null;
+    $scope.isRoutineSelection = function() {
+        return routineSelectionService.getSelectedRoutine() !== null;
     };
 
-    $scope.isFunctionSelection = function() {
-        return $scope.selectedFunction !== null;
-    };
-
-    $scope.confirmDeleteSelectedProcedure = function() {
-        if ($scope.isProcedureSelection()) {
-            $scope.showConfirmDialog(
-                "Would you really like to delete the selected procedure?",
-                "Yes",
-                "No",
-                Events.DELETE_SELECTED_PROCEDURE
-            );
-        }
-    };
-
-    $scope.confirmDeleteSelectedFunction = function() {
-        if ($scope.isFunctionSelection()) {
-            $scope.showConfirmDialog(
-                "Would you really like to delete the selected function?",
-                "Yes",
-                "No",
-                Events.DELETE_SELECTED_FUNCTION
-            );
-        }
+    $scope.aceLoaded = function(editor) {
+        $scope.editor = editor;
+        editor.setHighlightActiveLine(false);
+        editor.setShowPrintMargin(false);
+        editor.setShowInvisibles(true);
+        editor.setReadOnly(true);
+        editor.getSession().setUseWrapMode(true);
     };
 
 }]);

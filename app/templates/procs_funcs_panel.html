@@ -1,22 +1,4 @@
 <div id="proceduresFunctionsPanel" ng-controller="ProceduresFunctionsPanelController" ng-init="initialize()" ng-show="isProceduresFunctionsPanelVisible()">
-  <div class="subTitle">Procedures</div>
-  <div id="proceduresGrid" class="gridStyle" ng-grid="proceduresGrid">
-  </div>
-  <div class="middleFooter">
-    <div class="pull-right">
-      <div class="pull-left footerButtonRight" ng-class="!isProcedureSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedProcedure()">
-        <span class="fa fa-trash-o" title="Delete the selected procedure"></span>
-      </div>
-    </div>
-  </div>
-  <div class="subTitle">Functions</div>
-  <div id="functionsGrid" class="gridStyle" ng-grid="functionsGrid">
-  </div>
-  <div class="middleFooter">
-    <div class="pull-right">
-      <div class="pull-left footerButtonRight" ng-class="!isFunctionSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedFunction()">
-        <span class="fa fa-trash-o" title="Delete the selected function"></span>
-      </div>
-    </div>
-  </div>
+  <div id="routinesGrid" class="gridStyle" ng-grid="routinesGrid"></div>
+  <div ui-ace="{mode: 'sql', theme: 'clouds', onLoad: aceLoaded}" ng-model="routineCode" class="routineCodeEditor"></div>
 </div>

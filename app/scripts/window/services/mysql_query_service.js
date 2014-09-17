@@ -156,6 +156,19 @@ chromeMyAdmin.factory("mySQLQueryService", ["$q", "$rootScope", "mySQLClientServ
                 deferred.reject(reason);
             });
             return deferred.promise;
+        },
+        showCreateRoutine: function(database, routineName, routineType) {
+            var deferred = $q.defer();
+            mySQLClientService.query("SHOW CREATE " + routineType + " `" + database + "`.`" + routineName + "`").then(function(result) {
+                if (result.hasResultsetRows) {
+                    deferred.resolve(result);
+                } else {
+                    deferred.reject("Retrieving routine code failed.");
+                }
+            }, function(reason) {
+                deferred.reject(reason);
+            });
+            return deferred.promise;
         }
     };
 

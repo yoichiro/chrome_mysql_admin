@@ -345,3 +345,7 @@ span.editQuery {
 .nullValueOnCell {
     color: lightgray;
 }
+
+.routineCodeEditor {
+    border-top: 1px solid #eee;
+}
