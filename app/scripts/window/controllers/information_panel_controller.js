@@ -66,8 +66,10 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         if (mode === Modes.INFORMATION) {
             var table = targetObjectService.getTable();
             if (table) {
-                $scope.selectedTable = table;
-                loadCollations(table.name);
+                if ($scope.selectedTable !== table.name) {
+                    $scope.selectedTable = table.name;
+                    loadCollations(table.name);
+                }
             } else {
                 $scope.selectedTable = null;
             }
@@ -101,6 +103,9 @@ chromeMyAdmin.controller("InformationPanelController", ["$scope", "mySQLClientSe
         });
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
             onTableChanged(targetObjectService.getTable());
+        });
+        $scope.$on(Events.QUERY_EXECUTED, function(event, data) {
+            $scope.selectedTable = null;
         });
     };
 

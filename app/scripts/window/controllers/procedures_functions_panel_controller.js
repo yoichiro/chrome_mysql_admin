@@ -216,6 +216,9 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
         $scope.$on(Events.ROUTINE_SELECTION_CHANGED, function(event, data) {
             routineSelectionChanged();
         });
+        $scope.$on(Events.QUERY_EXECUTED, function(event, data) {
+            $scope.selectedDatabase = null;
+        });
     };
 
     $scope.initialize = function() {

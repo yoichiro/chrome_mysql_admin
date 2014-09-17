@@ -262,6 +262,9 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
             onTableChanged(targetObjectService.getTable());
         });
+        $scope.$on(Events.QUERY_EXECUTED, function(event, data) {
+            $scope.selectedTable = null;
+        });
     };
 
     $scope.initialize = function() {

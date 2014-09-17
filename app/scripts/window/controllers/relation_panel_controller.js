@@ -125,6 +125,9 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
             onTableChanged(targetObjectService.getTable());
         });
+        $scope.$on(Events.QUERY_EXECUTED, function(event, data) {
+            $scope.tableName = null;
+        });
     };
 
     var deleteSelectedRelation = function() {
