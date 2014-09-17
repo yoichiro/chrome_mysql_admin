@@ -7,7 +7,7 @@ chromeMyAdmin.directive("mainFooter", function() {
     };
 });
 
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService) {
     "use strict";
 
     var showMainStatusMessage = function(message) {
@@ -180,6 +180,21 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
 
     $scope.refreshProceduresFunctions = function() {
         targetObjectService.refreshProceduresFunctions();
+    };
+
+    $scope.isRoutineSelection = function() {
+        return routineSelectionService.getSelectedRoutine();
+    };
+
+    $scope.confirmDeleteSelectedRoutine = function() {
+        if ($scope.isRoutineSelection()) {
+            $scope.showConfirmDialog(
+                "Would you really like to delete the selected routine from the database?",
+                "Yes",
+                "No",
+                Events.DELETE_SELECTED_ROUTINE
+            );
+        }
     };
 
 }]);
