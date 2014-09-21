@@ -1,0 +1,157 @@
+<div id="createRoutineDialog" class="modal fade" ng-controller="CreateRoutineDialogController" ng-init="initialize()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Create routine</h4>
+      </div>
+      <div class="modal-body">
+        <div ng-show="isErrorMessageVisible()">
+          <div class="alert alert-danger">{{errorMessage}}</div>
+        </div>
+        <form class="form-horizontal" role="form">
+
+          <div class="form-group">
+            <label for="createRoutineType" class="col-sm-3 control-label">Type</label>
+            <div class="col-sm-9">
+              <select class="form-control" ng-model="routineType" ng-options="type for type in routineTypes">
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="createRoutineName" class="col-sm-3 control-label">Name</label>
+            <div class="col-sm-9">
+              <input id="createRoutineName" type="text" class="form-control" ng-model="routineName" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="createRoutineParameters" class="col-sm-3 control-label">Parameters</label>
+            <div class="col-sm-9">
+              <ul class="list-group" ng-show="parameters.length > 0">
+                <li class="list-group-item clearfix" ng-repeat="param in parameters">
+                  <div class="pull-left" ng-show="isProcedure()">
+                    <select class="form-control" ng-model="param.io" ng-options="io for io in ios">
+                    </select>
+                  </div>
+                  <div class="pull-left">
+                    <input type="text" class="form-control" ng-model="param.paramName" />
+                  </div>
+                  <div class="pull-right routineParameterButton">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="deleteParameter(param)"><span class="fa fa-times"></span></button>
+                  </div>
+                  <div class="clearfix" />
+                  <div class="pull-left">
+                    <select class="form-control" ng-model="param.typeName" ng-options="type for type in types">
+                    </select>
+                  </div>
+                  <div class="pull-left">
+                    <input type="number" class="form-control routineParameterTypeLength" ng-model="param.typeLength" />
+                  </div>
+                  <div class="pull-left">
+                    <select class="form-control" ng-model="param.typeOption" ng-options="option for option in typeOptions">
+                    </select>
+                  </div>
+                </li>
+              </ul>
+                <li class="list-group-item clearfix">
+                  <div class="pull-left" ng-show="isProcedure()">
+                    <select class="form-control" ng-model="newIo" ng-options="io for io in ios">
+                    </select>
+                  </div>
+                  <div class="pull-left">
+                    <input type="text" class="form-control" ng-model="newParamName" />
+                  </div>
+                  <div class="pull-right routineParameterButton">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="addParameter()"><span class="fa fa-plus"></span></button>
+                  </div>
+                  <div class="clearfix" />
+                  <div class="pull-left">
+                    <select class="form-control" ng-model="newTypeName" ng-options="type for type in types">
+                    </select>
+                  </div>
+                  <div class="pull-left">
+                    <input type="number" class="form-control routineParameterTypeLength" ng-model="newTypeLength" />
+                  </div>
+                  <div class="pull-left">
+                    <select class="form-control" ng-model="newTypeOption" ng-options="option for option in typeOptions">
+                    </select>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="form-group" ng-show="!isProcedure()">
+            <label for="createRoutineReturn" class="col-sm-3 control-label">Returns</label>
+            <div class="col-sm-9">
+              <div class="pull-left">
+                <select class="form-control" ng-model="returnTypeName" ng-options="type for type in types">
+                </select>
+              </div>
+              <div class="pull-left">
+                <input type="number" class="form-control routineParameterTypeLength" ng-model="returnTypeLength" />
+              </div>
+              <div class="pull-left">
+                <select class="form-control" ng-model="returnTypeOption" ng-options="option for option in typeOptions">
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="createRoutineBody" class="col-sm-3 control-label">Definition</label>
+            <div class="col-sm-9">
+              <div ui-ace="{mode: 'sql', theme: 'clouds', onLoad: aceLoaded}" ng-model="routineBody" class="routineBodyEditor" style="height: 150px; border: 1px solid #eee;"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="createRoutineDeterministic" class="col-sm-3 control-label">Deterministic</label>
+            <div class="col-sm-9">
+              <label class="radio-inline">
+                <input type="radio" ng-model="deterministic" value="true" /> Yes<br />
+              </label>
+              <label class="radio-inline">
+                <input type="radio" ng-model="deterministic" value="false" /> No<br />
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="createRoutineSQLSecurity" class="col-sm-3 control-label">SQL security</label>
+            <div class="col-sm-9">
+              <label class="radio-inline">
+                <input type="radio" ng-model="sqlSecurity" value="DEFINER" /> DEFINER<br />
+              </label>
+              <label class="radio-inline">
+                <input type="radio" ng-model="sqlSecurity" value="INVOKER" /> INVOKER<br />
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="createRoutineComment" class="col-sm-3 control-label">Comment</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" ng-model="comment" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="createRoutineCharacteristic" class="col-sm-3 control-label">Characteristic</label>
+            <div class="col-sm-9">
+              <select class="form-control" ng-model="characteristic" ng-options="char for char in characteristics">
+              </select>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="createRoutine()">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
