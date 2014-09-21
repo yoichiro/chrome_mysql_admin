@@ -7,7 +7,7 @@ chromeMyAdmin.directive("proceduresFunctionsPanel", function() {
     };
 });
 
-chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "Modes", "Events", "mySQLQueryService", "Templates", "routineSelectionService", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, Modes, Events, mySQLQueryService, Templates, routineSelectionService) {
+chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "Modes", "Events", "mySQLQueryService", "Templates", "routineSelectionService", "$q", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, Modes, Events, mySQLQueryService, Templates, routineSelectionService, $q) {
     "use strict";
 
     var initializeRoutinesGrid = function() {
@@ -181,11 +181,7 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
     var routineSelectionChanged = function() {
         var selectedRoutine = routineSelectionService.getSelectedRoutine();
         if (selectedRoutine) {
-            var database = targetObjectService.getDatabase();
-            var routineName = selectedRoutine.entity.ROUTINE_NAME;
-            var routineType = selectedRoutine.entity.ROUTINE_TYPE;
-            mySQLQueryService.showCreateRoutine(database, routineName, routineType).then(function(result) {
-                var routineCode = result.resultsetRows[0].values[2];
+            getRoutineCode(selectedRoutine).then(function(routineCode) {
                 $scope.routineCode = routineCode;
             }, function(reason) {
                 $scope.showErrorDialog("Retrieving routine code failed.", reason);
@@ -193,6 +189,93 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
         } else {
             $scope.routineCode = "";
         }
+    };
+
+    var getRoutineCode = function(routine) {
+        var deferred = $q.defer();
+        var database = targetObjectService.getDatabase();
+        var routineName = routine.entity.ROUTINE_NAME;
+        var routineType = routine.entity.ROUTINE_TYPE;
+        mySQLQueryService.showCreateRoutine(database, routineName, routineType).then(function(result) {
+            var routineCode = result.resultsetRows[0].values[2];
+            deferred.resolve(routineCode);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+    };
+
+    var executeProcedure = function(selectedRoutine) {
+        if (selectedRoutine.entity.ROUTINE_TYPE !== "PROCEDURE") {
+            return;
+        }
+        getRoutineCode(selectedRoutine).then(function(routineCode) {
+            var parameters = getProcedureParameters(routineCode);
+            var sets = [];
+            var inArgs = [];
+            var outArgs = [];
+            angular.forEach(parameters, function(p) {
+                if (p.io === "IN" || p.io === "INOUT") {
+                    sets.push("SET @" + p.name + " = <YOUR_VALUE>; -- " + p.type);
+                }
+                inArgs.push("@" + p.name);
+                if (p.io === "OUT" || p.io === "INOUT") {
+                    outArgs.push("@" + p.name);
+                }
+            });
+            var sql = "";
+            if (sets.length > 0) {
+                sql += sets.join("\n") + "\n";
+            }
+            sql += "CALL " + selectedRoutine.entity.ROUTINE_NAME + "(";
+            sql += inArgs.join(", ");
+            sql += ");";
+            if (outArgs.length > 0) {
+                sql += "\nSELECT ";
+                sql += outArgs.join(", ");
+                sql += ";";
+            }
+            $scope.showQueryPanel(sql);
+        }, function(reason) {
+            $scope.showErrorDialog("Retrieving routine code failed.", reason);
+        });
+    };
+
+    var getProcedureParameters = function(routineCode) {
+        var start = routineCode.indexOf("(") + 1;
+        var cnt = 0;
+        var end = -1;
+        for (var i = start; i < routineCode.length; i++) {
+            if (routineCode.charAt(i) === ")") {
+                if (cnt === 0) {
+                    end = i;
+                    break;
+                } else {
+                    cnt--;
+                }
+            } else if (routineCode.charAt(i) === "(") {
+                cnt++;
+            }
+        }
+        if (end === -1) {
+            throw "Invalid routineCode: " + routineCode;
+        }
+        if (start === end) {
+            return [];
+        }
+        var parameters = routineCode.substring(start, end).split(",");
+        var result = [];
+        angular.forEach(parameters, function(line) {
+            var trimed = line.trim();
+            var tokens = trimed.split(" ");
+            var obj = {
+                io: tokens[0],
+                name: tokens[1].substring(1, tokens[1].length - 1),
+                type: tokens.slice(2).join(" ")
+            };
+            result.push(obj);
+        });
+        return result;
     };
 
     var assignEventHandlers = function() {
@@ -218,6 +301,9 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
         });
         $scope.$on(Events.QUERY_EXECUTED, function(event, data) {
             $scope.selectedDatabase = null;
+        });
+        $scope.$on(Events.EXECUTE_SELECTED_PROCEDURE, function(event, data) {
+            executeProcedure(data);
         });
     };
 
