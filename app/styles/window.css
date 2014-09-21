@@ -349,3 +349,11 @@ span.editQuery {
 .routineCodeEditor {
     border-top: 1px solid #eee;
 }
+
+.routineParameterButton {
+    margin-top: 5px;
+}
+
+.routineParameterTypeLength {
+    width: 70px;
+}

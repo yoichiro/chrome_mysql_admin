@@ -197,4 +197,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         }
     };
 
+    $scope.createRoutine = function() {
+        if (targetObjectService.getDatabase()) {
+            routineSelectionService.showCreateRoutineDialog();
+        }
+    };
+
 }]);

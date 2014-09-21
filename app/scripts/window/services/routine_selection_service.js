@@ -14,6 +14,9 @@ chromeMyAdmin.factory("routineSelectionService", ["$rootScope", "Events", functi
         },
         getSelectedRoutine: function() {
             return selectedRoutine;
+        },
+        showCreateRoutineDialog: function() {
+            $rootScope.$broadcast(Events.SHOW_CREATE_ROUTINE_DIALOG, null);
         }
     };
 
