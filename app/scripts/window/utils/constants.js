@@ -53,6 +53,7 @@ chromeMyAdmin.constant("Events", {
     REQUEST_REFRESH: "requestRefresh",
     EXECUTING_QUERY: "executingQuery",
     QUERY_EXECUTED: "queryExecuted",
+    EXECUTE_SELECTED_PROCEDURE: "executeSelectedProcedure",
     LOGOUT: "logout",
     LOGIN: "login"
 });

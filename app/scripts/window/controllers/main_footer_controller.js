@@ -203,4 +203,15 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         }
     };
 
+    $scope.isProcedureSelection = function() {
+        var routine = routineSelectionService.getSelectedRoutine();
+        return routine && routine.entity.ROUTINE_TYPE === "PROCEDURE";
+    };
+
+    $scope.executeProcedure = function() {
+        if ($scope.isProcedureSelection()) {
+            routineSelectionService.executeSelectedProcedure();
+        }
+    };
+
 }]);
