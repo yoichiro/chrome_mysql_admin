@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("windowTitlePanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/window_title_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientService", "$q", "Events", function($scope, mySQLClientService, $q, Events) {
     "use strict";
 

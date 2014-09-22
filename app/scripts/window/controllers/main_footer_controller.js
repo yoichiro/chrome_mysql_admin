@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("mainFooter", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/main_footer.html"
-    };
-});
-
 chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService) {
     "use strict";
 

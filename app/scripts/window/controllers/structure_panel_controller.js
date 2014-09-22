@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("structurePanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/structure_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", "Templates", "TableTypes", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService, Templates, TableTypes) {
     "use strict";
 

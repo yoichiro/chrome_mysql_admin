@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("editColumnDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/edit_column_dialog.html"
-    };
-});
-
 chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService) {
     "use strict";
 

@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("updateRowDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/update_row_dialog.html"
-    };
-});
-
 chromeMyAdmin.controller("UpdateRowDialogController", ["$scope", "targetObjectService", "Events", "sqlExpressionService", "mySQLClientService", "rowsPagingService", "ValueTypes", function($scope, targetObjectService, Events, sqlExpressionService, mySQLClientService, rowsPagingService, ValueTypes) {
     "use strict";
 

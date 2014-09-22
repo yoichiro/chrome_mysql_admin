@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("proceduresFunctionsPanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/procs_funcs_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "Modes", "Events", "mySQLQueryService", "Templates", "routineSelectionService", "$q", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, Modes, Events, mySQLQueryService, Templates, routineSelectionService, $q) {
     "use strict";
 

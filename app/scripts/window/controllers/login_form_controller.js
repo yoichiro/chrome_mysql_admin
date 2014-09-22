@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("loginForm", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/login_form.html"
-    };
-});
-
 chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", "Events", "identityKeepService", function($scope, $timeout, mySQLClientService, favoriteService, Events, identityKeepService) {
     "use strict";
 

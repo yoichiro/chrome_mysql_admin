@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("addRelationDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/add_relation_dialog.html"
-    };
-});
-
 chromeMyAdmin.controller("AddRelationDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "mySQLQueryService", function($scope, Events, mySQLClientService, $q, targetObjectService, mySQLQueryService) {
     "use strict";
 

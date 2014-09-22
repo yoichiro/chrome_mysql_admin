@@ -15,12 +15,12 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li ng-class="{active: isRowsActive()}" ng-show="isConnected()" rel="tooltip" data-placement="bottom" title="Rows"><a href="#" ng-click="selectRows()"><span class="glyphicon glyphicon-align-justify"></span></a></li>
-        <li ng-class="{active: isStructureActive()}" ng-show="isConnected()" rel="tooltip" data-placement="bottom" title="Structure"><a href="#" ng-click="selectStructure()"><span class="glyphicon glyphicon-wrench"></span></a></li>
-        <li ng-class="{active: isInformationActive()}" ng-show="isConnected()" rel="tooltip" data-placement="bottom" title="Information"><a href="#" ng-click="selectInformation()"><span class="glyphicon glyphicon-info-sign"></span></a></li>
-        <li ng-class="{active: isRelationActive()}" ng-show="isConnected()" rel="tooltip" data-placement="bottom" title="Relation"><a href="#" ng-click="selectRelation()"><span class="glyphicon glyphicon-random"></span></a></li>
-        <li ng-class="{active: isProcsFuncsActive()}" ng-show="isConnected()" rel="tooltip" data-placement="bottom" title="Procedures/Functions"><a href="#" ng-click="selectProcsFuncs()"><span class="glyphicon glyphicon-fire"></span></a></li>
-        <li ng-class="{active: isQueryActive()}" ng-show="isConnected()" rel="tooltip" data-placement="bottom" title="Query"><a href="#" ng-click="selectQuery()"><span class="glyphicon glyphicon-edit"></span></a></li>
+        <navbar-menu-item title="Rows" icon="align-justify" click="selectRows()" active="isRowsActive()"></navbar-menu-item>
+        <navbar-menu-item title="Structure" icon="wrench" click="selectStructure()" active="isStructureActive()"></navbar-menu-item>
+        <navbar-menu-item title="Information" icon="info-sign" click="selectInformation()" active="isInformationActive()"></navbar-menu-item>
+        <navbar-menu-item title="Relation" icon="random" click="selectRelation()" active="isRelationActive()"></navbar-menu-item>
+        <navbar-menu-item title="Procedures/Functions" icon="fire" click="selectProcsFuncs()" active="isProcsFuncsActive()"></navbar-menu-item>
+        <navbar-menu-item title="Query" icon="edit" click="selectQuery()" active="isQueryActive()"></navbar-menu-item>
         <li rel="tooltip" data-placement="bottom" title="Configure">
           <a href="#"><span class="glyphicon glyphicon-cog" ng-click="configure()"></span></a>
         </li>
