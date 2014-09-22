@@ -3,15 +3,9 @@
   </div>
   <div class="middleFooter">
     <div class="pull-right">
-      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isTableSelection()) && 'footerButtonDisable'" ng-click="addColumn()">
-        <span class="fa fa-plus" title="Add a new column"></span>
-      </div>
-      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isColumnSelection()) && 'footerButtonDisable'" ng-click="editColumn()">
-        <span class="fa fa-pencil" title="Edit the selected column"></span>
-      </div>
-      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isColumnSelection()) && 'footerButtonDisable'" ng-click="confirmDeleteSelectedColumn()">
-        <span class="fa fa-trash-o" title="Delete the selected column"></span>
-      </div>
+      <footer-button icon="plus" click="addColumn()" title="Add a new column" enable="isTable() && isTableSelection()"></footer-button>
+      <footer-button icon="pencil" click="editColumn()" title="Edit the selected column" enable="isTable() && isColumnSelection()"></footer-button>
+      <footer-button icon="trash-o" click="confirmDeleteSelectedColumn()" title="Delete the selected column" enable="isTable() && isColumnSelection()"></footer-button>
     </div>
   </div>
   <div class="subTitle">Indexes</div>
@@ -19,12 +13,8 @@
   </div>
   <div class="middleFooter">
     <div class="pull-right">
-      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isTableSelection()) && 'footerButtonDisable'" ng-click="addIndex()">
-        <span class="fa fa-plus" title="Create a new index"></span>
-      </div>
-      <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isIndexSelection()) && 'footerButtonDisable'" ng-click="confirmDeleteSelectedIndex()">
-        <span class="fa fa-trash-o" title="Delete the selected index"></span>
-      </div>
+      <footer-button icon="plus" click="addIndex()" title="Create a new index" enable="isTable() && isTableSelection()"></footer-button>
+      <footer-button icon="trash-o" click="confirmDeleteSelectedIndex()" title="Delete the selected index" enable="isTable() && isIndexSelection()"></footer-button>
     </div>
   </div>
 </div>

@@ -2,72 +2,38 @@
   <div class="mainStatusMessage pull-left">{{mainStatusMessage}}</div>
   <!-- for Rows panel -->
   <div class="pull-right" ng-show="isRowsButtonsVisible()">
-    <div class="pull-left footerButtonRight" ng-class="(!isTableSelection() || !isTable()) && 'footerButtonDisable'" ng-click="insertRow()">
-      <span class="fa fa-plus" title="Insert a new row"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isRowSelection()) && 'footerButtonDisable'" ng-click="updateRow()">
-      <span class="fa fa-pencil" title="Edit the selected row"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isRowSelection()) && 'footerButtonDisable'" ng-click="confirmDeleteSelectedRow()">
-      <span class="fa fa-trash-o" title="Delete the selected row"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-click="refreshRows()">
-      <span class="fa fa-refresh" title="Refresh the row list"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-class="!hasPreviousPage() && 'footerButtonDisable'" ng-click="goPreviousPage()">
-      <span class="fa fa-arrow-left" title="Go to the previous page"></span>
-    </div>
+    <footer-button icon="plus" click="insertRow()" title="Insert a new row" enable="isTableSelection() && isTable()"></footer-button>
+    <footer-button icon="pencil" click="updateRow()" title="Edit the selected row" enable="isTable() && isRowSelection()"></footer-button>
+    <footer-button icon="trash-o" click="confirmDeleteSelectedRow()" title="Delete the selected row" enable="isTable() && isRowSelection()"></footer-button>
+    <footer-button icon="refresh" click="refreshRows()" title="Refresh the row list"></footer-button>
+    <footer-button icon="arrow-left" click="goPreviousPage()" title="Go to the previous page" enable="hasPreviousPage()"></footer-button>
     <div class="pull-left footerTextRight">{{getPagingInfo()}}</div>
-    <div class="pull-left footerButtonRight" ng-class="!hasNextPage() && 'footerButtonDisable'" ng-click="goNextPage()">
-      <span class="fa fa-arrow-right" title="Go to the next page"></span>
-    </div>
+    <footer-button icon="arrow-right" click="goNextPage()" title="Go to the next page" enable="hasNextPage()"></footer-button>
   </div>
   <!-- for Structure panel -->
   <div class="pull-right" ng-show="isStructureButtonsVisible()">
-    <div class="pull-left footerButtonRight" ng-click="refreshStructure()">
-      <span class="fa fa-refresh" title="Refresh the column list and the index list"></span>
-    </div>
+    <footer-button icon="refresh" click="refreshStructure()" title="Refresh the column list and the index list"></footer-button>
   </div>
   <!-- for Database panel -->
   <div class="pull-right" ng-show="isDatabaseButtonsVisible()">
-    <div class="pull-left footerButtonRight" ng-click="createDatabase()">
-      <span class="fa fa-plus" title="Create a new database"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-class="!isDatabaseSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedDatabase()">
-      <span class="fa fa-trash-o" title="Delete the database"></span>
-    </div>
+    <footer-button icon="plus" click="createDatabase()" title="Create a new database"></footer-button>
+    <footer-button icon="trash-o" click="confirmDeleteSelectedDatabase()" title="Delete the database" enable="isDatabaseSelection()"></footer-button>
   </div>
   <!-- for Information panel -->
   <div class="pull-right" ng-show="isInformationButtonsVisible()">
-    <div class="pull-left footerButtonRight" ng-click="refreshInformation()">
-      <span class="fa fa-refresh" title="Refresh the information"></span>
-    </div>
+    <footer-button icon="refresh" click="refreshInformation()" title="Refresh the information"></footer-button>
   </div>
   <!-- for Relation panel -->
   <div class="pull-right" ng-show="isRelationButtonsVisible()">
-    <div class="pull-left footerButtonRight" ng-class="(!isTableSelection() || !isTable()) && 'footerButtonDisable'" ng-click="addRelation()">
-      <span class="fa fa-plus" title="Add a new relation"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-class="(!isTable() || !isRelationSelection()) && 'footerButtonDisable'" ng-click="confirmDeleteSelectedRelation()">
-      <span class="fa fa-trash-o" title="Delete the relation"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-click="refreshRelation()">
-      <span class="fa fa-refresh" title="Refresh the foreign keys"></span>
-    </div>
+    <footer-button icon="plus" click="addRelation()" title="Add a new relation" enable="isTableSelection() && isTable()"></footer-button>
+    <footer-button icon="trash-o" click="confirmDeleteSelectedRelation()" title="Delete the relation" enable="isTable() && isRelationSelection()"></footer-button>
+    <footer-button icon="refresh" click="refreshRelation()" title="Refresh the foreign keys"></footer-button>
   </div>
   <!-- for Procedures and functions panel -->
   <div class="pull-right" ng-show="isProceduresFunctionsButtonsVisible()">
-    <div class="pull-left footerButtonRight" ng-class="!isProcedureSelection() && 'footerButtonDisable'" ng-click="executeProcedure()">
-      <span class="fa fa-play" title="Execute the selected procedure"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-class="!isDatabaseSelection() && 'footerButtonDisable'" ng-click="createRoutine()">
-      <span class="fa fa-plus" title="Create a new routine"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-class="!isRoutineSelection() && 'footerButtonDisable'" ng-click="confirmDeleteSelectedRoutine()">
-      <span class="fa fa-trash-o" title="Delete the procedure/function"></span>
-    </div>
-    <div class="pull-left footerButtonRight" ng-click="refreshProceduresFunctions()">
-      <span class="fa fa-refresh" title="Refresh procedures/functions"></span>
-    </div>
+    <footer-button icon="play" click="executeProcedure()" title="Execute the selected procedure" enable="isProcedureSelection()"></footer-button>
+    <footer-button icon="plus" click="createRoutine()" title="Create a new routine" enable="isDatabaseSelection()"></footer-button>
+    <footer-button icon="trash-o" click="confirmDeleteSelectedRoutine()" title="Delete the procedure/function" enable="isRoutineSelection()"></footer-button>
+    <footer-button icon="refresh" click="refreshProceduresFunctions()" title="Refresh procedure/function"></footer-button>
   </div>
 </div>
