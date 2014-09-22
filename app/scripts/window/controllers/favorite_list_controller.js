@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("favoriteListPanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/favorite_list_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("FavoriteListController", ["$scope", "mySQLClientService", "favoriteService", "Events", "UIConstants", function($scope, mySQLClientService, favoriteService, Events, UIConstants) {
     "use strict";
 

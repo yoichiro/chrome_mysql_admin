@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("navbarPanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/navbar_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "Events", "Modes", function($scope, mySQLClientService, modeService, targetObjectService, Events, Modes) {
     "use strict";
 

@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("createTableDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/create_table_dialog.html"
-    };
-});
-
 chromeMyAdmin.controller("CreateTableDialogController", ["$scope", "targetObjectService", "mySQLClientService", "Events", "modeService", "Modes", "Engines", "mySQLQueryService", function($scope, targetObjectService, mySQLClientService, Events, modeService, Modes, Engines, mySQLQueryService) {
     "use strict";
 

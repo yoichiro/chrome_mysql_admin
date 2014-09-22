@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("insertRowDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/insert_row_dialog.html"
-    };
-});
-
 chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", "sqlExpressionService", "ValueTypes", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events, sqlExpressionService, ValueTypes) {
     "use strict";
 

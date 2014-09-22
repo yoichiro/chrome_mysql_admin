@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("databasePanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/database_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", "MySQLErrorCode", "Templates", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode, Templates) {
     "use strict";
 

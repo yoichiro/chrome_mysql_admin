@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("relationPanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/relation_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", "relationSelectionService", "mySQLQueryService", "Templates", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events, relationSelectionService, mySQLQueryService, Templates) {
     "use strict";
 

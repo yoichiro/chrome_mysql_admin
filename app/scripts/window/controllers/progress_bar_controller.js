@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("progressPanel", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/progress_panel.html"
-    };
-});
-
 chromeMyAdmin.controller("ProgressBarController", ["$scope", "Events", function($scope, Events) {
     "use strict";
 

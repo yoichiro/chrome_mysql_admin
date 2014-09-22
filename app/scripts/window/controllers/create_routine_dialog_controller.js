@@ -1,12 +1,3 @@
-chromeMyAdmin.directive("createRoutineDialog", function() {
-    "use strict";
-
-    return {
-        restrict: "E",
-        templateUrl: "templates/create_routine_dialog.html"
-    };
-});
-
 chromeMyAdmin.controller("CreateRoutineDialogController", ["$scope", "Events", "mySQLClientService", "typeService", "sqlExpressionService", "targetObjectService", function($scope, Events, mySQLClientService, typeService, sqlExpressionService, targetObjectService) {
     "use strict";
 
