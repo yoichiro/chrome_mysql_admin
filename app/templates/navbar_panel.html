@@ -6,17 +6,18 @@
     </div>
     <div class="collapse navbar-collapse" id="navbar-collapse">
       <ul class="nav navbar-nav navbar-left" ng-show="isConnected()">
-        <li ng-class="{active: isDatabaseActive()}"><a href="#" rel="popover_database" ng-click="showDatabaseInfo()"><span class="glyphicon glyphicon-hdd"></span></a></li>
+        <navbar-menu-item title="Process list" icon="heart" click="showDatabaseInfo()" active="isDatabaseActive()"></navbar-menu-item>
+        <navbar-menu-item title="Server status graph" icon="stats" click="selectStatusGraph()" active="isStatusGraphActive()"></navbar-menu-item>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle databaseDropdownToggle" data-toggle="dropdown" title="{{selectedDatabase}}"><b class="caret"></b> {{selectedDatabase}}</a>
-          <ul class="dropdown-menu databaseDropdownList">
+          <ul class="dropdown-menu dropdownList">
             <li ng-repeat="database in databases" ng-click="selectDatabase($event, database)"><a href="#">{{database}}</a></li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <navbar-menu-item title="Rows" icon="align-justify" click="selectRows()" active="isRowsActive()"></navbar-menu-item>
-        <navbar-menu-item title="Structure" icon="wrench" click="selectStructure()" active="isStructureActive()"></navbar-menu-item>
+        <navbar-menu-item title="Structure" icon="list-alt" click="selectStructure()" active="isStructureActive()"></navbar-menu-item>
         <navbar-menu-item title="Information" icon="info-sign" click="selectInformation()" active="isInformationActive()"></navbar-menu-item>
         <navbar-menu-item title="Relation" icon="random" click="selectRelation()" active="isRelationActive()"></navbar-menu-item>
         <navbar-menu-item title="Procedures/Functions" icon="fire" click="selectProcsFuncs()" active="isProcsFuncsActive()"></navbar-menu-item>

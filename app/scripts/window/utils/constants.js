@@ -65,7 +65,8 @@ chromeMyAdmin.constant("Modes", {
     QUERY: "query",
     INFORMATION: "information",
     RELATION: "relation",
-    PROCS_FUNCS: "procs_funcs"
+    PROCS_FUNCS: "procs_funcs",
+    STATUS_GRAPH: "status_graph"
 });
 
 chromeMyAdmin.constant("ErrorLevel", {
@@ -233,7 +234,9 @@ chromeMyAdmin.constant("Configurations", {
     DEFAULT_ROW_COUNT_PER_PAGE_IN_ROWS_PANEL: 100,
     DEFAULT_PING_SPAN: 30000,
     QUERY_EDITOR_WRAP_MODE: "query_editor_wrap_mode",
-    DEFAULT_QUERY_EDITOR_WRAP_MODE: true
+    DEFAULT_QUERY_EDITOR_WRAP_MODE: true,
+    STATUS_GRAPH_AUTO_UPDATE_SPAN: "status_graph_auto_update_span",
+    DEFAULT_STATUS_GRAPH_AUTO_UPDATE_SPAN: 10000
 });
 
 chromeMyAdmin.constant("QueryEditorWrapMode", {

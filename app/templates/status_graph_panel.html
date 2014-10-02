@@ -1,0 +1,24 @@
+<div id="statusGraphPanel" ng-controller="StatusGraphPanelController" ng-init="initialize()" ng-show="isStatusGraphPanelVisible()">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{selectedStatusName}} <span class="caret"></span></a>
+            <ul class="dropdown-menu dropdownList">
+              <li ng-repeat="statusName in statusNameList">
+                <a href="#" ng-click="selectStatusName(statusName)">{{statusName}}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <button type="submit" class="btn btn-default btn-sm" ng-click="addGraph()">Add</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div id="graphContainer" style="height: 200px; overflow-y: auto; padding: 1px;">
+    <status-graph ng-repeat="statusName in statusGraphList | reverse" target="statusName" data="graphDataMap" closed="onGraphClosed(statusName)"></status-graph>
+  </div>
+</div>

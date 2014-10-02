@@ -331,9 +331,10 @@ span.editQuery {
     margin-right: 0;
 }
 
-.databaseDropdownList {
-    max-height: 500px;
-    overflow-y: auto;
+.dropdownList {
+    max-height: 400px;
+    max-width: 500px;
+    overflow: auto;
 }
 
 .databaseDropdownToggle {

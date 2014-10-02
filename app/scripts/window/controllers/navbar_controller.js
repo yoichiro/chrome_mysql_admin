@@ -19,21 +19,6 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
                 targetObjectService.resetDatabase();
                 loadDatabaseList();
                 $scope.connectionInfo = connectionInfo;
-                $("body").popover({
-                    placement: "bottom",
-                    trigger: "hover",
-                    html: true,
-                    content: function() {
-                        var info = $scope.connectionInfo;
-                        var tls = info.useSSL ? " (SSL)" : "";
-                        return "Server: " +
-                            info.hostName + ":" + info.port + tls + "<br />" +
-                            "MySQL version: " +
-                            info.initialHandshakeRequest.serverVersion;
-                    },
-                    container: "body",
-                    selector: "[rel=\"popover_database\"]"
-                });
             });
         }
     };
@@ -108,6 +93,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         return modeService.getMode() === Modes.PROCS_FUNCS;
     };
 
+    $scope.isStatusGraphActive = function() {
+        return modeService.getMode() === Modes.STATUS_GRAPH;
+    };
+
     $scope.selectRows = function() {
         modeService.changeMode(Modes.ROWS);
     };
@@ -138,6 +127,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.selectProcsFuncs = function() {
         modeService.changeMode(Modes.PROCS_FUNCS);
+    };
+
+    $scope.selectStatusGraph = function() {
+        modeService.changeMode(Modes.STATUS_GRAPH);
     };
 
 }]);

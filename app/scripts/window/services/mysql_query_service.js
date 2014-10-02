@@ -169,6 +169,19 @@ chromeMyAdmin.factory("mySQLQueryService", ["$q", "$rootScope", "mySQLClientServ
                 deferred.reject(reason);
             });
             return deferred.promise;
+        },
+        showGlobalStatus: function() {
+            var deferred = $q.defer();
+            mySQLClientService.query("SHOW GLOBAL STATUS").then(function(result) {
+                if (result.hasResultsetRows) {
+                    deferred.resolve(result);
+                } else {
+                    deferred.reject("Retrieving status failed.");
+                }
+            }, function(reason) {
+                deferred.reject(reason);
+            });
+            return deferred.promise;
         }
     };
 

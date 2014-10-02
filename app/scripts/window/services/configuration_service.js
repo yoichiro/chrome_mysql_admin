@@ -77,6 +77,16 @@ chromeMyAdmin.factory("configurationService", ["$rootScope", "$q", "Configuratio
             return setConfigurationValue(
                 Configurations.QUERY_EDITOR_WRAP_MODE,
                 wrap);
+        },
+        getStatusGraphAutoUpdateSpan: function() {
+            return getConfigurationValue(
+                Configurations.STATUS_GRAPH_AUTO_UPDATE_SPAN,
+                Configurations.DEFAULT_STATUS_GRAPH_AUTO_UPDATE_SPAN);
+        },
+        setStatusGraphAutoUpdateSpan: function(span) {
+            return setConfigurationValue(
+                Configurations.STATUS_GRAPH_AUTO_UPDATE_SPAN,
+                span);
         }
     };
 }]);

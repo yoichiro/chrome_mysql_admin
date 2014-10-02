@@ -151,6 +151,7 @@ module.exports = function (grunt) {
                         'scripts/lib/forge.min.js',
                         'scripts/lib/mysql_js_driver_*.min.js',
                         'scripts/lib/ace-builds/src-min-noconflict/{,*/}*.js',
+                        'scripts/lib/jquery.jqplot.min.js',
                         'fonts/{,*/}*.*',
                         '*.html',
                         'templates/*.html'
