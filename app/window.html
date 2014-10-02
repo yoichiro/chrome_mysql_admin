@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="styles/window.css" />
 <link rel="stylesheet" type="text/css" href="styles/ng-grid.min.css" />
 <link rel="stylesheet" type="text/css" href="styles/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="styles/jquery.jqplot.min.css" />
 
 <!-- build:js scripts/lib/jquery.min.js -->
 <script type="text/javascript" src="scripts/lib/jquery/jquery.js"></script>
@@ -35,6 +36,7 @@
 <!-- build:js scripts/lib/ui-ace.min.js -->
 <script type="text/javascript" src="scripts/lib/angular-ui-ace/ui-ace.js"></script>
 <!-- endbuild -->
+<script type="text/javascript" src="scripts/lib/jquery.jqplot.min.js"></script>
 
 <!-- build:js scripts/window.min.js -->
 <script type="text/javascript" src="scripts/window/main.js"></script>
@@ -84,6 +86,8 @@
 <script type="text/javascript" src="scripts/window/directives/structure_panel.js"></script>
 <script type="text/javascript" src="scripts/window/directives/update_row_dialog.js"></script>
 <script type="text/javascript" src="scripts/window/directives/window_title_panel.js"></script>
+<script type="text/javascript" src="scripts/window/directives/status_graph_panel.js"></script>
+<script type="text/javascript" src="scripts/window/directives/status_graph.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/navbar_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/database_object_list_controller.js"></script>
@@ -110,6 +114,7 @@
 <script type="text/javascript" src="scripts/window/controllers/window_title_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/procedures_functions_panel_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/create_routine_dialog_controller.js"></script>
+<script type="text/javascript" src="scripts/window/controllers/status_graph_panel_controller.js"></script>
 <!-- endbuild -->
 
 <!-- @if DEBUG -->
@@ -141,6 +146,7 @@
         <information-panel></information-panel>
         <relation-panel></relation-panel>
         <procedures-functions-panel></procedures-functions-panel>
+        <status-graph-panel></status-graph-panel>
         <login-form></login-form>
       </div>
       <main-footer></main-footer>

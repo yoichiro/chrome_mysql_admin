@@ -118,7 +118,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
     $scope.selectTable = function(table) {
         targetObjectService.changeTable(table);
         if (modeService.getMode() === Modes.DATABASE ||
-           modeService.getMode() === Modes.QUERY) {
+           modeService.getMode() === Modes.QUERY ||
+           modeService.getMode() === Modes.STATUS_GRAPH) {
             modeService.changeMode(Modes.ROWS);
         }
     };
