@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", "sqlExpressionService", "Templates", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes, sqlExpressionService, Templates) {
+chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", "sqlExpressionService", "Templates", "mySQLQueryService", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes, sqlExpressionService, Templates, mySQLQueryService) {
     "use strict";
 
     var initializeRowsGrid = function() {
@@ -195,41 +195,71 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         }
     };
 
-    var loadRows = function(tableName) {
-        rowsSelectionService.reset();
-        var rowsCount = 0;
-        var where = createSqlWhereSection();
-        mySQLClientService.query("SELECT COUNT(*) FROM `" + tableName + "`" + where).then(function(result) {
+    var loadRowCountWithWehereStatement = function(tableName, where) {
+        return mySQLClientService.query("SELECT COUNT(*) FROM `" + tableName + "`" + where).then(function(result) {
             if (result.hasResultsetRows) {
-                rowsCount = result.resultsetRows[0].values[0];
+                var rowsCount = result.resultsetRows[0].values[0];
                 rowsPagingService.updateTotalRowCount(rowsCount);
-                var order = "";
-                if ($scope.sortOptions.columns.length > 0) {
-                    order += " ORDER BY `";
-                    order += $scope.sortOptions.columns[0].displayName;
-                    order += "` " + $scope.sortOptions.directions[0].toUpperCase();
-                }
+                var order = createOrderStatement();
                 return mySQLClientService.query("SELECT * FROM `" + tableName + "` " + where + order + createSqlLimitSection());
+            } else {
+                    return $q.reject("Retrieving rows count failed.");
+            }
+        });
+    };
+
+    var loadRowsCountWithoutWhereStatement = function(tableName) {
+        return mySQLQueryService.showTableStatus(tableName).then(function(result) {
+            if (result.hasResultsetRows) {
+                var columnDefinitions = result.columnDefinitions;
+                var idx;
+                angular.forEach(columnDefinitions, function(column, index) {
+                    if (column.name == "Rows") {
+                        idx = index;
+                    }
+                });
+                var rowsCount = result.resultsetRows[0].values[idx];
+                rowsPagingService.updateTotalRowCount(rowsCount);
+                var order = createOrderStatement();
+                return mySQLClientService.query("SELECT * FROM `" + tableName + "` " + order + createSqlLimitSection());
             } else {
                 return $q.reject("Retrieving rows count failed.");
             }
-        }).then(function(result) {
-            if (result.hasResultsetRows) {
-                $scope.safeApply(function() {
-                    if (isDifferentColumnDefinitions(result.columnDefinitions)) {
-                        clearSortInfo();
-                        updateRowsColumnDefs(result.columnDefinitions);
-                    }
-                    updateColumnNames(result.columnDefinitions);
-                    updateRows(result.columnDefinitions, result.resultsetRows);
-                    $scope.lastQueryResult = result;
-                });
-            } else {
-                $scope.fatalErrorOccurred("Retrieving rows failed.");
-            }
-        }, function(reason) {
-            $scope.fatalErrorOccurred(reason);
         });
+    };
+
+    var createOrderStatement = function() {
+        var order = "";
+        if ($scope.sortOptions.columns.length > 0) {
+            order += " ORDER BY `";
+            order += $scope.sortOptions.columns[0].displayName;
+            order += "` " + $scope.sortOptions.directions[0].toUpperCase();
+        }
+        return order;
+    };
+
+    var loadRows = function(tableName) {
+        rowsSelectionService.reset();
+        var where = createSqlWhereSection();
+        (where ?
+         loadRowCountWithWehereStatement(tableName, where) :
+         loadRowsCountWithoutWhereStatement(tableName)).then(function(result) {
+             if (result.hasResultsetRows) {
+                 $scope.safeApply(function() {
+                     if (isDifferentColumnDefinitions(result.columnDefinitions)) {
+                         clearSortInfo();
+                         updateRowsColumnDefs(result.columnDefinitions);
+                     }
+                     updateColumnNames(result.columnDefinitions);
+                     updateRows(result.columnDefinitions, result.resultsetRows);
+                     $scope.lastQueryResult = result;
+                 });
+             } else {
+                 $scope.fatalErrorOccurred("Retrieving rows failed.");
+             }
+         }, function(reason) {
+             $scope.fatalErrorOccurred(reason);
+         });
     };
 
     var onModeChanged = function(mode) {
