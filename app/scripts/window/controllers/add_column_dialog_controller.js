@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService) {
+chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", "sqlExpressionService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService, sqlExpressionService) {
     "use strict";
 
     var onShowDialog = function(table) {
@@ -14,6 +14,8 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
         $scope.type = "INT";
         $scope.extra = "NONE";
         $scope.key = "PRIMARY";
+        $scope.setEnumValue = "";
+        $scope.setEnumValues = [];
         $("#addColumnDialog").modal("show");
         loadDatabaseData();
     };
@@ -62,11 +64,20 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
     };
 
     $scope.addColumn = function() {
+        if ($scope.type === "SET" || $scope.type === "ENUM") {
+            if ($scope.setEnumValues.length === 0) {
+                $scope.errorMessage = "SET/ENUM type column must have one or more values.";
+                return;
+            }
+        }
         var sql = "ALTER TABLE `" + $scope.selectedTable.name + "` ";
         sql += "ADD COLUMN `" + $scope.columnName + "` ";
         sql += $scope.type;
         if ($scope.length) {
             sql += "(" + $scope.length + ")";
+        }
+        if ($scope.type === "SET" || $scope.type === "ENUM") {
+            sql += "(" + sqlExpressionService.createStringArray($scope.setEnumValues) + ")";
         }
         sql += " ";
         if (typeService.isString($scope.type)) {
@@ -129,6 +140,20 @@ chromeMyAdmin.controller("AddColumnDialogController", ["$scope", "Events", "mySQ
 
     $scope.isKeyDisabled = function() {
         return $scope.extra !== "AUTO_INCREMENT";
+    };
+
+    $scope.addSetEnumValue = function() {
+        if ($scope.setEnumValue && $scope.setEnumValues.indexOf($scope.setEnumValue) === -1) {
+            $scope.setEnumValues.push($scope.setEnumValue);
+        }
+        $scope.setEnumValue = "";
+    };
+
+    $scope.deleteSetEnumValue = function(value) {
+        var index = $scope.setEnumValues.indexOf(value);
+        if (index !== -1) {
+            $scope.setEnumValues.splice(index, 1);
+        }
     };
 
 }]);

@@ -29,6 +29,27 @@
               </select>
             </div>
           </div>
+          <div class="form-group" ng-show="type == 'SET' || type == 'ENUM'">
+            <label for="editColumnTypeSetEnum" class="col-sm-3 control-label">Set/Enum values</label>
+            <div class="col-sm-9">
+              <ul class="list-group" ng-show="setEnumValues.length > 0">
+                <li class="list-group-item clearfix" ng-repeat="value in setEnumValues">
+                  <div class="pull-left">
+                    {{value}}
+                  </div>
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="deleteSetEnumValue(value)"><span class="fa fa-times"></span></button>
+                  </div>
+                </li>
+              </ul>
+              <div class="input-group">
+                <input type="text" class="form-control" ng-model="setEnumValue" />
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" ng-click="addSetEnumValue()">Add</button>
+                </span>
+              </div>
+            </div>
+          </div>
           <div class="form-group">
             <label for="editColumnLength" class="col-sm-3 control-label">Length</label>
             <div class="col-sm-9">
