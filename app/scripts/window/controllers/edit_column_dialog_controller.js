@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService) {
+chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", "sqlExpressionService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService, sqlExpressionService) {
     "use strict";
 
     var onShowDialog = function(table, columnDefs, columnStructure) {
@@ -8,19 +8,27 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
         $scope.originalColumnStructure = columnStructure;
         $scope.columnName = columnStructure.Field;
         var type = columnStructure.Type;
-        var length = getColumnLength(type);
-        if (length) {
-            $scope.length = Number(length);
-        } else {
+        $scope.type = getTypeName(type);
+        var length;
+        if ($scope.type === "SET" || $scope.type === "ENUM") {
             $scope.length = null;
+            $scope.setEnumValues = getSetEnumValues(type);
+        } else {
+            length = getColumnLength(type);
+            if (length) {
+                $scope.length = Number(length);
+            } else {
+                $scope.length = null;
+            }
+            $scope.setEnumValues = [];
         }
+        $scope.setEnumValue = "";
         $scope.unsigned = isUnsignedType(type);
         $scope.zerofill = isZerofillType(type);
         var collation = columnStructure.Collation;
         $scope.binary = isBinaryType(collation);
         $scope.allowNull = isNullType(columnStructure.Null);
         $scope.defaultValue = columnStructure.Default;
-        $scope.type = getTypeName(type);
         $scope.extra = getExtra(columnStructure.Extra);
         $scope.key = getKey(columnStructure.Key);
         $("#editColumnDialog").modal("show");
@@ -68,6 +76,16 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
         } else {
             return null;
         }
+    };
+
+    var getSetEnumValues = function(type) {
+        var idx = type.indexOf("(");
+        var s = type.substring(idx + 1, type.indexOf(")"));
+        var result = [];
+        angular.forEach(s.split(","), function(value) {
+            result.push(value.substring(1, value.length - 1));
+        }, result);
+        return result;
     };
 
     var isUnsignedType = function(type) {
@@ -155,12 +173,21 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
     };
 
     $scope.editColumn = function() {
+        if ($scope.type === "SET" || $scope.type === "ENUM") {
+            if ($scope.setEnumValues.length === 0) {
+                $scope.errorMessage = "SET/ENUM type column must have one or more values.";
+                return;
+            }
+        }
         var sql = "ALTER TABLE `" + $scope.selectedTable.name + "` ";
         sql += "CHANGE COLUMN `" + $scope.originalColumnStructure.Field + "` `";
         sql += $scope.columnName + "` ";
         sql += $scope.type;
         if ($scope.length) {
             sql += "(" + $scope.length + ")";
+        }
+        if ($scope.type === "SET" || $scope.type === "ENUM") {
+            sql += "(" + sqlExpressionService.createStringArray($scope.setEnumValues) + ")";
         }
         sql += " ";
         if (typeService.isString($scope.type)) {
@@ -223,6 +250,20 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
 
     $scope.isKeyDisabled = function() {
         return $scope.extra !== "AUTO_INCREMENT";
+    };
+
+    $scope.addSetEnumValue = function() {
+        if ($scope.setEnumValue && $scope.setEnumValues.indexOf($scope.setEnumValue) === -1) {
+            $scope.setEnumValues.push($scope.setEnumValue);
+        }
+        $scope.setEnumValue = "";
+    };
+
+    $scope.deleteSetEnumValue = function(value) {
+        var index = $scope.setEnumValues.indexOf(value);
+        if (index !== -1) {
+            $scope.setEnumValues.splice(index, 1);
+        }
     };
 
 }]);

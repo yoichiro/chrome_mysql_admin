@@ -73,6 +73,13 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", "ValueTypes", funct
         },
         replaceValue: function(value) {
             return _replaceValue(value);
+        },
+        createStringArray: function(values) {
+            var tmp = [];
+            angular.forEach(values, function(value) {
+                tmp.push("\"" + _replaceValue(value) + "\"");
+            }, tmp);
+            return tmp.join(", ");
         }
     };
 }]);
