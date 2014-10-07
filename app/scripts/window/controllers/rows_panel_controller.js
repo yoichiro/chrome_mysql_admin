@@ -278,23 +278,45 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         }
     };
 
-    var showInsertRowDialog = function() {
-        if ($scope.lastQueryResult) {
-            var columnDefinitions = $scope.lastQueryResult.columnDefinitions;
-            targetObjectService.showInsertRowDialog(columnDefinitions);
+    var loadTableStructure = function(callback) {
+        var tableName = targetObjectService.getTable();
+        if (tableName) {
+            mySQLQueryService.showFullColumns(tableName.name).then(function(result) {
+                var resultsetRows = result.resultsetRows;
+                var columnDefinitions = [];
+                angular.forEach(resultsetRows, function(row) {
+                    this.push({
+                        name: row.values[0],
+                        type: row.values[1],
+                        isNotNull: function() {
+                            return row.values[3] === "NO";
+                        }
+                    });
+                }, columnDefinitions);
+                callback(columnDefinitions);
+            }, function(reason) {
+                $scope.fatalErrorOccurred(reason);
+            });
         }
     };
 
+    var showInsertRowDialog = function() {
+        loadTableStructure(function(columnDefinitions) {
+            targetObjectService.showInsertRowDialog(columnDefinitions);
+        });
+    };
+
     var showUpdateRowDialog = function() {
-        if ($scope.lastQueryResult) {
-            var columnDefinitions = $scope.lastQueryResult.columnDefinitions;
-            var row = rowsSelectionService.getSelectedRows();
-            var originalRow = $scope.lastQueryResult.resultsetRows[row.rowIndex];
-            targetObjectService.showUpdateRowDialog({
-                columnDefinitions: columnDefinitions,
-                row: originalRow
-            });
-        }
+        loadTableStructure(function(columnDefinitions) {
+            if ($scope.lastQueryResult) {
+                var row = rowsSelectionService.getSelectedRows();
+                var originalRow = $scope.lastQueryResult.resultsetRows[row.rowIndex];
+                targetObjectService.showUpdateRowDialog({
+                    columnDefinitions: columnDefinitions,
+                    row: originalRow
+                });
+            }
+        });
     };
 
     var _isRowsPanelVisible = function() {

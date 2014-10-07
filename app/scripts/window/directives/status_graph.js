@@ -6,7 +6,10 @@ chromeMyAdmin.directive("statusGraph", [function() {
                 markerOptions: {
                     show: false
                 },
-                shadow: false
+                shadow: false,
+                fill: true,
+                fillAlpha: 0.3,
+                fillAndStroke: true
             },
             grid: {
                 background: "#ffffff",
