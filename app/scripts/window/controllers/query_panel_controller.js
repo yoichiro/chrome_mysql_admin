@@ -298,4 +298,18 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         doShowQueryResult(index);
     };
 
+    $scope.onFileDrop = function(files) {
+        if (files.length === 1) {
+            var file = files[0];
+            var reader = new FileReader();
+            reader.onload = function(evt) {
+                var text = evt.target.result;
+                $scope.$apply(function() {
+                    $scope.setQuery(text);
+                });
+            };
+            reader.readAsText(file, "UTF-8");
+        }
+    };
+
 }]);
