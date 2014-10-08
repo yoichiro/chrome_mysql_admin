@@ -20,7 +20,7 @@
       </div>
     </div>
   </nav>
-  <div ui-ace="{mode: 'sql', theme: 'clouds', onLoad: aceLoaded}" ng-model="query" class="queryEditor"></div>
+  <div ui-ace="{mode: 'sql', theme: 'clouds', onLoad: aceLoaded}" ng-model="query" class="queryEditor" file-drop="onFileDrop(files)"></div>
 
   <div class="queryMiddlePanel">
     <div class="dropdown pull-left">
