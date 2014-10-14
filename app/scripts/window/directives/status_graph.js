@@ -30,11 +30,13 @@ chromeMyAdmin.directive("statusGraph", [function() {
         templateUrl: "templates/status_graph.html",
         replace: true,
         scope: {
-            data: "=",
+            normalData: "=",
+            deltaData: "=",
             statusName: "=target",
-            closedCallback: "&closed"
+            closedCallback: "&closed",
+            graphType: "="
         },
-        controller: ["$scope", function($scope) {
+        controller: ["$scope", "GraphTypes", function($scope, GraphTypes) {
             this.assignEventHandlers = function(scope, element) {
                 window.addEventListener("resize", function(e) {
                     scope.replot();
@@ -45,15 +47,27 @@ chromeMyAdmin.directive("statusGraph", [function() {
             };
 
             this.createGraph = function(scope, element) {
+                var data;
+                if ($scope.graphType === GraphTypes.NORMAL) {
+                    data = scope.normalData[scope.statusName];
+                } else {
+                    data = scope.deltaData[scope.statusName];
+                }
                 return element.find("div.graph").jqplot(
-                    [scope.data[scope.statusName]],
+                    [data],
                     createGraphOption()
                 ).data("jqplot");
             };
 
             $scope.replot = function() {
                 var options = createGraphOption();
-                options.data = [$scope.data[$scope.statusName]];
+                var data;
+                if ($scope.graphType === GraphTypes.NORMAL) {
+                    data = $scope.normalData[$scope.statusName];
+                } else {
+                    data = $scope.deltaData[$scope.statusName];
+                }
+                options.data = [data];
                 options.clear = true;
                 $scope.jqplot.replot(options);
             };
@@ -71,7 +85,7 @@ chromeMyAdmin.directive("statusGraph", [function() {
             return function(scope, element, attrs, ctrl) {
                 scope.jqplot = ctrl.createGraph(scope, element);
 
-                scope.$watch("data", function(newVal, oldVal) {
+                scope.$watch("deltaData", function(newVal, oldVal) {
                     scope.replot();
                 }, true);
 
