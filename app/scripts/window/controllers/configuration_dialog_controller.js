@@ -29,7 +29,7 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
 
     $scope.initialize = function() {
         $scope.databaseInfoAutoUpdateSpans = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
-        $scope.statusGraphAutoUpdateSpans = [5, 10, 15, 20, 25, 30];
+        $scope.statusGraphAutoUpdateSpans = [1, 3, 5, 10, 15, 20, 25, 30];
         $scope.rowCountsPerPageInRowsPanel = [10, 20, 50, 100, 200, 500, 1000];
         $scope.queryEditorWrapModes = [QueryEditorWrapMode.WRAP, QueryEditorWrapMode.NOT_WRAP];
         assignEventHandlers();
