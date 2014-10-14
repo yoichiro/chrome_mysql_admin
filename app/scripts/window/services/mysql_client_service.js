@@ -36,7 +36,9 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
     var _consumeQuery = function() {
         var task = queryQueue[0];
         if (task.type === "query") {
-            return _doQuery(task);
+            return _doQuery(task, true);
+        } else if (task.type === "queryWithoutProgressBar") {
+            return _doQuery(task, false);
         } else if (task.type === "getDatabases") {
             return _getDatabases(task);
         } else if (task.type === "getStatistics") {
@@ -61,9 +63,11 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         });
     };
 
-    var _doQuery = function(task) {
-        $rootScope.showMainStatusMessage("Executing query...");
-        $rootScope.showProgressBar();
+    var _doQuery = function(task, showProgressBar) {
+        if (showProgressBar) {
+            $rootScope.showMainStatusMessage("Executing query...");
+            $rootScope.showProgressBar();
+        }
         var deferred = $q.defer();
         console.log("Query: " + task.query);
         _addQueryHistory(task.query);
@@ -78,12 +82,16 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                 columnDefinitions: columnDefinitions,
                 resultsetRows: resultsetRows
             });
-            $rootScope.hideProgressBar();
+            if (showProgressBar) {
+                $rootScope.hideProgressBar();
+            }
             if (remaining > 0) {
                 _consumeQuery();
             }
         }, function(result) {
-            $rootScope.hideProgressBar();
+            if (showProgressBar) {
+                $rootScope.hideProgressBar();
+            }
             $rootScope.showMainStatusMessage(
                 "No errors. Affected rows count is " + result.affectedRows);
             queryQueue.shift();
@@ -96,7 +104,9 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                 _consumeQuery();
             }
         }, function(result) {
-            $rootScope.hideProgressBar();
+            if (showProgressBar) {
+                $rootScope.hideProgressBar();
+            }
             $rootScope.showMainStatusMessage(result.errorMessage);
             queryQueue.shift();
             var remaining = queryQueue.length;
@@ -105,7 +115,9 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
                 _consumeQuery();
             }
         }, function(result) {
-            $rootScope.hideProgressBar();
+            if (showProgressBar) {
+                $rootScope.hideProgressBar();
+            }
             $rootScope.showMainStatusMessage("Fatal error occurred. " + result);
             queryQueue = [];
             $rootScope.fatalErrorOccurred(result);
@@ -272,6 +284,9 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         },
         query: function(query) {
             return _addQueryQueue("query", query);
+        },
+        queryWithoutProgressBar: function(query) {
+            return _addQueryQueue("queryWithoutProgressBar", query);
         },
         getStatistics: function() {
             return _addQueryQueue("getStatistics", null);

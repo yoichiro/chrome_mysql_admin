@@ -172,7 +172,7 @@ chromeMyAdmin.factory("mySQLQueryService", ["$q", "$rootScope", "mySQLClientServ
         },
         showGlobalStatus: function() {
             var deferred = $q.defer();
-            mySQLClientService.query("SHOW GLOBAL STATUS").then(function(result) {
+            mySQLClientService.queryWithoutProgressBar("SHOW GLOBAL STATUS").then(function(result) {
                 if (result.hasResultsetRows) {
                     deferred.resolve(result);
                 } else {
