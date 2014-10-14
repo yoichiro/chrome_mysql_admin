@@ -273,3 +273,8 @@ chromeMyAdmin.constant("TableTypes", {
     SYSTEM_VIEW: "SYSTEM VIEW",
     TEMPORARY: "TEMPORARY"
 });
+
+chromeMyAdmin.constant("GraphTypes", {
+    NORMAL: "Original",
+    DELTA: "Delta"
+});
