@@ -290,6 +290,9 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
                         type: row.values[1],
                         isNotNull: function() {
                             return row.values[3] === "NO";
+                        },
+                        isPrimaryKey: function() {
+                            return row.values[4] === "PRI";
                         }
                     });
                 }, columnDefinitions);
