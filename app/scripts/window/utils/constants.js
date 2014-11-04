@@ -33,6 +33,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_QUERY_PANEL: "showQueryPanel",
     SHOW_ADD_RELATION_DIALOG: "showAddRelationDialog",
     SHOW_CREATE_ROUTINE_DIALOG: "showCreateRoutineDialog",
+    SHOW_AND_EXECUTE_QUERY_PANEL: "showAndExecuteQueryPanel",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
 

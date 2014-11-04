@@ -2,6 +2,9 @@
   <div id="structureGrid" class="gridStyle" ng-grid="structureGrid">
   </div>
   <div class="middleFooter">
+    <div class="pull-left">
+      <footer-button icon="eyedropper" click="selectDistinct()" title="Get values without overlaps" enable="isColumnSelection()" align="left"></footer-button>
+    </div>
     <div class="pull-right">
       <footer-button icon="plus" click="addColumn()" title="Add a new column" enable="isTable() && isTableSelection()"></footer-button>
       <footer-button icon="pencil" click="editColumn()" title="Edit the selected column" enable="isTable() && isColumnSelection()"></footer-button>

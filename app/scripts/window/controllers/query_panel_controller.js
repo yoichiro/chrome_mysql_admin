@@ -51,6 +51,12 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.query = query;
     };
 
+    var onShowAndExecuteQueryPanel = function(query) {
+        modeService.changeMode(Modes.QUERY);
+        $scope.query = query;
+        doExecuteQueries(false);
+    };
+
     var assignEventHandlers = function() {
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
@@ -60,6 +66,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         });
         $scope.$on(Events.SHOW_QUERY_PANEL, function(event, data) {
             onShowQueryPanel(data.query);
+        });
+        $scope.$on(Events.SHOW_AND_EXECUTE_QUERY_PANEL, function(event, data) {
+            onShowAndExecuteQueryPanel(data.query);
         });
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
             doExecuteQueries($scope.wasExplainExecuted);

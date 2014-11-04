@@ -82,10 +82,6 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
         $rootScope.$broadcast(Events.SHOW_CONFIGURATION_DIALOG, null);
     };
 
-    $rootScope.showQueryPanel = function(query) {
-        $rootScope.$broadcast(Events.SHOW_QUERY_PANEL, {query: query});
-    };
-
     $rootScope.login = function() {
         $rootScope.$broadcast(Events.LOGIN, null);
     };

@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClientService", "Events", "configurationService", "QueryEditorWrapMode", function($scope, mySQLClientService, Events, configurationService, QueryEditorWrapMode) {
+chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClientService", "Events", "configurationService", "QueryEditorWrapMode", "anyQueryExecuteService", function($scope, mySQLClientService, Events, configurationService, QueryEditorWrapMode, anyQueryExecuteService) {
     "use strict";
 
     var doOpen = function() {
@@ -54,7 +54,7 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
 
     $scope.editQuery = function(query) {
         close();
-        $scope.showQueryPanel(query);
+        anyQueryExecuteService.showQueryPanel(query);
     };
 
     $scope.changeRowCount = function() {
