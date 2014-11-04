@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "Modes", "Events", "mySQLQueryService", "Templates", "routineSelectionService", "$q", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, Modes, Events, mySQLQueryService, Templates, routineSelectionService, $q) {
+chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "Modes", "Events", "mySQLQueryService", "Templates", "routineSelectionService", "$q", "anyQueryExecuteService", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, Modes, Events, mySQLQueryService, Templates, routineSelectionService, $q, anyQueryExecuteService) {
     "use strict";
 
     var initializeRoutinesGrid = function() {
@@ -226,7 +226,7 @@ chromeMyAdmin.controller("ProceduresFunctionsPanelController", ["$scope", "mySQL
                 sql += outArgs.join(", ");
                 sql += ";";
             }
-            $scope.showQueryPanel(sql);
+            anyQueryExecuteService.showQueryPanel(sql);
         }, function(reason) {
             $scope.showErrorDialog("Retrieving routine code failed.", reason);
         });

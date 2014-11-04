@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", "Templates", "TableTypes", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService, Templates, TableTypes) {
+chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "UIConstants", "$q", "Events", "Modes", "mySQLQueryService", "Templates", "TableTypes", "anyQueryExecuteService", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService, Templates, TableTypes, anyQueryExecuteService) {
     "use strict";
 
     var initializeStructureGrid = function() {
@@ -335,6 +335,16 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
                 this.push(column.Field);
             }, columnNames);
             targetObjectService.showAddIndexDialog(columnNames);
+        }
+    };
+
+    $scope.selectDistinct = function() {
+        if ($scope.isColumnSelection()) {
+            var columnStructure = $scope.selectedColumn;
+            var name = columnStructure.Field;
+            var sql = "SELECT `" + name + "`, COUNT(`" + name + "`) FROM `" +
+                    targetObjectService.getTable().name + "` GROUP BY `" + name + "`";
+            anyQueryExecuteService.showAndExecuteQueryPanel(sql);
         }
     };
 
