@@ -7,6 +7,9 @@ chromeMyAdmin.factory("anyQueryExecuteService", ["$rootScope", "Events", functio
         },
         showAndExecuteQueryPanel: function(query) {
             $rootScope.$broadcast(Events.SHOW_AND_EXECUTE_QUERY_PANEL, {query: query});
+        },
+        showFindSameRowsDialog: function() {
+            $rootScope.$broadcast(Events.SHOW_FIND_SAME_ROWS_DIALOG, null);
         }
     };
 

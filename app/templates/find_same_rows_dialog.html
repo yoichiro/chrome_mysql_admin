@@ -1,0 +1,50 @@
+<div id="findSameRowsDialog" class="modal fade" ng-controller="FindSameRowsDialogController" ng-init="initialize()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Find same rows</h4>
+      </div>
+      <div class="modal-body">
+        <div ng-show="isErrorMessageVisible()">
+          <div class="alert alert-danger">{{errorMessage}}</div>
+        </div>
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label for="findSameRowsColumns" class="col-sm-3 control-label">Keys</label>
+            <div class="col-sm-9">
+              <ul class="list-group" ng-show="selectedKeys.length > 0">
+                <li class="list-group-item clearfix" ng-repeat="selectedKey in selectedKeys">
+                  <div class="pull-left">
+                    {{selectedKey.label}}
+                  </div>
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="deleteSelectedKey(selectedKey)"><span class="fa fa-times"></span></button>
+                  </div>
+                </li>
+              </ul>
+              <div class="input-group" ng-show="keys.length > 0">
+                <select class="form-control" ng-model="key" ng-options="key.label for key in keys">
+                </select>
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" ng-click="addKey()">Add</button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="findSameRowsMatchingTypes" class="col-sm-3 control-label">Matching rule</label>
+            <div class="col-sm-9">
+              <select id="findSameRowsMatchingTypes" class="form-control" ng-model="matchingType" ng-options="type for type in matchingTypes">
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="findSameRows()" ng-disabled="isFindDisabled()">Find</button>
+      </div>
+    </div>
+  </div>
+</div>
