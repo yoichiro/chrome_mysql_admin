@@ -6,6 +6,7 @@
     <footer-button icon="pencil" click="updateRow()" title="Edit the selected row" enable="isTable() && isRowSelection()"></footer-button>
     <footer-button icon="trash-o" click="confirmDeleteSelectedRow()" title="Delete the selected row" enable="isTable() && isRowSelection()"></footer-button>
     <footer-button icon="refresh" click="refreshRows()" title="Refresh the row list"></footer-button>
+    <footer-button icon="magnet" click="findSameRows()" title="Find same rows" enable="isTable() && isRowSelection()"></footer-button>
     <footer-button icon="arrow-left" click="goPreviousPage()" title="Go to the previous page" enable="hasPreviousPage()"></footer-button>
     <div class="pull-left footerTextRight">{{getPagingInfo()}}</div>
     <footer-button icon="arrow-right" click="goNextPage()" title="Go to the next page" enable="hasNextPage()"></footer-button>

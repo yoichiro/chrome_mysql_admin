@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", "anyQueryExecuteService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService, anyQueryExecuteService) {
     "use strict";
 
     var showMainStatusMessage = function(message) {
@@ -202,6 +202,12 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     $scope.executeProcedure = function() {
         if ($scope.isProcedureSelection()) {
             routineSelectionService.executeSelectedProcedure();
+        }
+    };
+
+    $scope.findSameRows = function() {
+        if ($scope.isTable() && $scope.isRowSelection()) {
+            anyQueryExecuteService.showFindSameRowsDialog();
         }
     };
 
