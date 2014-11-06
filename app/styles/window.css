@@ -225,6 +225,11 @@ body {
     padding-right: 5px;
 }
 
+.queryMiddlePanel .dropdown-menu {
+    height: 250px;
+    overflow: auto;
+}
+
 #queryPanel nav {
     margin-bottom: 0;
 }
