@@ -28,6 +28,7 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
 
     var resetTitleText = function() {
         $scope.titleText = getAboutMe();
+        document.title = chrome.runtime.getManifest().name;
     };
 
     var getAboutMe = function() {
@@ -41,9 +42,14 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
         if (mySQLClientService.isConnected()) {
             $scope.safeApply(function() {
                 var tls = info.useSSL ? " (SSL)" : "";
-                $scope.titleText = info.hostName + ":" + info.port + tls +
+                var name = "";
+                if (info.name) {
+                    name = "[" + info.name + "] ";
+                }
+                $scope.titleText = name + info.hostName + ":" + info.port + tls +
                     " | " + info.userName +
                     " | " + info.initialHandshakeRequest.serverVersion;
+                document.title = $scope.titleText;
             });
         } else {
             resetTitleText();
