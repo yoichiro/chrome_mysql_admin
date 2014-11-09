@@ -37,4 +37,8 @@
     <footer-button icon="trash-o" click="confirmDeleteSelectedRoutine()" title="Delete the procedure/function" enable="isRoutineSelection()"></footer-button>
     <footer-button icon="refresh" click="refreshProceduresFunctions()" title="Refresh procedure/function"></footer-button>
   </div>
+  <!-- for Query panel -->
+  <div class="pull-right" ng-show="isQueryButtonsVisible()">
+    <footer-button icon="download" click="exportQueryResult()" title="Export this query result" enable="isQueryResultSelection()"></footer-button>
+  </div>
 </div>

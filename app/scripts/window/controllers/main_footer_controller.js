@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", "anyQueryExecuteService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService, anyQueryExecuteService) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", "anyQueryExecuteService", "querySelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService, anyQueryExecuteService, querySelectionService) {
     "use strict";
 
     var showMainStatusMessage = function(message) {
@@ -43,6 +43,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
 
     $scope.isProceduresFunctionsButtonsVisible = function() {
         return mySQLClientService.isConnected() && modeService.getMode() === Modes.PROCS_FUNCS;
+    };
+
+    $scope.isQueryButtonsVisible = function() {
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.QUERY;
     };
 
     $scope.hasPreviousPage = function() {
@@ -209,6 +213,17 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         if ($scope.isTable() && $scope.isRowSelection()) {
             anyQueryExecuteService.showFindSameRowsDialog();
         }
+    };
+
+    $scope.exportQueryResult = function() {
+        if ($scope.isQueryResultSelection()) {
+            querySelectionService.exportQueryResult();
+        }
+    };
+
+    $scope.isQueryResultSelection = function() {
+        var queryResult = querySelectionService.getQueryResult();
+        return queryResult && queryResult.success && queryResult.result.hasResultsetRows;
     };
 
 }]);
