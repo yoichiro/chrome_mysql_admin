@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", "$timeout", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations, $timeout) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", "$timeout", "querySelectionService", "columnTypeService", "$filter", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations, $timeout, querySelectionService, columnTypeService, $filter) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -18,6 +18,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.queryResultColumnDefs = [];
         $scope.queryResultData = [];
         $scope.selectedQuery = "";
+        querySelectionService.reset();
     };
 
     var _isQueryPanelVisible = function() {
@@ -73,6 +74,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
             doExecuteQueries($scope.wasExplainExecuted);
         });
+        $scope.$on(Events.EXPORT_QUERY_RESULT, function(event, data) {
+            exportQueryResult();
+        });
         configurationService.addConfigurationChangeListener(function(name, value) {
             if (name === Configurations.QUERY_EDITOR_WRAP_MODE) {
                 $scope.editor.getSession().setUseWrapMode(value);
@@ -91,6 +95,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     var doShowQueryResult = function(index) {
         resetQueryResultGrid();
         var queryResult = $scope.queryResults[index];
+        querySelectionService.setQueryResult(queryResult);
         $scope.selectedQuery = queryResult.query;
         if (queryResult.success) {
             var result = queryResult.result;
@@ -206,6 +211,61 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         queryHistoryService.getAll().then(function(result) {
             $scope.queryHistory = result.reverse();
         });
+    };
+
+    var exportQueryResult = function() {
+        var now = $filter("date")(new Date(), "yyyyMMddHHmmss");
+        var filename = "query_result_" + now + ".csv";
+        var options = {
+            type: "saveFile",
+            suggestedName: filename
+        };
+        chrome.fileSystem.chooseEntry(options, function(writableEntry) {
+            if (writableEntry) {
+                var blob = createSelectedQueryResultBlob();
+                writableEntry.createWriter(function(writer) {
+                    writer.onerror = function(e) {
+                        $scope.fatalErrorOccurred(e);
+                    };
+                    writer.onwriteend = function() {
+                        $scope.showMainStatusMessage("Exporting done: " + writableEntry.name);
+                    };
+                    writer.write(blob);
+                }, function(e) {
+                    $scope.fatalErrorOccurred(e);
+                });
+            }
+        });
+    };
+
+    var createSelectedQueryResultBlob = function() {
+        var lines = [];
+        var queryResult = querySelectionService.getQueryResult();
+        var columnDefinitions = queryResult.result.columnDefinitions;
+        var resultsetRows = queryResult.result.resultsetRows;
+        var titleRow = [];
+        angular.forEach(columnDefinitions, function(column) {
+            this.push("\"" + column.name + "\"");
+        }, titleRow);
+        lines.push(titleRow.join(","));
+        angular.forEach(resultsetRows, function(row) {
+            var values = [];
+            angular.forEach(row.values, function(value, index) {
+                if (value) {
+                    if (columnTypeService.isNumeric(columnDefinitions[index].columnType)) {
+                        this.push(value);
+                    } else {
+                        this.push("\"" + value.replace(/"/g, "\"\"") + "\"");
+                    }
+                } else {
+                    this.push("");
+                }
+            }, values);
+            lines.push(values.join(","));
+        });
+        var text = lines.join("\n");
+        var blob = new Blob([text], {type: "text/csv"});
+        return blob;
     };
 
     $scope.initialize = function() {
