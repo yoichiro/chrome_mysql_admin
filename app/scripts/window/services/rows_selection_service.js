@@ -13,6 +13,9 @@ chromeMyAdmin.factory("rowsSelectionService", ["$rootScope", "Events", function(
         },
         getSelectedRows: function() {
             return selectedRow;
+        },
+        copyRowToClipboard: function() {
+            $rootScope.$broadcast(Events.COPY_ROWS_PANEL_ROW_TO_CLIPBOARD, selectedRow);
         }
     };
 

@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", "$timeout", "querySelectionService", "columnTypeService", "$filter", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations, $timeout, querySelectionService, columnTypeService, $filter) {
+chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", "$timeout", "querySelectionService", "columnTypeService", "$filter", "clipboardService", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations, $timeout, querySelectionService, columnTypeService, $filter, clipboardService) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -9,6 +9,15 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             enableColumnResize: true,
             enableSorting: false,
             enablePinning: true,
+            multiSelect: false,
+            selectedItems: $scope.selectedRows,
+            afterSelectionChange: function(rowItem, event) {
+                if (rowItem.selected) {
+                    querySelectionService.setSelectedRows(rowItem);
+                } else {
+                    querySelectionService.resetSelectedRows();
+                }
+            },
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
             rowHeight: UIConstants.GRID_ROW_HEIGHT
         };
@@ -18,7 +27,8 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.queryResultColumnDefs = [];
         $scope.queryResultData = [];
         $scope.selectedQuery = "";
-        querySelectionService.reset();
+        querySelectionService.resetQueryResult();
+        querySelectionService.resetSelectedRows();
     };
 
     var _isQueryPanelVisible = function() {
@@ -76,6 +86,9 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         });
         $scope.$on(Events.EXPORT_QUERY_RESULT, function(event, data) {
             exportQueryResult();
+        });
+        $scope.$on(Events.COPY_QUERY_RESULT_ROW_TO_CLIPBOARD, function(event, data) {
+            copyRowToClipboard();
         });
         configurationService.addConfigurationChangeListener(function(name, value) {
             if (name === Configurations.QUERY_EDITOR_WRAP_MODE) {
@@ -266,6 +279,11 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         var text = lines.join("\n");
         var blob = new Blob([text], {type: "text/csv"});
         return blob;
+    };
+
+    var copyRowToClipboard = function() {
+        clipboardService.copyRow(querySelectionService.getQueryResult().result,
+                                 querySelectionService.getSelectedRows());
     };
 
     $scope.initialize = function() {

@@ -57,6 +57,8 @@ chromeMyAdmin.constant("Events", {
     QUERY_EXECUTED: "queryExecuted",
     EXECUTE_SELECTED_PROCEDURE: "executeSelectedProcedure",
     EXPORT_QUERY_RESULT: "exportQueryResult",
+    COPY_QUERY_RESULT_ROW_TO_CLIPBOARD: "copyQueryResultRowToClipboard",
+    COPY_ROWS_PANEL_ROW_TO_CLIPBOARD: "copyRowsPanelRowToClipboard",
     LOGOUT: "logout",
     LOGIN: "login"
 });

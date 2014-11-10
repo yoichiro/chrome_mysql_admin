@@ -226,4 +226,22 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         return queryResult && queryResult.success && queryResult.result.hasResultsetRows;
     };
 
+    $scope.isQueryResultRowSelection = function() {
+        var queryResult = querySelectionService.getQueryResult();
+        var selectedRows = querySelectionService.getSelectedRows();
+        return queryResult && queryResult.success && queryResult.result.hasResultsetRows && selectedRows;
+    };
+
+    $scope.copyQueryResultRowToClipboard = function() {
+        if ($scope.isQueryResultRowSelection()) {
+            querySelectionService.copyRowToClipboard();
+        }
+    };
+
+    $scope.copyRowsPanelRowToClipboard = function() {
+        if ($scope.isRowSelection()) {
+            rowsSelectionService.copyRowToClipboard();
+        }
+    };
+
 }]);

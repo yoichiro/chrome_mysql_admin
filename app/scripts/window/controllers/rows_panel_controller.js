@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", "sqlExpressionService", "Templates", "mySQLQueryService", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes, sqlExpressionService, Templates, mySQLQueryService) {
+chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", "sqlExpressionService", "Templates", "mySQLQueryService", "columnTypeService", "clipboardService", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes, sqlExpressionService, Templates, mySQLQueryService, columnTypeService, clipboardService) {
     "use strict";
 
     var initializeRowsGrid = function() {
@@ -377,6 +377,14 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         $scope.$on(Events.QUERY_EXECUTED, function(event, data) {
             $scope.tableName = null;
         });
+        $scope.$on(Events.COPY_ROWS_PANEL_ROW_TO_CLIPBOARD, function(event, data) {
+            copyRowToClipboard();
+        });
+    };
+
+    var copyRowToClipboard = function() {
+        clipboardService.copyRow($scope.lastQueryResult,
+                                 rowsSelectionService.getSelectedRows());
     };
 
     var doQueryAndReload = function() {
