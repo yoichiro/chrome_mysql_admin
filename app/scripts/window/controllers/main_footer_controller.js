@@ -93,7 +93,7 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     $scope.confirmDeleteSelectedRow = function() {
         if ($scope.isTable() && $scope.isRowSelection()) {
             $scope.showConfirmDialog(
-                "Would you really like to delete the selected row from MySQL server?",
+                "Once deleted data will be undone. Would you really like to delete the selected row from MySQL server?",
                 "Yes",
                 "No",
                 Events.DELETE_SELECTED_ROW
@@ -136,7 +136,7 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
 
     $scope.confirmDeleteSelectedDatabase = function() {
         $scope.showConfirmDialog(
-            "Would you really like to delete the selected database from MySQL server?",
+            "Once deleted data will be undone. Would you really like to delete the selected database from MySQL server?",
             "Yes",
             "No",
             Events.DELETE_SELECTED_DATABASE
@@ -158,7 +158,7 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     $scope.confirmDeleteSelectedRelation = function() {
         if ($scope.isTable() && $scope.isRelationSelection()) {
             $scope.showConfirmDialog(
-                "Would you really like to delete the selected relation from the database?",
+                "Once deleted data will be undone. Would you really like to delete the selected relation from the database?",
                 "Yes",
                 "No",
                 Events.DELETE_SELECTED_RELATION
@@ -184,7 +184,7 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     $scope.confirmDeleteSelectedRoutine = function() {
         if ($scope.isRoutineSelection()) {
             $scope.showConfirmDialog(
-                "Would you really like to delete the selected routine from the database?",
+                "Once deleted data will be undone. Would you really like to delete the selected routine from the database?",
                 "Yes",
                 "No",
                 Events.DELETE_SELECTED_ROUTINE

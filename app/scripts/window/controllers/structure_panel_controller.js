@@ -291,7 +291,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     $scope.confirmDeleteSelectedColumn = function() {
         if ($scope.isTable() && $scope.isColumnSelection()) {
             $scope.showConfirmDialog(
-                "Would you really like to delete the selected column?",
+                "Once deleted data will be undone. Would you really like to delete the selected column?",
                 "Yes",
                 "No",
                 Events.DELETE_SELECTED_COLUMN
@@ -320,7 +320,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
     $scope.confirmDeleteSelectedIndex = function() {
         if ($scope.isTable() && $scope.isIndexSelection()) {
             $scope.showConfirmDialog(
-                "Would you really like to delete the selected index?",
+                "Once deleted data will be undone. Would you really like to delete the selected index?",
                 "Yes",
                 "No",
                 Events.DELETE_SELECTED_INDEX
