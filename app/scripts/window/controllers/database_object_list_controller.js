@@ -93,15 +93,29 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         });
     };
 
+    var doTruncateTable = function() {
+        var table = targetObjectService.getTable();
+        var sql = "TRUNCATE TABLE `" + table.name + "`";
+        mySQLClientService.query(sql).then(function(result) {
+            if (result.hasResultsetRows) {
+                $scope.fatalErrorOccurred("Truncating table failed.");
+            } else {
+                doRefresh();
+            }
+        }, function(reason) {
+            $scope.showErrorDialog("Truncating table failed.", reason);
+            doRefresh();
+        });
+    };
+
     var clearTables = function() {
         $scope.tables = [];
     };
 
-    $scope.initialize = function() {
+    var assignEventHandlers = function() {
         $scope.$on(Events.DATABASE_CHANGED, function(event, database) {
             databaseChanged();
         });
-        clearTables();
         $scope.$on(Events.CONNECTION_CHANGED, function(event, data) {
             onConnectionChanged();
         });
@@ -111,6 +125,14 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         $scope.$on(Events.DROP_SELECTED_TABLE, function(event, data) {
             doDropTable();
         });
+        $scope.$on(Events.TRUNCATE_SELECTED_TABLE, function(event, data) {
+            doTruncateTable();
+        });
+    };
+
+    $scope.initialize = function() {
+        assignEventHandlers();
+        clearTables();
         assignWindowResizeEventHandler();
         adjustObjectListHeight();
     };
@@ -150,7 +172,7 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         return table && table.name !== null;
     };
 
-    $scope.canDelete = function() {
+    $scope.canDrop = function() {
         var table = targetObjectService.getTable();
         if (table) {
             return table.type === TableTypes.BASE_TABLE ||
@@ -160,20 +182,43 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
         }
     };
 
-    $scope.confirmDropSelectedTable = function() {
+    $scope.canTruncate = function() {
         var table = targetObjectService.getTable();
-        var type;
-        if (table.type === TableTypes.BASE_TABLE) {
-            type = "table";
-        } else if (table.type === TableTypes.VIEW) {
-            type = "view";
+        if (table) {
+            return table.type === TableTypes.BASE_TABLE;
+        } else {
+            return false;
         }
-        $scope.showConfirmDialog(
-            "Would you really like to drop the selected " + type + " from MySQL server?",
-            "Yes",
-            "No",
-            Events.DROP_SELECTED_TABLE
-        );
+    };
+
+    $scope.confirmDropSelectedTable = function() {
+        if ($scope.canDrop()) {
+            var table = targetObjectService.getTable();
+            var type;
+            if (table.type === TableTypes.BASE_TABLE) {
+                type = "table";
+            } else if (table.type === TableTypes.VIEW) {
+                type = "view";
+            }
+            $scope.showConfirmDialog(
+                "Once deleted data will be undone. Would you really like to drop the selected " + type + " from MySQL server?",
+                "Yes",
+                "No",
+                Events.DROP_SELECTED_TABLE
+            );
+        }
+    };
+
+    $scope.confirmTruncateSelectedTable = function() {
+        if ($scope.canTruncate()) {
+            var table = targetObjectService.getTable();
+            $scope.showConfirmDialog(
+                "Once deleted data will be undone. Would you really like to truncate the selected table?",
+                "Yes",
+                "No",
+                Events.TRUNCATE_SELECTED_TABLE
+            );
+        }
     };
 
 }]);
