@@ -226,6 +226,7 @@ body {
 }
 
 .queryMiddlePanel .dropdown-menu {
+    width: 570px;
     height: 250px;
     overflow: auto;
 }
