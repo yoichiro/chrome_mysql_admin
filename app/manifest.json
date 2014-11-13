@@ -3,7 +3,7 @@
     "name": "Chrome MySQL Admin",
     "short_name": "MyAdmin",
     "description": "This application provides you 'MySQL GUI Admin console' windows.",
-    "version": "2.22.2",
+    "version": "2.22.3",
     "author": "Yoichiro Tanaka",
     "app": {
         "background": {
