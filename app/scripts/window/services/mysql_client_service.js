@@ -1,7 +1,8 @@
 chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $rootScope) {
     "use strict";
 
-    MySQL.communication.setSocketImpl(new MySQL.ChromeSocket2());
+    var mySQLClient = new MySQL.Client();
+    mySQLClient.setSocketImpl(new MySQL.ChromeSocket2());
 
     var queryQueue = [];
     var queryHistory = [];
@@ -11,7 +12,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         $rootScope.showProgressBar();
         var deferred = $q.defer();
         $rootScope.notifyExecutingQuery("Logging out from MySQL server.");
-        MySQL.client.logout(function() {
+        mySQLClient.logout(function() {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Logged out from MySQL server.");
             queryQueue = [];
@@ -72,7 +73,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         console.log("Query: " + task.query);
         _addQueryHistory(task.query);
         $rootScope.notifyExecutingQuery(task.query);
-        MySQL.client.query(task.query, function(columnDefinitions, resultsetRows) {
+        mySQLClient.query(task.query, function(columnDefinitions, resultsetRows) {
             $rootScope.showMainStatusMessage(
                 "No errors. Rows count is " + resultsetRows.length);
             queryQueue.shift();
@@ -131,7 +132,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         var deferred = $q.defer();
         console.log("Get databases");
         $rootScope.notifyExecutingQuery("Retrieving database list.");
-        MySQL.client.getDatabases(function(databases) {
+        mySQLClient.getDatabases(function(databases) {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Retrieved database list.");
             queryQueue.shift();
@@ -159,7 +160,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         var deferred = $q.defer();
         console.log("Get statistics");
         $rootScope.notifyExecutingQuery("Retrieving statistics.");
-        MySQL.client.getStatistics(function(statistics) {
+        mySQLClient.getStatistics(function(statistics) {
             $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("Retrieved statistics.");
             queryQueue.shift();
@@ -183,7 +184,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         var deferred = $q.defer();
         console.log("Ping");
         $rootScope.notifyExecutingQuery("Ping.");
-        MySQL.client.ping(function(result) {
+        mySQLClient.ping(function(result) {
             // $rootScope.hideProgressBar();
             $rootScope.showMainStatusMessage("");
             if (result.isSuccess()) {
@@ -208,14 +209,14 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
 
     return {
         isConnected: function() {
-            return MySQL.communication.isConnected();
+            return mySQLClient.isConnected();
         },
         login: function(hostName, portNumber, userName, password) {
             $rootScope.showMainStatusMessage("Logging in to MySQL server...");
             $rootScope.showProgressBar();
             var deferred = $q.defer();
             $rootScope.notifyExecutingQuery("Logging in to MySQL server.");
-            MySQL.client.login(
+            mySQLClient.login(
                 hostName,
                 Number(portNumber),
                 userName,
@@ -247,7 +248,7 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
             $rootScope.showProgressBar();
             var deferred = $q.defer();
             $rootScope.notifyExecutingQuery("Logging in to MySQL server with SSL.");
-            MySQL.client.loginWithSSL(
+            mySQLClient.loginWithSSL(
                 hostName,
                 Number(portNumber),
                 userName,
