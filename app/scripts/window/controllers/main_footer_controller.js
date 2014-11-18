@@ -215,6 +215,12 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         }
     };
 
+    $scope.findRowsWithTheValue = function() {
+        if ($scope.isTable() && $scope.isRowSelection()) {
+            anyQueryExecuteService.showFindRowsWithTheValueDialog();
+        }
+    };
+
     $scope.exportQueryResult = function() {
         if ($scope.isQueryResultSelection()) {
             querySelectionService.exportQueryResult();

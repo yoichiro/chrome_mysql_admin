@@ -62,10 +62,10 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         $scope.query = query;
     };
 
-    var onShowAndExecuteQueryPanel = function(query) {
+    var onShowAndExecuteQueryPanel = function(query, removeEmptyResult) {
         modeService.changeMode(Modes.QUERY);
         $scope.query = query;
-        doExecuteQueries(false);
+        doExecuteQueries(false, removeEmptyResult);
     };
 
     var assignEventHandlers = function() {
@@ -79,10 +79,10 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
             onShowQueryPanel(data.query);
         });
         $scope.$on(Events.SHOW_AND_EXECUTE_QUERY_PANEL, function(event, data) {
-            onShowAndExecuteQueryPanel(data.query);
+            onShowAndExecuteQueryPanel(data.query, data.removeEmptyResult);
         });
         $scope.$on(Events.REQUEST_REFRESH, function(event, data) {
-            doExecuteQueries($scope.wasExplainExecuted);
+            doExecuteQueries($scope.wasExplainExecuted, false);
         });
         $scope.$on(Events.EXPORT_QUERY_RESULT, function(event, data) {
             exportQueryResult();
@@ -134,7 +134,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         }
     };
 
-    var doExecuteQuery = function(queries) {
+    var doExecuteQuery = function(queries, removeEmptyResult) {
         if (queries.length === 0) {
             doShowQueryResult(0);
             $scope.notifyQueryExecuted();
@@ -142,12 +142,15 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         }
         var query = queries.shift();
         mySQLClientService.query(query).then(function(result) {
-            $scope.queryResults.push({
-                query: query,
-                result: result,
-                success: true
-            });
-            doExecuteQuery(queries);
+            if (!removeEmptyResult ||
+                (result.hasResultsetRows && result.resultsetRows.length > 0)) {
+                $scope.queryResults.push({
+                    query: query,
+                    result: result,
+                    success: true
+                });
+            }
+            doExecuteQuery(queries, removeEmptyResult);
             queryHistoryService.add(query).then(function() {
                 loadQueryHistory();
             });
@@ -161,11 +164,11 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 errorMessage: errorMessage,
                 sucess: false
             });
-            doExecuteQuery([]);
+            doExecuteQuery([], removeEmptyResult);
         });
     };
 
-    var doExecuteQueries = function(explain) {
+    var doExecuteQueries = function(explain, removeEmptyResult) {
         resetQueryResultGrid();
         $scope.queryErrorMessage = "";
         $scope.queryResults = [];
@@ -179,7 +182,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                             this[index] = "EXPLAIN " + query;
                         }, parseResult.result);
                     }
-                    doExecuteQuery(parseResult.result);
+                    doExecuteQuery(parseResult.result, removeEmptyResult);
                 }
             } else {
                 var errorMessage = "ParseError: " + parseResult.error.message;
@@ -300,11 +303,11 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
     };
 
     $scope.executeQuery = function() {
-        doExecuteQueries(false);
+        doExecuteQueries(false, false);
     };
 
     $scope.executeExplain = function() {
-        doExecuteQueries(true);
+        doExecuteQueries(true, false);
     };
 
     $scope.isQueryErrorMessageVisible = function() {
@@ -328,7 +331,7 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
                 mac: "Command-Enter"
             },
             exec: function(editor) {
-                doExecuteQueries(false);
+                doExecuteQueries(false, false);
             },
             readOnly: false
         });

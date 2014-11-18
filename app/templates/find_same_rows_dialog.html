@@ -11,8 +11,8 @@
         </div>
         <form class="form-horizontal" role="form">
           <div class="form-group">
-            <label for="findSameRowsColumns" class="col-sm-3 control-label">Keys</label>
-            <div class="col-sm-9">
+            <label for="findSameRowsColumns" class="col-sm-4 control-label">Keys</label>
+            <div class="col-sm-8">
               <ul class="list-group" ng-show="selectedKeys.length > 0">
                 <li class="list-group-item clearfix" ng-repeat="selectedKey in selectedKeys">
                   <div class="pull-left">
@@ -33,10 +33,21 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="findSameRowsMatchingTypes" class="col-sm-3 control-label">Matching rule</label>
-            <div class="col-sm-9">
+            <label for="findSameRowsMatchingTypes" class="col-sm-4 control-label">Matching rule</label>
+            <div class="col-sm-8">
               <select id="findSameRowsMatchingTypes" class="form-control" ng-model="matchingType" ng-options="type for type in matchingTypes">
               </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="findSameRowsRemoveEmptyResult" class="col-sm-4 control-label">Remove empty result</label>
+            <div class="col-sm-8">
+              <label class="radio-inline">
+                <input type="radio" ng-model="removeEmptyResult" value="true" /> Yes<br />
+              </label>
+              <label class="radio-inline">
+                <input type="radio" ng-model="removeEmptyResult" value="false" /> No<br />
+              </label>
             </div>
           </div>
         </form>
