@@ -344,7 +344,7 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
             var name = columnStructure.Field;
             var sql = "SELECT `" + name + "`, COUNT(`" + name + "`) FROM `" +
                     targetObjectService.getTable().name + "` GROUP BY `" + name + "`";
-            anyQueryExecuteService.showAndExecuteQueryPanel(sql);
+            anyQueryExecuteService.showAndExecuteQueryPanel(sql, false);
         }
     };
 

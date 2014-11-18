@@ -33,6 +33,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_ADD_RELATION_DIALOG: "showAddRelationDialog",
     SHOW_CREATE_ROUTINE_DIALOG: "showCreateRoutineDialog",
     SHOW_FIND_SAME_ROWS_DIALOG: "showFindSameRowsDialog",
+    SHOW_FIND_ROWS_WITH_THE_VALUE_DIALOG: "showFindRowsWithTheValueDialog",
     SHOW_QUERY_PANEL: "showQueryPanel",
     SHOW_AND_EXECUTE_QUERY_PANEL: "showAndExecuteQueryPanel",
 

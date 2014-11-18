@@ -4,6 +4,7 @@ chromeMyAdmin.controller("FindSameRowsDialogController", ["$scope", "Events", "t
     var onShowDialog = function() {
         resetErrorMessage();
         $scope.matchingType = "Full";
+        $scope.removeEmptyResult = "true";
         var table = targetObjectService.getTable();
         mySQLQueryService.showFullColumns(table.name).then(function(result) {
             var selectedRow = rowsSelectionService.getSelectedRows();
@@ -53,7 +54,9 @@ chromeMyAdmin.controller("FindSameRowsDialogController", ["$scope", "Events", "t
     var loadStructure = function(tables, sqls) {
         if (tables.length === 0) {
             $("#findSameRowsDialog").modal("hide");
-            anyQueryExecuteService.showAndExecuteQueryPanel(sqls.join(";\n"));
+            anyQueryExecuteService.showAndExecuteQueryPanel(
+                sqls.join(";\n"),
+                $scope.removeEmptyResult === "true");
             return;
         }
         var table = tables.shift();
