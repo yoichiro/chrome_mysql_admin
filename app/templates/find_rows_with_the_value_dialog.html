@@ -39,6 +39,17 @@
               </label>
             </div>
           </div>
+          <div class="form-group">
+            <label for="findRowsWithTheValueTypePartialMatch" class="col-sm-4 control-label">Matching rule</label>
+            <div class="col-sm-8">
+              <label class="radio-inline">
+                <input type="radio" ng-model="matchingRule" value="full" /> Full<br />
+              </label>
+              <label class="radio-inline">
+                <input type="radio" ng-model="matchingRule" value="partial" /> Partial<br />
+              </label>
+            </div>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
