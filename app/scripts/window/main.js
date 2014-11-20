@@ -60,6 +60,10 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
         $rootScope.$broadcast(Events.SHOW_PROGRESS_BAR, null);
     };
 
+    $rootScope.showChangeWindowPanel = function() {
+        $rootScope.$broadcast(Events.SHOW_CHANGE_WINDOW_PANEL, null);
+    };
+
     $rootScope.hideProgressBar = function() {
         $rootScope.$broadcast(Events.HIDE_PROGRESS_BAR, null);
     };

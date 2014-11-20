@@ -112,4 +112,8 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
         appWindow.setAlwaysOnTop($scope.alwaysOnTop);
     };
 
+    $scope.moveOtherWindow = function() {
+        $scope.showChangeWindowPanel();
+    };
+
 }]);

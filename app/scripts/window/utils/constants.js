@@ -23,6 +23,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_UPDATE_ROW_DIALOG: "showUpdateRowDialog",
     SHOW_MAIN_STATUS_MESSAGE: "showMainStatusMessage",
     SHOW_PROGRESS_BAR: "showProgressBar",
+    SHOW_CHANGE_WINDOW_PANEL: "showChangeWindowPanel",
     SHOW_CONFIRM_DIALOG: "showConfirmDialog",
     SHOW_ERROR_DIALOG: "showErrorDialog",
     SHOW_ADD_COLUMN_DIALOG: "showAddColumnDialog",
@@ -38,6 +39,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_AND_EXECUTE_QUERY_PANEL: "showAndExecuteQueryPanel",
 
     HIDE_PROGRESS_BAR: "hideProgressBar",
+    HIDE_CHANGE_WINDOW_PANEL: "hideChangeWindowPanel",
 
     DELETE_SELECTED_ROW: "deleteSelectedRow",
     DELETE_SELECTED_COLUMN: "deleteSelectedColumn",

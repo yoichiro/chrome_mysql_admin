@@ -1,0 +1,7 @@
+<div id="changeWindowPanel" ng-controller="ChangeWindowPanelController" ng-show="isVisibleChangeWindowPanel()" ng-init="initialize()" ng-click="hideChangeWindowPanel()">
+  <div class="windowList">
+    <div class="list-group">
+      <a href="#" class="list-group-item" ng-repeat="window in windows" ng-click="changeWindow(window.id)">{{window.title}}</a>
+    </div>
+  </div>
+</div>
