@@ -1,13 +1,17 @@
-chromeMyAdmin.controller("FindRowsWithTheValueDialogController", ["$scope", "Events", "targetObjectService", "mySQLQueryService", "rowsSelectionService", "anyQueryExecuteService", "TableTypes", function($scope, Events, targetObjectService, mySQLQueryService, rowsSelectionService, anyQueryExecuteService, TableTypes) {
+chromeMyAdmin.controller("FindRowsWithTheValueDialogController", ["$scope", "Events", "targetObjectService", "mySQLQueryService", "rowsSelectionService", "anyQueryExecuteService", "TableTypes", "sqlExpressionService", function($scope, Events, targetObjectService, mySQLQueryService, rowsSelectionService, anyQueryExecuteService, TableTypes, sqlExpressionService) {
     "use strict";
 
     var ONLY_SAME_COLUMN_TYPE = "same";
     var ANY_COLUMN_TYPE = "any";
 
+    var MATCHING_RULE_FULL = "full";
+    var MATCHING_RULE_PARTIAL = "partial";
+
     var onShowDialog = function() {
         resetErrorMessage();
         $scope.columnType = ONLY_SAME_COLUMN_TYPE;
         $scope.removeEmptyResult = "true";
+        $scope.matchingRule = MATCHING_RULE_FULL;
         var table = targetObjectService.getTable();
         mySQLQueryService.showFullColumns(table.name).then(function(result) {
             var selectedRow = rowsSelectionService.getSelectedRows();
@@ -71,7 +75,11 @@ chromeMyAdmin.controller("FindRowsWithTheValueDialogController", ["$scope", "Eve
                     typeName.indexOf($scope.value.type) === 0) {
                     var sql = "SELECT * FROM `" + table + "` WHERE ";
                     var target = resultsetRow.values[0];
-                    sql += "`" + target + "` = \"" + $scope.value.value + "\"";
+                    if ($scope.matchingRule === MATCHING_RULE_FULL) {
+                        sql += "`" + target + "` = \"" + sqlExpressionService.replaceValue($scope.value.value) + "\"";
+                    } else {
+                        sql += "`" + target + "` LIKE \"%" + sqlExpressionService.replaceValue($scope.value.value) + "%\"";
+                    }
                     sqls.push(sql);
                 }
             });
