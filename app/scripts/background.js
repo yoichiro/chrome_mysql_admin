@@ -16,6 +16,8 @@
 
 "use strict";
 
+var windows = [];
+
 function createWindow() {
     chrome.storage.sync.get("windowSize", function(items) {
         var params = {};
@@ -40,8 +42,42 @@ function createWindow() {
         params.minHeight = 600;
         params.resizable = true;
         params.frame = "none";
-        chrome.app.window.create("window.html", params);
+        params.id = String((new Date()).getTime());
+        chrome.app.window.create("window.html", params, function(createdWindow) {
+            createdWindow.onClosed.addListener((function(closedWindow) {
+                return function() {
+                    for (var i = 0; i < windows.length; i++) {
+                        var window = windows[i];
+                        if (window.id === closedWindow.id) {
+                            windows.splice(i, 1);
+                            break;
+                        }
+                    }
+                };
+            })(createdWindow));
+            windows.push(createdWindow);
+        });
     });
+}
+
+function getWindows() {
+    var result = [];
+    for (var i = 0; i < windows.length; i++) {
+        result.push({
+            id: windows[i].id,
+            title: windows[i].contentWindow.document.title
+        });
+    }
+    return result;
+}
+
+function focusWindow(id) {
+    for (var i = 0; i < windows.length; i++) {
+        if (windows[i].id === id) {
+            windows[i].focus();
+            break;
+        }
+    }
 }
 
 chrome.app.runtime.onLaunched.addListener(function() {
