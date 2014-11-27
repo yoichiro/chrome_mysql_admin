@@ -97,6 +97,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         return modeService.getMode() === Modes.STATUS_GRAPH;
     };
 
+    $scope.isERDiagramActive = function() {
+        return modeService.getMode() === Modes.ER_DIAGRAM;
+    };
+
     $scope.selectRows = function() {
         modeService.changeMode(Modes.ROWS);
     };
@@ -131,6 +135,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.selectStatusGraph = function() {
         modeService.changeMode(Modes.STATUS_GRAPH);
+    };
+
+    $scope.selectERDiagram = function() {
+        modeService.changeMode(Modes.ER_DIAGRAM);
     };
 
 }]);

@@ -44,4 +44,8 @@
     <footer-button icon="copy" click="copyQueryResultRowToClipboard()" title="Copy the row values to Clipboard" enable="isQueryResultRowSelection()"></footer-button>
     <footer-button icon="download" click="exportQueryResult()" title="Export this query result" enable="isQueryResultSelection()"></footer-button>
   </div>
+  <!-- for ER Diagram panel -->
+  <div class="pull-right" ng-show="isErDiagramButtonsVisible()">
+    <footer-button icon="refresh" click="refreshErDiagram()" title="Refresh ER Diagram" enable="isDatabaseSelection()"></footer-button>
+  </div>
 </div>

@@ -89,6 +89,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         refreshProceduresFunctions: function() {
             $rootScope.$broadcast(Events.REFRESH_PROCEDURES_FUNCTIONS, null);
+        },
+        refreshErDiagram: function() {
+            $rootScope.$broadcast(Events.REFRESH_ER_DIAGRAM, null);
         }
     };
 

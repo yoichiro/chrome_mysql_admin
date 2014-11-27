@@ -49,6 +49,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         return mySQLClientService.isConnected() && modeService.getMode() === Modes.QUERY;
     };
 
+    $scope.isErDiagramButtonsVisible = function() {
+        return mySQLClientService.isConnected() && modeService.getMode() === Modes.ER_DIAGRAM;
+    };
+
     $scope.hasPreviousPage = function() {
         return _hasPrevisouPage();
     };
@@ -247,6 +251,12 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
     $scope.copyRowsPanelRowToClipboard = function() {
         if ($scope.isRowSelection()) {
             rowsSelectionService.copyRowToClipboard();
+        }
+    };
+
+    $scope.refreshErDiagram = function() {
+        if ($scope.isDatabaseSelection()) {
+            targetObjectService.refreshErDiagram();
         }
     };
 
