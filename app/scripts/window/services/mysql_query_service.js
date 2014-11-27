@@ -61,6 +61,7 @@ chromeMyAdmin.factory("mySQLQueryService", ["$q", "$rootScope", "mySQLClientServ
                 deferred.reject(reason);
             });
             return deferred.promise;
+
         },
         showCreateTable: function(table) {
             var deferred = $q.defer();

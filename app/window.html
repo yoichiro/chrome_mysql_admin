@@ -32,6 +32,7 @@
 <!-- endbuild -->
 <script type="text/javascript" src="scripts/lib/forge.min.js"></script>
 <script type="text/javascript" src="scripts/lib/mysql_js_driver_2.0.0.min.js"></script>
+<script type="text/javascript" src="scripts/lib/jcanvas.min.js"></script>
 
 <script type="text/javascript" src="scripts/lib/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="scripts/lib/ace-builds/src-min-noconflict/ext-language_tools.js"></script>
@@ -62,6 +63,7 @@
 <script type="text/javascript" src="scripts/window/services/query_selection_service.js"></script>
 <script type="text/javascript" src="scripts/window/services/column_type_service.js"></script>
 <script type="text/javascript" src="scripts/window/services/clipboard_service.js"></script>
+<script type="text/javascript" src="scripts/window/services/relation_service.js"></script>
 <script type="text/javascript" src="scripts/window/directives/navbar_menu_item.js"></script>
 <script type="text/javascript" src="scripts/window/directives/footer_button.js"></script>
 <script type="text/javascript" src="scripts/window/directives/resize_when.js"></script>
@@ -98,6 +100,8 @@
 <script type="text/javascript" src="scripts/window/directives/find_same_rows_dialog.js"></script>
 <script type="text/javascript" src="scripts/window/directives/find_rows_with_the_value_dialog.js"></script>
 <script type="text/javascript" src="scripts/window/directives/change_window_panel.js"></script>
+<script type="text/javascript" src="scripts/window/directives/er_diagram_panel.js"></script>
+<script type="text/javascript" src="scripts/window/directives/er_diagram.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/login_form_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/navbar_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/database_object_list_controller.js"></script>
@@ -128,6 +132,7 @@
 <script type="text/javascript" src="scripts/window/controllers/find_same_rows_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/find_rows_with_the_value_dialog_controller.js"></script>
 <script type="text/javascript" src="scripts/window/controllers/change_window_panel_controller.js"></script>
+<script type="text/javascript" src="scripts/window/controllers/er_diagram_panel_controller.js"></script>
 <!-- endbuild -->
 
 <!-- @if DEBUG -->
@@ -161,6 +166,7 @@
         <relation-panel></relation-panel>
         <procedures-functions-panel></procedures-functions-panel>
         <status-graph-panel></status-graph-panel>
+        <er-diagram-panel></er-diagram-panel>
         <login-form></login-form>
       </div>
       <main-footer></main-footer>

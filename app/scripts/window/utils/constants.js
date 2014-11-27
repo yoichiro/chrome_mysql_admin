@@ -55,6 +55,7 @@ chromeMyAdmin.constant("Events", {
     REFRESH_TABLE_LIST: "refreshTableList",
     REFRESH_DATABASES: "refreshDatabases",
     REFRESH_PROCEDURES_FUNCTIONS: "refreshProceduresFunctions",
+    REFRESH_ER_DIAGRAM: "refreshErDiagram",
     REQUEST_DROP_TABLE: "requestDropTable",
     REQUEST_REFRESH: "requestRefresh",
     EXECUTING_QUERY: "executingQuery",
@@ -75,7 +76,8 @@ chromeMyAdmin.constant("Modes", {
     INFORMATION: "information",
     RELATION: "relation",
     PROCS_FUNCS: "procs_funcs",
-    STATUS_GRAPH: "status_graph"
+    STATUS_GRAPH: "status_graph",
+    ER_DIAGRAM: "er_diagram"
 });
 
 chromeMyAdmin.constant("ErrorLevel", {
