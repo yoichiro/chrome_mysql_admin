@@ -6,7 +6,8 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
     };
 
     var loadEntities = function() {
-        var model = new ErDiagram.Model();
+        var database = targetObjectService.getDatabase();
+        var model = new ErDiagram.Model(database);
         mySQLQueryService.showTables().then(function(result) {
             if (result.hasResultsetRows) {
                 angular.forEach(result.resultsetRows, function(row) {
@@ -33,7 +34,6 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
         mySQLQueryService.showFullColumns(entityName).then(function(result) {
             if (result.hasResultsetRows) {
                 angular.forEach(result.resultsetRows, function(row) {
-                    console.log(row);
                     var name = row.values[0];
                     var type = row.values[1];
                     var notNull = (row.values[3] === "NO");
@@ -136,6 +136,23 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
 
     $scope.isERDiagramPanelVisible = function() {
         return _isERDiagramPanelVisible();
+    };
+
+    $scope.storePosition = function(model, dimensions) {
+        chrome.storage.sync.get("erDiagramDimensions", function(items) {
+            var erDiagramDimensions = items.erDiagramDimensions || {};
+            erDiagramDimensions[model.getDatabase()] = dimensions;
+            chrome.storage.sync.set({erDiagramDimensions: erDiagramDimensions}, function() {
+            });
+        });
+    };
+
+    $scope.providePosition = function(model, callback) {
+        chrome.storage.sync.get("erDiagramDimensions", function(items) {
+            var erDiagramDimensions = items.erDiagramDimensions || {};
+            var dimensions = erDiagramDimensions[model.getDatabase()];
+            callback(dimensions);
+        });
     };
 
 }]);

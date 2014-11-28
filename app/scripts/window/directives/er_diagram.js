@@ -3,7 +3,8 @@
 
     // --- Model
 
-    var Model = function() {
+    var Model = function(newDatabase) {
+        this.database = newDatabase;
         this.entities = [];
         this.entityNameMap = {};
         this.connections = [];
@@ -55,7 +56,11 @@
     };
 
     Model.prototype.getEntityConnections = function(entityName) {
-        return this.entityConnectionsMap[entityName];
+        return this.entityConnectionsMap[entityName] || [];
+    };
+
+    Model.prototype.getDatabase = function() {
+        return this.database;
     };
 
     // --- Entity
@@ -230,30 +235,98 @@ chromeMyAdmin.directive("erDiagram", [function() {
         templateUrl: "templates/er_diagram.html",
         replace: true,
         scope: {
-            model: "="
+            model: "=",
+            storePosition: "&",
+            positionProvider: "&"
         },
         controller: ["$scope", function($scope) {
             $scope.drawModel = function(model, element) {
-                var startX = 30;
-                var startY = 30;
-                var offsetX = startX;
-                var offsetY = startY;
+                if ($scope.positionProvider) {
+                    $scope.positionProvider({
+                        model: model,
+                        callback: function(dimensions) {
+                            if (dimensions) {
+                                doDrawModel(model, element, getStoredPositionCalculator(dimensions));
+                            } else {
+                                doDrawModel(model, element, getBasicPositionCalculator(model));
+                            }
+                        }
+                    });
+                } else {
+                    doDrawModel(model, element, getBasicPositionCalculator(model));
+                }
+            };
+
+            var getStoredPositionCalculator = function(dimensions) {
+                return (function(dimensions) {
+                    var offsetX = 30;
+                    var offsetY = 30;
+                    var existsPosition = false;
+                    return {
+                        preDraw: function(entry) {
+                            var dimension = dimensions[entry.getName()];
+                            if (dimension) {
+                                existsPosition = true;
+                                return {
+                                    x: dimension.x,
+                                    y: dimension.y
+                                };
+                            } else {
+                                existsPosition = false;
+                                return {
+                                    x: offsetX,
+                                    y: offsetY
+                                };
+                            }
+                        },
+                        postDraw: function(entry, dimension) {
+                            if (!existsPosition) {
+                                offsetX += dimension.width + 30;
+                                offsetY += dimension.height + 30;
+                            }
+                        }
+                    };
+                })(dimensions);
+            };
+
+            var getBasicPositionCalculator = function(model) {
+                return (function(model) {
+                    var startX = 30;
+                    var startY = 30;
+                    var offsetX = startX;
+                    var offsetY = startY;
+                    var xLength = Math.ceil(Math.sqrt(model.getEntities().length));
+                    var maxHeight = 0;
+                    var idx = 0;
+                    return {
+                        preDraw: function(entity) {
+                            return {
+                                x: offsetX,
+                                y: offsetY
+                            };
+                        },
+                        postDraw: function(entity, dimension) {
+                            maxHeight = Math.max(maxHeight, dimension.height);
+                            offsetX += dimension.width + 50;
+                            if ((idx !== 0) && ((idx + 1) % xLength === 0)) {
+                                offsetX = startX;
+                                offsetY += maxHeight + 50;
+                                maxHeight = 0;
+                            }
+                            idx++;
+                        }
+                    };
+                })(model);
+            };
+
+            var doDrawModel = function(model, element, positionCalculator) {
                 var entities = model.getEntities();
-                var xLength = Math.ceil(Math.sqrt(entities.length));
-                var dimensions = [];
-                var maxHeight = 0;
                 for (var i = 0; i < entities.length; i++) {
                     var entity = entities[i];
+                    var position = positionCalculator.preDraw(entity);
                     var dimension = drawEntity(
-                        model, entity, offsetX, offsetY, element);
-                    dimensions.push(dimension);
-                    maxHeight = Math.max(maxHeight, dimension.height);
-                    offsetX += dimension.width + 50;
-                    if ((i !== 0) && ((i + 1) % xLength === 0)) {
-                        offsetX = startX;
-                        offsetY += maxHeight + 50;
-                        maxHeight = 0;
-                    }
+                        model, entity, position.x, position.y, element);
+                    positionCalculator.postDraw(entity, dimension);
                 }
                 drawConnections(model, element);
                 adjustCanvasSize(element);
@@ -269,12 +342,12 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 // Event handlers
                 var onDragHandler = (function(model, element) {
                     return function(layer) {
-                        entityDrag(model, layer, element);
+                        $scope.entityDrag(model, layer, element);
                     };
                 })(model, element);
                 var onDragEndHandler = (function(model, element) {
                     return function(layer) {
-                        entityDragEnd(model, layer, element);
+                        $scope.entityDragEnd(model, layer, element);
                     };
                 })(model, element);
 
@@ -459,7 +532,7 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 return -1; // FIXME: Should throw exception?
             };
 
-            var entityDrag = function(model, layer, element) {
+            $scope.entityDrag = function(model, layer, element) {
                 var canvas = getCanvas(element);
                 var entityName = layer.groups[0];
                 var connections = model.getEntityConnections(entityName);
@@ -470,8 +543,32 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 }
             };
 
-            var entityDragEnd = function(model, layer, element) {
+            $scope.entityDragEnd = function(model, layer, element) {
+                if ($scope.storePosition) {
+                    var canvas = getCanvas(element);
+                    var entities = model.getEntities();
+                    var data = {};
+                    angular.forEach(entities, function(entity) {
+                        var entityName = entity.getName();
+                        var borderLayer = canvas.getLayer(entityName + "-border");
+                        var dimension = {
+                            x: borderLayer.x,
+                            y: borderLayer.y,
+                            width: borderLayer.width,
+                            height: borderLayer.height
+                        };
+                        this[entityName] = dimension;
+                    }, data);
+                    storePosition(model, data);
+                }
                 adjustCanvasSize(element);
+            };
+
+            var storePosition = function(model, dimensions) {
+                $scope.storePosition({
+                    model: model,
+                    dimensions: dimensions
+                });
             };
 
             $scope.removeAllLayers = function(element) {
@@ -484,8 +581,6 @@ chromeMyAdmin.directive("erDiagram", [function() {
             return function(scope, element, attrs, ctrl) {
                 scope.$watch("model", (function(element) {
                     return function(newVal, oldVal) {
-                        console.log("model has been changed.");
-                        console.log(newVal);
                         if (newVal) {
                             scope.removeAllLayers(element);
                             scope.drawModel(newVal, element);
