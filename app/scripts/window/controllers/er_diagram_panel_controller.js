@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes", "mySQLClientService", "UIConstants", "modeService", "targetObjectService", "mySQLQueryService", "TableTypes", "relationService", function($scope, Events, Modes, mySQLClientService, UIConstants, modeService, targetObjectService, mySQLQueryService, TableTypes, relationService) {
+chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes", "mySQLClientService", "UIConstants", "modeService", "targetObjectService", "mySQLQueryService", "TableTypes", "relationService", "$filter", function($scope, Events, Modes, mySQLClientService, UIConstants, modeService, targetObjectService, mySQLQueryService, TableTypes, relationService, $filter) {
     "use strict";
 
     var resetErDiagram = function() {
@@ -107,6 +107,34 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
             resetErDiagram();
             loadEntities();
         });
+        $scope.$on(Events.SAVE_ER_DIAGRAM_IMAGE, function(event, data) {
+            saveErDiagramImage();
+        });
+    };
+
+    var saveErDiagramImage = function() {
+        var now = $filter("date")(new Date(), "yyyyMMddHHmmss");
+        var filename = targetObjectService.getDatabase() + "_" + now + ".png";
+        var options = {
+            type: "saveFile",
+            suggestedName: filename
+        };
+        chrome.fileSystem.chooseEntry(options, function(writableEntry) {
+            if (writableEntry) {
+                var blob = $scope.erDiagramAPI.getBlob();
+                writableEntry.createWriter(function(writer) {
+                    writer.onerror = function(e) {
+                        $scope.fatalErrorOccurred(e);
+                    };
+                    writer.onwriteend = function() {
+                        $scope.showMainStatusMessage("Saving done: " + writableEntry.name);
+                    };
+                    writer.write(blob);
+                }, function(e) {
+                    $scope.fatalErrorOccurred(e);
+                });
+            }
+        });
     };
 
     var assignWindowResizeEventHandler = function() {
@@ -153,6 +181,10 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
             var dimensions = erDiagramDimensions[model.getDatabase()];
             callback(dimensions);
         });
+    };
+
+    $scope.onLoadErDiagram = function(api) {
+        $scope.erDiagramAPI = api;
     };
 
 }]);

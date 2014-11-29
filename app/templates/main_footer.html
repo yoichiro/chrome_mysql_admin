@@ -46,6 +46,7 @@
   </div>
   <!-- for ER Diagram panel -->
   <div class="pull-right" ng-show="isErDiagramButtonsVisible()">
+    <footer-button icon="download" click="saveErDiagramImage()" title="Save ER Diagram image" enable="isDatabaseSelection()"></footer-button>
     <footer-button icon="refresh" click="refreshErDiagram()" title="Refresh ER Diagram" enable="isDatabaseSelection()"></footer-button>
   </div>
 </div>

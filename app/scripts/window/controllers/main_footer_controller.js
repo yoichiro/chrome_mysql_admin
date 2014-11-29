@@ -260,4 +260,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         }
     };
 
+    $scope.saveErDiagramImage = function() {
+        if ($scope.isDatabaseSelection()) {
+            targetObjectService.saveErDiagramImage();
+        }
+    };
+
 }]);

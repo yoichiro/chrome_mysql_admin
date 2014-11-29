@@ -237,7 +237,8 @@ chromeMyAdmin.directive("erDiagram", [function() {
         scope: {
             model: "=",
             storePosition: "&",
-            positionProvider: "&"
+            positionProvider: "&",
+            onLoad: "&"
         },
         controller: ["$scope", function($scope) {
             $scope.drawModel = function(model, element) {
@@ -320,6 +321,7 @@ chromeMyAdmin.directive("erDiagram", [function() {
             };
 
             var doDrawModel = function(model, element, positionCalculator) {
+                drawBackground(element);
                 var entities = model.getEntities();
                 for (var i = 0; i < entities.length; i++) {
                     var entity = entities[i];
@@ -334,6 +336,18 @@ chromeMyAdmin.directive("erDiagram", [function() {
 
             var getCanvas = function(element) {
                 return element.find("canvas");
+            };
+
+            var drawBackground = function(element) {
+                var canvas = getCanvas(element);
+                canvas.drawRect({
+                    fillStyle: "white",
+                    x: 0,
+                    y: 0,
+                    width: 100,
+                    height: 100,
+                    name: "background"
+                });
             };
 
             var drawEntity = function(model, entity, x, y, element) {
@@ -448,6 +462,9 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 }
                 canvas.attr("width", canvasWidth + 50);
                 canvas.attr("height", canvasHeight + 50);
+                var background = canvas.getLayer("background");
+                background.width = canvasWidth + 50;
+                background.height = canvasHeight + 50;
                 canvas.drawLayers();
             };
 
@@ -575,6 +592,19 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 var canvas = getCanvas(element);
                 canvas.removeLayers();
             };
+
+            $scope.getBlob = function(element) {
+                var type = 'image/png';
+                var canvas = getCanvas(element).get(0);
+                var dataUrl = canvas.toDataURL(type);
+                var bin = atob(dataUrl.split(',')[1]);
+                var buffer = new Uint8Array(bin.length);
+                for (var i = 0; i < bin.length; i++) {
+                    buffer[i] = bin.charCodeAt(i);
+                }
+                var blob = new Blob([buffer.buffer], {type: type});
+                return blob;
+            };
         }],
         compile: function(element, attrs) {
             setJCanvasDefaults();
@@ -589,6 +619,17 @@ chromeMyAdmin.directive("erDiagram", [function() {
                         }
                     };
                 })(element), false);
+                if (scope.onLoad) {
+                    scope.onLoad({
+                        api: (function(scope, element) {
+                            return {
+                                getBlob: function() {
+                                    return scope.getBlob(element);
+                                }
+                            };
+                        })(scope, element)
+                    });
+                }
             };
         }
     };

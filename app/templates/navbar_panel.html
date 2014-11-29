@@ -8,7 +8,6 @@
       <ul class="nav navbar-nav navbar-left" ng-show="isConnected()">
         <navbar-menu-item title="Process list" icon="gears" click="showDatabaseInfo()" active="isDatabaseActive()"></navbar-menu-item>
         <navbar-menu-item title="Server status graph" icon="area-chart" click="selectStatusGraph()" active="isStatusGraphActive()"></navbar-menu-item>
-        <navbar-menu-item title="ER diagram" icon="desktop" click="selectERDiagram()" active="isERDiagramActive()"></navbar-menu-item>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle databaseDropdownToggle" data-toggle="dropdown" title="{{selectedDatabase}}"><b class="caret"></b> {{selectedDatabase}}</a>
           <ul class="dropdown-menu dropdownList">
@@ -22,6 +21,7 @@
         <navbar-menu-item title="Information" icon="info" click="selectInformation()" active="isInformationActive()"></navbar-menu-item>
         <navbar-menu-item title="Relation" icon="share-alt" click="selectRelation()" active="isRelationActive()"></navbar-menu-item>
         <navbar-menu-item title="Procedures/Functions" icon="play" click="selectProcsFuncs()" active="isProcsFuncsActive()"></navbar-menu-item>
+        <navbar-menu-item title="ER diagram" icon="desktop" click="selectERDiagram()" active="isERDiagramActive()"></navbar-menu-item>
         <navbar-menu-item title="Query" icon="edit" click="selectQuery()" active="isQueryActive()"></navbar-menu-item>
         <li rel="tooltip" data-placement="bottom" title="Configure">
           <a href="#"><span class="glyphicon glyphicon-cog" ng-click="configure()"></span></a>

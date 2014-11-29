@@ -92,6 +92,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         refreshErDiagram: function() {
             $rootScope.$broadcast(Events.REFRESH_ER_DIAGRAM, null);
+        },
+        saveErDiagramImage: function() {
+            $rootScope.$broadcast(Events.SAVE_ER_DIAGRAM_IMAGE, null);
         }
     };
 
