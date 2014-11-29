@@ -400,3 +400,7 @@ span.editQuery {
     height: 100%;
     overflow: auto;
 }
+
+.erDiagramContainer canvas {
+    background-color: white;
+}
