@@ -87,6 +87,36 @@ chromeMyAdmin.factory("configurationService", ["$rootScope", "$q", "Configuratio
             return setConfigurationValue(
                 Configurations.STATUS_GRAPH_AUTO_UPDATE_SPAN,
                 span);
+        },
+        getErDiagramShowPrimaryKey: function() {
+            return getConfigurationValue(
+                Configurations.ER_DIAGRAM_SHOW_PRIMARY_KEY,
+                Configurations.DEFAULT_ER_DIAGRAM_SHOW_PRIMARY_KEY);
+        },
+        setErDiagramShowPrimaryKey: function(showPrimaryKey) {
+            return setConfigurationValue(
+                Configurations.ER_DIAGRAM_SHOW_PRIMARY_KEY,
+                showPrimaryKey);
+        },
+        getErDiagramShowColumnType: function() {
+            return getConfigurationValue(
+                Configurations.ER_DIAGRAM_SHOW_COLUMN_TYPE,
+                Configurations.DEFAULT_ER_DIAGRAM_SHOW_COLUMN_TYPE);
+        },
+        setErDiagramShowColumnType: function(showColumnType) {
+            return setConfigurationValue(
+                Configurations.ER_DIAGRAM_SHOW_COLUMN_TYPE,
+                showColumnType);
+        },
+        getErDiagramShowColumnNotNull: function() {
+            return getConfigurationValue(
+                Configurations.ER_DIAGRAM_SHOW_COLUMN_NOT_NULL,
+                Configurations.DEFAULT_ER_DIAGRAM_SHOW_COLUMN_NOT_NULL);
+        },
+        setErDiagramShowColumnNotNull: function(showColumnNotNull) {
+            return setConfigurationValue(
+                Configurations.ER_DIAGRAM_SHOW_COLUMN_NOT_NULL,
+                showColumnNotNull);
         }
     };
 }]);

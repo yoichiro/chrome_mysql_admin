@@ -24,10 +24,10 @@
         <navbar-menu-item title="ER diagram" icon="desktop" click="selectERDiagram()" active="isERDiagramActive()"></navbar-menu-item>
         <navbar-menu-item title="Query" icon="edit" click="selectQuery()" active="isQueryActive()"></navbar-menu-item>
         <li rel="tooltip" data-placement="bottom" title="Configure">
-          <a href="#"><span class="glyphicon glyphicon-cog" ng-click="configure()"></span></a>
+          <a href="#" ng-click="configure()"><span class="glyphicon glyphicon-cog"></span></a>
         </li>
         <li ng-show="isConnected()" rel="tooltip" data-placement="bottom" title="Logout">
-          <a href="#"><span class="glyphicon glyphicon-off" ng-click="logout()"></span></a>
+          <a href="#" ng-click="logout()"><span class="glyphicon glyphicon-off"></span></a>
         </li>
       </ul>
     </div>

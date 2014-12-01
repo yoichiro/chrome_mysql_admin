@@ -1,3 +1,8 @@
 <div id="erDiagramPanel" ng-controller="ErDiagramPanelController" ng-init="initialize()" ng-show="isERDiagramPanelVisible()">
-  <er-diagram model="erDiagramModel" on-load="onLoadErDiagram(api)" store-position="storePosition(model,dimensions)" position-provider="providePosition(model,callback)"></er-diagram>
+  <er-diagram model="erDiagramModel"
+              on-load="onLoadErDiagram(api)"
+              store-position="storePosition(model,dimensions)"
+              position-provider="providePosition(model,callback)"
+              configuration="configuration">
+  </er-diagram>
 </div>

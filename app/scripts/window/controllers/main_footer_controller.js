@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", "anyQueryExecuteService", "querySelectionService", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService, anyQueryExecuteService, querySelectionService) {
+chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQLClientService", "rowsPagingService", "rowsSelectionService", "targetObjectService", "Events", "Modes", "relationSelectionService", "TableTypes", "routineSelectionService", "anyQueryExecuteService", "querySelectionService", "ConfigurationTabs", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService, anyQueryExecuteService, querySelectionService, ConfigurationTabs) {
     "use strict";
 
     var showMainStatusMessage = function(message) {
@@ -264,6 +264,10 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         if ($scope.isDatabaseSelection()) {
             targetObjectService.saveErDiagramImage();
         }
+    };
+
+    $scope.openErDiagramConfiguration = function() {
+        $scope.showConfigurationDialog(ConfigurationTabs.ER_DIAGRAM);
     };
 
 }]);

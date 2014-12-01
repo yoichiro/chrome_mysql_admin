@@ -82,8 +82,10 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
         });
     };
 
-    $rootScope.showConfigurationDialog = function() {
-        $rootScope.$broadcast(Events.SHOW_CONFIGURATION_DIALOG, null);
+    $rootScope.showConfigurationDialog = function(activeTab) {
+        $rootScope.$broadcast(Events.SHOW_CONFIGURATION_DIALOG, {
+            activeTab: activeTab
+        });
     };
 
     $rootScope.login = function() {

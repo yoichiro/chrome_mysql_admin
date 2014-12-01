@@ -238,7 +238,8 @@ chromeMyAdmin.directive("erDiagram", [function() {
             model: "=",
             storePosition: "&",
             positionProvider: "&",
-            onLoad: "&"
+            onLoad: "&",
+            configuration: "="
         },
         controller: ["$scope", function($scope) {
             $scope.drawModel = function(model, element) {
@@ -372,18 +373,22 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 layerNames.push(entityName);
                 // Draw column list
                 var columns = entity.getColumns();
+                var config = $scope.configuration;
                 for (var i = 0; i < columns.length; i++) {
                     var column = columns[i];
                     var columnName = column.getName();
                     var columnType = column.getType();
                     var columnFullName = entityName + "." + columnName;
                     var label = "";
-                    if (column.isPrimary()) {
+                    if (config.showPrimaryKey && column.isPrimary()) {
                         label += "[PK] ";
                     }
-                    label += columnName + " : " + columnType;
-                    if (column.isNotNull()) {
-                        label += " not null";
+                    label += columnName;
+                    if (config.showColumnType) {
+                            label += " : " + columnType;
+                    }
+                    if (config.showColumnNotNull && column.isNotNull()) {
+                        label += " : not null";
                     }
                     drawText(x + 5, y + 30 + (i * 20),
                              label, columnFullName, entityName, onDragHandler, onDragEndHandler, canvas);
@@ -619,6 +624,12 @@ chromeMyAdmin.directive("erDiagram", [function() {
                         }
                     };
                 })(element), false);
+                scope.$watch("configuration", (function(element) {
+                    return function(newVal, oldVal) {
+                        scope.removeAllLayers(element);
+                        scope.drawModel(scope.model, element);
+                    };
+                })(element), true);
                 if (scope.onLoad) {
                     scope.onLoad({
                         api: (function(scope, element) {
