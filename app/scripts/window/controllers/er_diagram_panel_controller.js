@@ -103,6 +103,13 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
                 loadEntities();
             }
         });
+        $scope.$on(Events.TABLE_CHANGED, function(event, table) {
+            if (modeService.getMode() === Modes.ER_DIAGRAM) {
+                if (table) {
+                    $scope.erDiagramAPI.showEntityInView(table.name);
+                }
+            }
+        });
         $scope.$on(Events.REFRESH_ER_DIAGRAM, function(event, data) {
             resetErDiagram();
             loadEntities();
