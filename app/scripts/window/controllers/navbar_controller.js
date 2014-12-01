@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "Events", "Modes", function($scope, mySQLClientService, modeService, targetObjectService, Events, Modes) {
+chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "Events", "Modes", "ConfigurationTabs", function($scope, mySQLClientService, modeService, targetObjectService, Events, Modes, ConfigurationTabs) {
     "use strict";
 
     var loadDatabaseList = function() {
@@ -122,7 +122,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
     };
 
     $scope.configure = function() {
-        $scope.showConfigurationDialog();
+        $scope.showConfigurationDialog(ConfigurationTabs.BASIC);
     };
 
     $scope.selectRelation = function() {

@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes", "mySQLClientService", "UIConstants", "modeService", "targetObjectService", "mySQLQueryService", "TableTypes", "relationService", "$filter", function($scope, Events, Modes, mySQLClientService, UIConstants, modeService, targetObjectService, mySQLQueryService, TableTypes, relationService, $filter) {
+chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes", "mySQLClientService", "UIConstants", "modeService", "targetObjectService", "mySQLQueryService", "TableTypes", "relationService", "$filter", "configurationService", "Configurations", function($scope, Events, Modes, mySQLClientService, UIConstants, modeService, targetObjectService, mySQLQueryService, TableTypes, relationService, $filter, configurationService, Configurations) {
     "use strict";
 
     var resetErDiagram = function() {
@@ -110,6 +110,17 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
         $scope.$on(Events.SAVE_ER_DIAGRAM_IMAGE, function(event, data) {
             saveErDiagramImage();
         });
+        configurationService.addConfigurationChangeListener(function(name, value) {
+            $scope.safeApply(function() {
+                if (name === Configurations.ER_DIAGRAM_SHOW_PRIMARY_KEY) {
+                    $scope.configuration.showPrimaryKey = value;
+                } else if (name === Configurations.ER_DIAGRAM_SHOW_COLUMN_TYPE) {
+                    $scope.configuration.showColumnType = value;
+                } else if (name === Configurations.ER_DIAGRAM_SHOW_COLUMN_NOT_NULL) {
+                    $scope.configuration.showColumnNotNull = value;
+                }
+            });
+        });
     };
 
     var saveErDiagramImage = function() {
@@ -156,10 +167,25 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
             modeService.getMode() === Modes.ER_DIAGRAM;
     };
 
+    var loadConfiguration = function() {
+        var configuration = {};
+        configurationService.getErDiagramShowPrimaryKey().then(function(showPrimaryKey) {
+            configuration.showPrimaryKey = showPrimaryKey;
+            return configurationService.getErDiagramShowColumnType();
+        }).then(function(showColumnType) {
+            configuration.showColumnType = showColumnType;
+            return configurationService.getErDiagramShowColumnNotNull();
+        }).then(function(showColumnNotNull) {
+            configuration.showColumnNotNull = showColumnNotNull;
+            $scope.configuration = configuration;
+        });
+    };
+
     $scope.initialize = function() {
         assignEventHandlers();
         assignWindowResizeEventHandler();
         adjustCanvasContainerHeight();
+        loadConfiguration();
     };
 
     $scope.isERDiagramPanelVisible = function() {

@@ -1,7 +1,7 @@
 chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClientService", "Events", "configurationService", "QueryEditorWrapMode", "anyQueryExecuteService", function($scope, mySQLClientService, Events, configurationService, QueryEditorWrapMode, anyQueryExecuteService) {
     "use strict";
 
-    var doOpen = function() {
+    var doOpen = function(activeTab) {
         configurationService.getDatabaseInfoAutoUpdateSpan().then(function(span) {
             $scope.databaseInfoAutoUpdateSpan = span / 1000;
             return configurationService.getRowCountPerPageInRowsPanel();
@@ -13,7 +13,17 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
             return configurationService.getStatusGraphAutoUpdateSpan();
         }).then(function(span) {
             $scope.statusGraphAutoUpdateSpan = span / 1000;
+            return configurationService.getErDiagramShowPrimaryKey();
+        }).then(function(showPrimaryKey) {
+            $scope.erDiagramShowPrimaryKey = showPrimaryKey ? "ON" : "OFF";
+            return configurationService.getErDiagramShowColumnType();
+        }).then(function(showColumnType) {
+            $scope.erDiagramShowColumnType = showColumnType ? "ON" : "OFF";
+            return configurationService.getErDiagramShowColumnNotNull();
+        }).then(function(showColumnNotNull) {
+            $scope.erDiagramShowColumnNotNull = showColumnNotNull ? "ON" : "OFF";
         });
+        $(".nav-pills a[href=\"#" + activeTab + "\"]").tab("show");
         $("#configurationDialog").modal("show");
     };
 
@@ -23,7 +33,7 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
 
     var assignEventHandlers = function() {
         $scope.$on(Events.SHOW_CONFIGURATION_DIALOG, function(event, data) {
-            doOpen();
+            doOpen(data.activeTab);
         });
     };
 
@@ -65,6 +75,17 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
     $scope.changeQueryEditorWrapMode = function() {
         configurationService.setQueryEditorWrapMode(
             $scope.queryEditorWrapMode === QueryEditorWrapMode.WRAP);
+    };
+
+    $scope.changeErDiagramSettings = function() {
+        configurationService.setErDiagramShowPrimaryKey(
+            $scope.erDiagramShowPrimaryKey === "ON").then(function() {
+                return configurationService.setErDiagramShowColumnType(
+                    $scope.erDiagramShowColumnType === "ON");
+            }).then(function() {
+                configurationService.setErDiagramShowColumnNotNull(
+                    $scope.erDiagramShowColumnNotNull === "ON");
+            });
     };
 
 }]);

@@ -248,7 +248,19 @@ chromeMyAdmin.constant("Configurations", {
     QUERY_EDITOR_WRAP_MODE: "query_editor_wrap_mode",
     DEFAULT_QUERY_EDITOR_WRAP_MODE: true,
     STATUS_GRAPH_AUTO_UPDATE_SPAN: "status_graph_auto_update_span",
-    DEFAULT_STATUS_GRAPH_AUTO_UPDATE_SPAN: 10000
+    DEFAULT_STATUS_GRAPH_AUTO_UPDATE_SPAN: 10000,
+    ER_DIAGRAM_SHOW_PRIMARY_KEY: "er_diagram_show_primary_key",
+    DEFAULT_ER_DIAGRAM_SHOW_PRIMARY_KEY: true,
+    ER_DIAGRAM_SHOW_COLUMN_TYPE: "er_diagram_show_column_type",
+    DEFAULT_ER_DIAGRAM_SHOW_COLUMN_TYPE: true,
+    ER_DIAGRAM_SHOW_COLUMN_NOT_NULL: "er_diagram_show_column_not_null",
+    DEFAULT_ER_DIAGRAM_SHOW_COLUMN_NOT_NULL: true
+});
+
+chromeMyAdmin.constant("ConfigurationTabs", {
+    BASIC: "configBasic",
+    ER_DIAGRAM: "configErDiagram",
+    QUERY_HISTORY: "configQueryHistory"
 });
 
 chromeMyAdmin.constant("QueryEditorWrapMode", {
