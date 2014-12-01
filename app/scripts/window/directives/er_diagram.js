@@ -610,6 +610,15 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 var blob = new Blob([buffer.buffer], {type: type});
                 return blob;
             };
+
+            $scope.showEntityInView = function(entityName, element) {
+                var canvas = getCanvas(element);
+                var border = canvas.getLayer(entityName + "-border");
+                if (border) {
+                    element.scrollTop(Math.max(0, border.y - 10));
+                    element.scrollLeft(Math.max(0, border.x - 10));
+                }
+            };
         }],
         compile: function(element, attrs) {
             setJCanvasDefaults();
@@ -636,6 +645,9 @@ chromeMyAdmin.directive("erDiagram", [function() {
                             return {
                                 getBlob: function() {
                                     return scope.getBlob(element);
+                                },
+                                showEntityInView: function(entityName) {
+                                    scope.showEntityInView(entityName, element);
                                 }
                             };
                         })(scope, element)
