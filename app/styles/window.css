@@ -10,24 +10,14 @@ body {
 .windowTitlePanel {
     width: 100%;
     height: 20px;
-    -webkit-app-region: drag;
-    border-top: 1px solid #eee;
-    border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
 }
 
 .windowTitlePanel div {
-    -webkit-app-region: no-drag;
     margin-top: 3px;
-    cursor: pointer;
 }
 
 .windowTitlePanel div.titleText {
     margin-top: 0;
-    margin-left: 10px;
-    -webkit-user-select: none;
-    -webkit-app-region: drag;
-    cursor: default;
 }
 
 .navbar-fixed-top {

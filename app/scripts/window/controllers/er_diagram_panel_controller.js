@@ -209,11 +209,15 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
     };
 
     $scope.providePosition = function(model, callback) {
-        chrome.storage.sync.get("erDiagramDimensions", function(items) {
-            var erDiagramDimensions = items.erDiagramDimensions || {};
-            var dimensions = erDiagramDimensions[model.getDatabase()];
-            callback(dimensions);
-        });
+        if (model) {
+            chrome.storage.sync.get("erDiagramDimensions", function(items) {
+                var erDiagramDimensions = items.erDiagramDimensions || {};
+                var dimensions = erDiagramDimensions[model.getDatabase()];
+                callback(dimensions);
+            });
+        } else {
+            callback(null);
+        }
     };
 
     $scope.onLoadErDiagram = function(api) {
