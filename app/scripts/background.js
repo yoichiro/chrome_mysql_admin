@@ -41,7 +41,7 @@ function createWindow() {
         params.minWidth = 800;
         params.minHeight = 600;
         params.resizable = true;
-        params.frame = "none";
+        params.frame = "chrome";
         params.id = String((new Date()).getTime());
         chrome.app.window.create("window.html", params, function(createdWindow) {
             createdWindow.onClosed.addListener((function(closedWindow) {
@@ -56,6 +56,27 @@ function createWindow() {
                 };
             })(createdWindow));
             windows.push(createdWindow);
+            var storePosition = ((function(window) {
+                return function() {
+                    var windowSize = {
+                        bounds: {
+                            top: window.innerBounds.top,
+                            left: window.innerBounds.left,
+                            width: window.innerBounds.width,
+                            height: window.innerBounds.height
+                        },
+                        isFullscreen: window.isFullscreen(),
+                        isMaximized: window.isMaximized()
+                    };
+                    chrome.storage.sync.set({windowSize: windowSize}, function() {
+                    });
+                };
+            })(createdWindow));
+            createdWindow.onBoundsChanged.addListener(storePosition);
+            createdWindow.onFullscreened.addListener(storePosition);
+            createdWindow.onMaximized.addListener(storePosition);
+            createdWindow.onMinimized.addListener(storePosition);
+            createdWindow.onRestored.addListener(storePosition);
         });
     });
 }

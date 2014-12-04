@@ -636,7 +636,9 @@ chromeMyAdmin.directive("erDiagram", [function() {
                 scope.$watch("configuration", (function(element) {
                     return function(newVal, oldVal) {
                         scope.removeAllLayers(element);
-                        scope.drawModel(scope.model, element);
+                        if (scope.model) {
+                            scope.drawModel(scope.model, element);
+                        }
                     };
                 })(element), true);
                 if (scope.onLoad) {
