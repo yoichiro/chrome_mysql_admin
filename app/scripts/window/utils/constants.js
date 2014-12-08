@@ -279,7 +279,8 @@ chromeMyAdmin.constant("Engines", [
 chromeMyAdmin.constant("ValueTypes", {
     VALUE: "value",
     NULL: "NULL",
-    EXPRESSION: "expression"
+    EXPRESSION: "expression",
+    DEFAULT: "default"
 });
 
 chromeMyAdmin.constant("Templates", {
