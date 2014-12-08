@@ -41,6 +41,15 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
         return result;
     };
 
+    $scope.getExecutingQuery = function() {
+        if (targetObjectService.getTable()) {
+            return sqlExpressionService.createInsertStatement(
+                targetObjectService.getTable().name, $scope.values, $scope.valueTypes);
+        } else {
+            return "";
+        }
+    };
+
     $scope.insertRow = function() {
         resetErrorMessage();
         var sql = sqlExpressionService.createInsertStatement(
@@ -76,7 +85,8 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
     };
 
     $scope.isDisabledValueField = function(columnName) {
-        return $scope.valueTypes[columnName] === ValueTypes.NULL;
+        return $scope.valueTypes[columnName] === ValueTypes.NULL ||
+            $scope.valueTypes[columnName] === ValueTypes.DEFAULT;
     };
 
 }]);

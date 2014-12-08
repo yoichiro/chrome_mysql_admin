@@ -51,6 +51,8 @@ chromeMyAdmin.factory("sqlExpressionService", ["$rootScope", "ValueTypes", funct
                 if (valueType === ValueTypes.NULL) {
                     targetColumns.push("`" + columnName + "`");
                     targetValues.push("NULL");
+                } else if (valueType === ValueTypes.DEFAULT) {
+                    // Exclude this column
                 } else if (value != null) {
                     targetColumns.push("`" + columnName + "`");
                     if (valueType === ValueTypes.VALUE) {

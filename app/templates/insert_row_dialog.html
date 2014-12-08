@@ -26,9 +26,17 @@
               <label class="radio-inline">
                 <input type="radio" ng-model="valueTypes[column.name]" value="expression" ng-change="onChangeValueType(column.name)" /> Expression
               </label>
+              <label class="radio-inline">
+                <input type="radio" ng-model="valueTypes[column.name]" value="default" ng-change="onChangeValueType(column.name)" /> Default value
+              </label>
             </div>
           </div>
         </form>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            {{getExecutingQuery()}}
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
