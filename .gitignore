@@ -10,3 +10,4 @@ app/scripts/lib/angular
 app/scripts/lib/jquery
 app/scripts/lib/ace-builds
 app/scripts/lib/angular-ui-ace
+app/newlib

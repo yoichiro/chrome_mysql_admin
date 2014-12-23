@@ -204,7 +204,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
                 "Once deleted data will be undone. Would you really like to drop the selected " + type + " from MySQL server?",
                 "Yes",
                 "No",
-                Events.DROP_SELECTED_TABLE
+                Events.DROP_SELECTED_TABLE,
+                true
             );
         }
     };
@@ -216,7 +217,8 @@ chromeMyAdmin.controller("DatabaseObjectListController", ["$scope", "mySQLClient
                 "Once deleted data will be undone. Would you really like to truncate the selected table?",
                 "Yes",
                 "No",
-                Events.TRUNCATE_SELECTED_TABLE
+                Events.TRUNCATE_SELECTED_TABLE,
+                true
             );
         }
     };

@@ -65,6 +65,7 @@ chromeMyAdmin.constant("Events", {
     COPY_QUERY_RESULT_ROW_TO_CLIPBOARD: "copyQueryResultRowToClipboard",
     COPY_ROWS_PANEL_ROW_TO_CLIPBOARD: "copyRowsPanelRowToClipboard",
     SAVE_ER_DIAGRAM_IMAGE: "save_er_diagram_image",
+    CONTINUE_SSH2_PORT_FORWARDING: "continue_ssh2_port_forwarding",
     LOGOUT: "logout",
     LOGIN: "login"
 });

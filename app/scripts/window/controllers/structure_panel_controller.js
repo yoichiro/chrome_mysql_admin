@@ -294,7 +294,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
                 "Once deleted data will be undone. Would you really like to delete the selected column?",
                 "Yes",
                 "No",
-                Events.DELETE_SELECTED_COLUMN
+                Events.DELETE_SELECTED_COLUMN,
+                true
             );
         }
     };
@@ -323,7 +324,8 @@ chromeMyAdmin.controller("StructurePanelController", ["$scope", "mySQLClientServ
                 "Once deleted data will be undone. Would you really like to delete the selected index?",
                 "Yes",
                 "No",
-                Events.DELETE_SELECTED_INDEX
+                Events.DELETE_SELECTED_INDEX,
+                true
             );
         }
     };

@@ -110,8 +110,9 @@ body {
 }
 
 .loginPanel {
-    width: 450px;
+    width: 500px;
     padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .loginPanel .form-group {
@@ -124,6 +125,10 @@ body {
 
 .loginPanelAlertBlock {
     margin-top: 15px;
+}
+
+#loginForm {
+    overflow-y: auto;
 }
 
 .tableLink {

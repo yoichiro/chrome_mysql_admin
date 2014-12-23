@@ -73,12 +73,13 @@ chromeMyAdmin.run(["$rootScope", "Events", "ErrorLevel", "mySQLClientService", "
     };
 
     $rootScope.showConfirmDialog = function(
-        message, yesButtonLabel, noButtonLabel, callbackEvent) {
+        message, yesButtonLabel, noButtonLabel, callbackEvent, danger) {
         $rootScope.$broadcast(Events.SHOW_CONFIRM_DIALOG, {
             message: message,
             yesButtonLabel: yesButtonLabel,
             noButtonLabel: noButtonLabel,
-            callbackEvent: callbackEvent
+            callbackEvent: callbackEvent,
+            danger: danger
         });
     };
 

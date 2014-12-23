@@ -64,6 +64,7 @@
 <script type="text/javascript" src="scripts/window/services/column_type_service.js"></script>
 <script type="text/javascript" src="scripts/window/services/clipboard_service.js"></script>
 <script type="text/javascript" src="scripts/window/services/relation_service.js"></script>
+<script type="text/javascript" src="scripts/window/services/ssh2_port_forwarding_service.js"></script>
 <script type="text/javascript" src="scripts/window/directives/navbar_menu_item.js"></script>
 <script type="text/javascript" src="scripts/window/directives/footer_button.js"></script>
 <script type="text/javascript" src="scripts/window/directives/resize_when.js"></script>
@@ -188,6 +189,13 @@
 <create-routine-dialog></create-routine-dialog>
 <find-same-rows-dialog></find-same-rows-dialog>
 <find-rows-with-the-value-dialog></find-rows-with-the-value-dialog>
+
+<div id="listener">
+  <embed id="ssh2_port_forwarding"
+         width=0 height=0
+         src="newlib/Release/ssh2_port_forwarding.nmf"
+         type="application/x-nacl" />
+</div>
 
 </body>
 

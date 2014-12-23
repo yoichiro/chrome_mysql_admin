@@ -23,6 +23,20 @@ module.exports = function (grunt) {
             options: {
                 spawn: false
             },
+            cc: {
+                files: ['<%= yeoman.app %>/nacl_src/*.cc'],
+                tasks: ['make'],
+                options: {
+                    livereload: true
+                }
+            },
+            h: {
+                files: ['<%= yeoman.app %>/nacl_src/*.h'],
+                tasks: ['make'],
+                options: {
+                    livereload: true
+                }
+            },
             livereload: {
                 options: {
                     livereload: '<%= connect.livereload.options.livereload %>'
@@ -155,7 +169,8 @@ module.exports = function (grunt) {
                         'scripts/lib/jcanvas.min.js',
                         'fonts/{,*/}*.*',
                         '*.html',
-                        'templates/*.html'
+                        'templates/*.html',
+                        'newlib/Release/*.{nexe,nmf}'
                     ]
                 }]
             }
@@ -200,6 +215,15 @@ module.exports = function (grunt) {
                     verbose: true
                 }
             }
+        },
+        shell: {
+            make: {
+                command: [
+                    'cd app/nacl_src',
+                    'make',
+                    'cd ../..'
+                ].join(';')
+            }
         }
     });
 
@@ -224,6 +248,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean',
         'bower:install',
+        'make',
         'copy:angular_csp_css',
         'chromeManifest:dist',
         'useminPrepare',
@@ -240,5 +265,9 @@ module.exports = function (grunt) {
         'jshint',
         'test',
         'build'
+    ]);
+
+    grunt.registerTask('make', [
+        'shell:make'
     ]);
 };
