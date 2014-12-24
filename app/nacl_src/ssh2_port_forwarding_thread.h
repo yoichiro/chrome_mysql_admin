@@ -14,21 +14,6 @@
 #include "communication_exception.h"
 #include "ssh2_port_forwarding_event_listener.h"
 
-/*
-class SessionContext
-{
- public:
-  explicit SessionContext();
-  virtual ~SessionContext();
-
-  const std::string GetPassword();
-  void SetPassword(const std::string &password);
-
- private:
-  std::string password_;
-};
-*/
-
 class Ssh2PortForwardingThread
 {
 
@@ -86,6 +71,8 @@ class Ssh2PortForwardingThread
                         int sock) throw(CommunicationException);
 
   std::string GetHostKeyHash(LIBSSH2_SESSION *session);
+
+  std::string GetHostKeyMethod(LIBSSH2_SESSION *session);
 
   void AuthenticateUser() throw(CommunicationException);
 

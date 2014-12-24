@@ -119,9 +119,12 @@ void Ssh2PortForwardingThread::ConnectAndHandshakeImpl()
     std::string fingerprint;
     fingerprint = GetHostKeyHash(session);
     Log(fingerprint.c_str());
+    std::string hostkey_method;
+    hostkey_method = GetHostKeyMethod(session);
+    Log(hostkey_method.c_str());
     server_sock_ = sock;
     session_ = session;
-    listener_->OnHandshakeFinished(fingerprint);
+    listener_->OnHandshakeFinished(fingerprint, hostkey_method);
   } catch (CommunicationException &e) {
     std::string msg;
     msg = e.toString();
@@ -207,6 +210,13 @@ std::string Ssh2PortForwardingThread::GetHostKeyHash(LIBSSH2_SESSION *session)
     oss << std::setw(2) << std::hex << ((unsigned int)fingerprint[i] & 0xFF);
   }
   std::string result = oss.str();
+  return result;
+}
+
+std::string Ssh2PortForwardingThread::GetHostKeyMethod(LIBSSH2_SESSION *session)
+{
+  const char *method = libssh2_session_methods(session, LIBSSH2_METHOD_HOSTKEY);
+  std::string result = method;
   return result;
 }
 

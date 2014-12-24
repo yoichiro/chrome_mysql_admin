@@ -20,7 +20,8 @@ class Ssh2PortForwardingInstance : public pp::Instance, public Ssh2PortForwardin
 
   virtual void HandleMessage(const pp::Var &var_message);
 
-  virtual void OnHandshakeFinished(const std::string &fingerprint);
+  virtual void OnHandshakeFinished(const std::string &fingerprint,
+                                   const std::string &hostkey_method);
   virtual void OnWaitingConnection(const int port);
   virtual void OnForwardingStarted();
   virtual void OnSentBytes(const int length);

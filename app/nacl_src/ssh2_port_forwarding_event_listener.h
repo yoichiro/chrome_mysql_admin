@@ -9,7 +9,8 @@ class Ssh2PortForwardingEventListener {
 
   virtual ~Ssh2PortForwardingEventListener() {};
 
-  virtual void OnHandshakeFinished(const std::string &fingerprint) = 0;
+  virtual void OnHandshakeFinished(const std::string &fingerprint,
+                                   const std::string &hostkey_method) = 0;
   virtual void OnWaitingConnection(const int port) = 0;
   virtual void OnForwardingStarted() = 0;
   virtual void OnSentBytes(const int length) = 0;

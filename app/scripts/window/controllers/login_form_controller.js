@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", "Events", "identityKeepService", "ssh2PortForwardingService", "UIConstants", function($scope, $timeout, mySQLClientService, favoriteService, Events, identityKeepService, ssh2PortForwardingService, UIConstants) {
+chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", "Events", "identityKeepService", "ssh2PortForwardingService", "UIConstants", "ssh2KnownHostService", function($scope, $timeout, mySQLClientService, favoriteService, Events, identityKeepService, ssh2PortForwardingService, UIConstants, ssh2KnownHostService) {
     "use strict";
 
     // Private methods
@@ -55,21 +55,64 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
             doConnect();
         });
         $scope.$on(Events.CONTINUE_SSH2_PORT_FORWARDING, function(event, data) {
-            continueSsh2PortForwarding();
+            ssh2KnownHostService.addLastChecked().then(function(result) {
+                continueSsh2PortForwarding(function(port) {
+                    doConnectToMySQL("127.0.0.1", port);
+                });
+            });
+        });
+        $scope.$on(Events.CONTINUE_SSH2_PORT_FORWARDING_FOR_TEST, function(event, data) {
+            ssh2KnownHostService.addLastChecked().then(function(result) {
+                continueSsh2PortForwarding(function(port) {
+                    doTestConnectToMySQL("127.0.0.1", port);
+                });
+            });
         });
         assignWindowResizeEventHandler();
         adjustLoginFormHeight();
     };
 
-    var continueSsh2PortForwarding = function() {
+    var continueSsh2PortForwarding = function(callback) {
         ssh2PortForwardingService.portForwarding($scope.ssh2AuthType, $scope.ssh2UserName, $scope.ssh2Password, $scope.hostName, $scope.portNumber).then(function(result) {
-            doConnectToMySQL("127.0.0.1", result.values[0]);
+            callback(result.values[0]);
         }, function(reason) {
             console.log(reason);
             $scope.showErrorDialog("Port forwarding failed.",
                                    reason.values[0]);
             mySQLClientService.logout();
         });
+    };
+
+    var doTestConnectToMySQL = function(hostName, portNumber) {
+        if (isUseSSLConnection()) {
+            mySQLClientService.loginWithSSL(
+                hostName,
+                Number(portNumber),
+                $scope.userName,
+                $scope.password,
+                $scope.caCert,
+                isCheckCN()
+            ).then(function(initialHandshakeRequest) {
+                $scope.showCustomErrorDialog("Test connection", "Connection was successfully.", "");
+                mySQLClientService.logout();
+            }, function(reason) {
+                $scope.showCustomErrorDialog("Test connection", "Connection failed.", reason);
+                mySQLClientService.logout();
+            });
+        } else {
+            mySQLClientService.login(
+                hostName,
+                Number(portNumber),
+                $scope.userName,
+                $scope.password
+            ).then(function(initialHandshakeRequest) {
+                $scope.showCustomErrorDialog("Test connection", "Connection was successfully.", "");
+                mySQLClientService.logout();
+            }, function(reason) {
+                $scope.showCustomErrorDialog("Test connection", "Connection failed.", reason);
+                mySQLClientService.logout();
+            });
+        }
     };
 
     var doConnectToMySQL = function(hostName, portNumber) {
@@ -108,27 +151,56 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     var doConnect = function() {
         if (isUsePortForwarding()) {
-            ssh2PortForwardingService.connect($scope.ssh2HostName, $scope.ssh2PortNumber).then(function(result) {
-                var fingerprint = result.values[0];
-                var disp = fingerprint.substring(0, 2);
-                for (var i = 2; i < fingerprint.length; i += 2) {
-                    disp += ":" + fingerprint.substring(i, i + 2);
-                }
-                $scope.showConfirmDialog(
-                    "Please check the host key: " + disp,
-                    "Connect",
-                    "Cancel",
-                    Events.CONTINUE_SSH2_PORT_FORWARDING,
-                    false);
-            }, function(reason) {
-                console.log(reason);
-                $scope.showErrorDialog("Connection failed to SSH2 server.",
-                                       reason.values[0]);
-                mySQLClientService.logout();
-            });
+            startPortForwarding(Events.CONTINUE_SSH2_PORT_FORWARDING);
         } else {
             doConnectToMySQL($scope.hostName, $scope.portNumber);
         }
+    };
+
+    var startPortForwarding = function(event) {
+        var hostName = $scope.ssh2HostName;
+        var port = $scope.ssh2PortNumber;
+        ssh2PortForwardingService.connect(hostName, port).then(function(result) {
+            var fingerprint = result.values[0];
+            var hostkeyMethod = result.values[1];
+            ssh2KnownHostService.check(hostName, port, hostkeyMethod, fingerprint).then(function(result) {
+                console.log(result);
+                var disp = hostkeyMethod + " " + fingerprint.substring(0, 2);
+                for (var i = 2; i < fingerprint.length; i += 2) {
+                    disp += ":" + fingerprint.substring(i, i + 2);
+                }
+                if (result.result === "found") {
+                    if (event === Events.CONTINUE_SSH2_PORT_FORWARDING) {
+                        continueSsh2PortForwarding(function(port) {
+                            doConnectToMySQL("127.0.0.1", port);
+                        });
+                    } else if (event === Events.CONTINUE_SSH2_PORT_FORWARDING_FOR_TEST) {
+                        continueSsh2PortForwarding(function(port) {
+                            doTestConnectToMySQL("127.0.0.1", port);
+                        });
+                    }
+                } else if (result.result === "not_found") {
+                    $scope.showConfirmDialog(
+                        "Please check the fingerprint: " + disp,
+                        "Connect",
+                        "Cancel",
+                        event,
+                        false);
+                } else { // not_same
+                    $scope.showConfirmDialog(
+                        "Not same as the previous: " + disp,
+                        "Connect",
+                        "Cancel",
+                        event,
+                        true);
+                }
+            });
+        }, function(reason) {
+            console.log(reason);
+            $scope.showErrorDialog("Connection failed to SSH2 server.",
+                                   reason.values[0]);
+            mySQLClientService.logout();
+        });
     };
 
     var isUseSSLConnection = function() {
@@ -165,34 +237,10 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     };
 
     $scope.doTestConnection = function() {
-        if (isUseSSLConnection()) {
-            mySQLClientService.loginWithSSL(
-                $scope.hostName,
-                Number($scope.portNumber),
-                $scope.userName,
-                $scope.password,
-                $scope.caCert,
-                isCheckCN()
-            ).then(function(initialHandshakeRequest) {
-                $scope.showCustomErrorDialog("Test connection", "Connection was successfully.", "");
-                mySQLClientService.logout();
-            }, function(reason) {
-                $scope.showCustomErrorDialog("Test connection", "Connection failed.", reason);
-                mySQLClientService.logout();
-            });
+        if (isUsePortForwarding()) {
+            startPortForwarding(Events.CONTINUE_SSH2_PORT_FORWARDING_FOR_TEST);
         } else {
-            mySQLClientService.login(
-                $scope.hostName,
-                Number($scope.portNumber),
-                $scope.userName,
-                $scope.password
-            ).then(function(initialHandshakeRequest) {
-                $scope.showCustomErrorDialog("Test connection", "Connection was successfully.", "");
-                mySQLClientService.logout();
-            }, function(reason) {
-                $scope.showCustomErrorDialog("Test connection", "Connection failed.", reason);
-                mySQLClientService.logout();
-            });
+            doTestConnectToMySQL($scope.hostName, $scope.portNumber);
         }
     };
 

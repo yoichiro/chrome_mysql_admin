@@ -68,9 +68,11 @@ int Ssh2PortForwardingInstance::GetIntegerValueFromJsonArgs(const Json::Value &a
   return result;
 }
 
-void Ssh2PortForwardingInstance::OnHandshakeFinished(const std::string &fingerprint)
+void Ssh2PortForwardingInstance::OnHandshakeFinished(const std::string &fingerprint,
+                                                     const std::string &hostkey_method)
 {
-  SendResponse(std::string("fingerprint"), std::vector<std::string>{fingerprint});
+  SendResponse(std::string("fingerprint"),
+               std::vector<std::string>{fingerprint, hostkey_method});
 }
 
 void Ssh2PortForwardingInstance::OnWaitingConnection(const int port)
