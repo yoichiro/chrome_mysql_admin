@@ -14,7 +14,6 @@ chromeMyAdmin.factory("ssh2KnownHostService", ["$rootScope", "$q", function($roo
             var deferred = $q.defer();
             chrome.storage.sync.get("knownHosts", function(items) {
                 var knownHosts = items.knownHosts || {};
-                console.log(knownHosts);
                 var key = hostName + ":" + port;
                 var knownHost = knownHosts[key];
                 if (knownHost) {

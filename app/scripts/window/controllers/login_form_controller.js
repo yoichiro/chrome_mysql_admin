@@ -76,7 +76,6 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         ssh2PortForwardingService.portForwarding($scope.ssh2AuthType, $scope.ssh2UserName, $scope.ssh2Password, $scope.hostName, $scope.portNumber).then(function(result) {
             callback(result.values[0]);
         }, function(reason) {
-            console.log(reason);
             $scope.showErrorDialog("Port forwarding failed.",
                                    reason.values[0]);
             mySQLClientService.logout();
@@ -164,7 +163,6 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
             var fingerprint = result.values[0];
             var hostkeyMethod = result.values[1];
             ssh2KnownHostService.check(hostName, port, hostkeyMethod, fingerprint).then(function(result) {
-                console.log(result);
                 var disp = hostkeyMethod + " " + fingerprint.substring(0, 2);
                 for (var i = 2; i < fingerprint.length; i += 2) {
                     disp += ":" + fingerprint.substring(i, i + 2);
@@ -196,7 +194,6 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 }
             });
         }, function(reason) {
-            console.log(reason);
             $scope.showErrorDialog("Connection failed to SSH2 server.",
                                    reason.values[0]);
             mySQLClientService.logout();
