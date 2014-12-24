@@ -1,16 +1,17 @@
 chromeMyAdmin.controller("ConfirmDialogController", ["$scope", "Events", function($scope, Events) {
     "use strict";
 
-    var open = function(message, yesButtonLabel, noButtonLabel) {
+    var open = function(message, yesButtonLabel, noButtonLabel, danger) {
         $scope.message = message;
         $scope.yesButtonLabel = yesButtonLabel;
         $scope.noButtonLabel = noButtonLabel;
+        $scope.danger = danger;
         $("#confirmDialog").modal("show");
     };
 
     var assignEventHandlers = function() {
         $scope.$on(Events.SHOW_CONFIRM_DIALOG, function(event, data) {
-            open(data.message, data.yesButtonLabel, data.noButtonLabel);
+            open(data.message, data.yesButtonLabel, data.noButtonLabel, data.danger);
             $scope.callbackEvent = data.callbackEvent;
         });
     };
@@ -22,6 +23,10 @@ chromeMyAdmin.controller("ConfirmDialogController", ["$scope", "Events", functio
     $scope.execute = function() {
         $("#confirmDialog").modal("hide");
         $scope.callbackFromConfirmDialog($scope.callbackEvent, true);
+    };
+
+    $scope.isDanger = function() {
+        return $scope.danger;
     };
 
 }]);

@@ -10,7 +10,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">{{noButtonLabel}}</button>
-        <button type="button" class="btn btn-danger" ng-click="execute()">{{yesButtonLabel}}</button>
+        <button type="button" class="btn" ng-class="(isDanger()==true) ? 'btn-danger' : 'btn-primary'" ng-click="execute()">{{yesButtonLabel}}</button>
       </div>
     </div>
   </div>

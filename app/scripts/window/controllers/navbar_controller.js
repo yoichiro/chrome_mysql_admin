@@ -61,7 +61,8 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
             "Would you really like to logout from MySQL server?",
             "Yes",
             "No",
-            Events.LOGOUT
+            Events.LOGOUT,
+            true
         );
     };
 

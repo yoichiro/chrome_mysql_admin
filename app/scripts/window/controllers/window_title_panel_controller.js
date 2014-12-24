@@ -22,12 +22,13 @@ chromeMyAdmin.controller("windowTitlePanelController", ["$scope", "mySQLClientSe
     var onConnectionChanged = function(info) {
         if (mySQLClientService.isConnected()) {
             $scope.safeApply(function() {
-                var tls = info.useSSL ? " (SSL)" : "";
+                var opt = info.useSSL ? ":SSL" : "";
+                opt += info.usePortForwarding ? ":SSH2" : "";
                 var name = "";
                 if (info.name) {
                     name = "[" + info.name + "] ";
                 }
-                $scope.titleText = name + info.hostName + ":" + info.port + tls +
+                $scope.titleText = name + info.hostName + ":" + info.port + opt +
                     " | " + info.userName +
                     " | " + info.initialHandshakeRequest.serverVersion;
                 document.title = $scope.titleText;

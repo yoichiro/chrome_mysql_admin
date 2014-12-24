@@ -100,7 +100,8 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
                 "Once deleted data will be undone. Would you really like to delete the selected row from MySQL server?",
                 "Yes",
                 "No",
-                Events.DELETE_SELECTED_ROW
+                Events.DELETE_SELECTED_ROW,
+                true
             );
         }
     };
@@ -143,7 +144,8 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
             "Once deleted data will be undone. Would you really like to delete the selected database from MySQL server?",
             "Yes",
             "No",
-            Events.DELETE_SELECTED_DATABASE
+            Events.DELETE_SELECTED_DATABASE,
+            true
         );
     };
 
@@ -165,7 +167,8 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
                 "Once deleted data will be undone. Would you really like to delete the selected relation from the database?",
                 "Yes",
                 "No",
-                Events.DELETE_SELECTED_RELATION
+                Events.DELETE_SELECTED_RELATION,
+                true
             );
         }
     };
@@ -191,7 +194,8 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
                 "Once deleted data will be undone. Would you really like to delete the selected routine from the database?",
                 "Yes",
                 "No",
-                Events.DELETE_SELECTED_ROUTINE
+                Events.DELETE_SELECTED_ROUTINE,
+                true
             );
         }
     };
