@@ -49,6 +49,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                 $scope.ssh2AuthType = favorite.ssh2AuthType || "password";
                 $scope.ssh2UserName = favorite.ssh2UserName;
                 $scope.ssh2Password = favorite.ssh2Password;
+                $scope.ssh2PrivateKey = favorite.ssh2PrivateKey;
             });
         });
         $scope.$on(Events.LOGIN, function(event, data) {
@@ -73,13 +74,23 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     };
 
     var continueSsh2PortForwarding = function(callback) {
-        ssh2PortForwardingService.portForwarding($scope.ssh2AuthType, $scope.ssh2UserName, $scope.ssh2Password, $scope.hostName, $scope.portNumber).then(function(result) {
-            callback(result.values[0]);
+        var privateKey = $scope.ssh2PrivateKey || "";
+        /*
+        ssh2PortForwardingService.storePrivateKeyToFile(privateKey).then(function() {
+         */
+            ssh2PortForwardingService.portForwarding($scope.ssh2AuthType, $scope.ssh2UserName, $scope.ssh2Password, $scope.hostName, $scope.portNumber, $scope.ssh2PrivateKey).then(function(result) {
+                callback(result.values[0]);
+            }, function(reason) {
+                $scope.showErrorDialog("Port forwarding failed.",
+                                       reason.values[0]);
+                mySQLClientService.logout();
+            });
+        /*
         }, function(reason) {
-            $scope.showErrorDialog("Port forwarding failed.",
-                                   reason.values[0]);
+            $scope.showErrorDialog("Storing the private key failed: ", reason);
             mySQLClientService.logout();
         });
+                                                 */
     };
 
     var doTestConnectToMySQL = function(hostName, portNumber) {
@@ -213,7 +224,7 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
     };
 
     var setupItems = function() {
-        $scope.ssh2AuthTypes = ["password", "keyboard-interactive"];
+        $scope.ssh2AuthTypes = ["password", "keyboard-interactive", "publickey"];
     };
 
     // Public methods
@@ -269,7 +280,8 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
                                 $scope.ssh2PortNumber,
                                 $scope.ssh2AuthType,
                                 $scope.ssh2UserName,
-                                $scope.ssh2Password);
+                                $scope.ssh2Password,
+                                $scope.ssh2PrivateKey);
         }
     };
 
@@ -291,6 +303,10 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     $scope.isUsePortForwarding = function() {
         return isUsePortForwarding();
+    };
+
+    $scope.isUsePortForwardingPublicKeyAuth = function() {
+        return isUsePortForwarding() && ($scope.ssh2AuthType === "publickey");
     };
 
 }]);

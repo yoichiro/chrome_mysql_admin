@@ -31,6 +31,7 @@ Ssh2PortForwardingThread::Ssh2PortForwardingThread(pp::Instance *instance,
     password_(""),
     remote_dest_hostname_(""),
     remote_dest_port_(-1),
+    private_key_(""),
     server_sock_(-1),
     session_(NULL)
 {
@@ -45,8 +46,6 @@ void Ssh2PortForwardingThread::ConnectAndHandshake(const std::string server_host
 {
   if (!thread_) {
     Log("ConnectAndHandshake");
-    Log(server_hostname.c_str());
-    Log(server_port);
     server_hostname_ = server_hostname;
     server_port_ = server_port;
     pthread_create(&thread_,
@@ -62,7 +61,8 @@ void Ssh2PortForwardingThread::AuthenticateAndForward(const std::string auth_typ
                                                       const std::string username,
                                                       const std::string password,
                                                       const std::string remote_dest_hostname,
-                                                      const int remote_dest_port)
+                                                      const int remote_dest_port,
+                                                      const std::string private_key)
 {
   if (!thread_) {
     if (!session_) {
@@ -74,6 +74,7 @@ void Ssh2PortForwardingThread::AuthenticateAndForward(const std::string auth_typ
     password_ = password;
     remote_dest_hostname_ = remote_dest_hostname;
     remote_dest_port_ = remote_dest_port;
+    private_key_ = private_key;
     pthread_create(&thread_,
                    NULL,
                    &Ssh2PortForwardingThread::StartAuthenticateAndForwardThread,
@@ -118,10 +119,8 @@ void Ssh2PortForwardingThread::ConnectAndHandshakeImpl()
     HandshakeSession(session, sock);
     std::string fingerprint;
     fingerprint = GetHostKeyHash(session);
-    Log(fingerprint.c_str());
     std::string hostkey_method;
     hostkey_method = GetHostKeyMethod(session);
-    Log(hostkey_method.c_str());
     server_sock_ = sock;
     session_ = session;
     listener_->OnHandshakeFinished(fingerprint, hostkey_method);
@@ -265,8 +264,6 @@ void Ssh2PortForwardingThread::AuthenticateUser() throw(CommunicationException)
 {
   char *user_auth_list;
   user_auth_list = libssh2_userauth_list(session_, username_.c_str(), strlen(username_.c_str()));
-  fprintf(stderr, "Authentication methods: %s\n", user_auth_list);
-
   if (auth_type_ == "password") {
     if (strstr(user_auth_list, auth_type_.c_str())) {
       AuthenticateByPassword(session_, username_, password_);
@@ -278,6 +275,12 @@ void Ssh2PortForwardingThread::AuthenticateUser() throw(CommunicationException)
       AuthenticateByKeyboardInteractive(session_, username_, password_);
     } else {
       THROW_COMMUNICATION_EXCEPTION("Authentication type 'keyboard-interactive' is not supported", 0);
+    }
+  } else if (auth_type_ == "publickey") {
+    if (strstr(user_auth_list, auth_type_.c_str())) {
+      AuthenticateByPublicKey(session_, username_, password_, private_key_);
+    } else {
+      THROW_COMMUNICATION_EXCEPTION("Authentication type 'publickey' is not supported", 0);
     }
   } else {
     THROW_COMMUNICATION_EXCEPTION("Unknown user authentication type", 0);
@@ -336,6 +339,39 @@ void Ssh2PortForwardingThread::KeyboardCallback(const char *name,
   }
   (void)prompts;
   (void)abstract;
+}
+
+void Ssh2PortForwardingThread::AuthenticateByPublicKey(LIBSSH2_SESSION *session,
+                                                       const std::string &username,
+                                                       const std::string &password,
+                                                       const std::string &private_key)
+  throw(CommunicationException)
+{
+  int rc = -1;
+  size_t len;
+
+  FILE *f;
+  f = fopen("/cma/private_key", "w");
+  if (f) {
+    len = strlen(private_key.c_str());
+    fwrite(private_key.c_str(), 1, len, f);
+    fclose(f);
+  } else {
+    fclose(f);
+    THROW_COMMUNICATION_EXCEPTION("Storing private key failed", rc);
+  }
+
+  while((rc = libssh2_userauth_publickey_fromfile(session,
+                                                  username.c_str(),
+                                                  NULL,
+                                                  "/cma/private_key",
+                                                  password.c_str())) == LIBSSH2_ERROR_EAGAIN);
+  if (rc) {
+    char *err_msg;
+    libssh2_session_last_error(session, &err_msg, NULL, 0);
+    THROW_COMMUNICATION_EXCEPTION(err_msg, rc);
+  }
+  Log("Authentication by publickey succeeded", rc);
 }
 
 std::tuple<int, int, LIBSSH2_CHANNEL*>

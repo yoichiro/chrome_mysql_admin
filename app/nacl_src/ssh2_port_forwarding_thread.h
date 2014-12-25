@@ -29,7 +29,8 @@ class Ssh2PortForwardingThread
                               const std::string username,
                               const std::string password,
                               const std::string remote_dest_hostname,
-                              const int remote_dest_port);
+                              const int remote_dest_port,
+                              const std::string private_key);
 
   std::string GetPassword();
 
@@ -48,6 +49,7 @@ class Ssh2PortForwardingThread
 
   std::string remote_dest_hostname_;
   int remote_dest_port_;
+  std::string private_key_;
 
   int server_sock_;
   LIBSSH2_SESSION *session_;
@@ -92,6 +94,12 @@ class Ssh2PortForwardingThread
                         const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts,
                         LIBSSH2_USERAUTH_KBDINT_RESPONSE *response,
                         void **abstract);
+
+  void AuthenticateByPublicKey(LIBSSH2_SESSION *session,
+                               const std::string &username,
+                               const std::string &password,
+                               const std::string &private_key)
+    throw(CommunicationException);
 
   int SearchUnusedPort() throw(CommunicationException);
 
