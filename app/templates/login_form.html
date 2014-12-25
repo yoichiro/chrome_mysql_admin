@@ -74,6 +74,12 @@
           <input type="password" id="loginFormSsh2Password" class="form-control" ng-model="ssh2Password" required />
         </div>
       </div>
+      <div class="form-group" ng-show="isUsePortForwardingPublicKeyAuth()">
+        <label for="loginFormSsh2PrivateKey" class="col-sm-4 control-label">Private key</label>
+        <div class="col-sm-8">
+          <textarea class="form-control" ng-model="ssh2PrivateKey"></textarea>
+        </div>
+      </div>
 
       <div class="form-group">
         <label for="loginFormUseSSL" class="col-sm-4 control-label">SSL</label>

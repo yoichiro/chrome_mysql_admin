@@ -1,6 +1,9 @@
 #include <cstdio>
 #include <sstream>
 #include <memory>
+#include <sys/mount.h>
+
+#include <errno.h>
 
 #include "nacl_io/nacl_io.h"
 
@@ -14,6 +17,7 @@ Ssh2PortForwardingInstance::Ssh2PortForwardingInstance(PP_Instance instance)
     factory_(this)
 {
   nacl_io_init_ppapi(instance, pp::Module::Get()->get_browser_interface());
+  mount("", "/cma", "memfs", 0, "");
   ssh2_port_forwarding_thread_ = new Ssh2PortForwardingThread(this, this);
   Log("Instance created.");
 }
@@ -49,11 +53,13 @@ void Ssh2PortForwardingInstance::HandleMessage(const pp::Var &var_message)
         std::string password = args[2].asString();
         std::string remote_dest_hostname = args[3].asString();
         int remote_dest_port = GetIntegerValueFromJsonArgs(args, 4);
+        std::string private_key  = args[5].asString();
         ssh2_port_forwarding_thread_->AuthenticateAndForward(auth_type,
                                                              username,
                                                              password,
                                                              remote_dest_hostname,
-                                                             remote_dest_port);
+                                                             remote_dest_port,
+                                                             private_key);
       }
     }
   }
