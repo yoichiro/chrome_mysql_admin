@@ -5,8 +5,8 @@ chromeMyAdmin.factory("ssh2PortForwardingService", ["$rootScope", "$q", function
 
     var listener = document.querySelector("#listener");
     listener.addEventListener("message", function(evt) {
-        $rootScope.hideProgressBar();
         if (deferred) {
+            $rootScope.hideProgressBar();
             var result = JSON.parse(evt.data);
             if (result.message === "error") {
                 deferred.reject(result);
@@ -19,8 +19,8 @@ chromeMyAdmin.factory("ssh2PortForwardingService", ["$rootScope", "$q", function
 
     return {
         connect: function(ssh2ServerHostname, ssh2ServerPort) {
-            $rootScope.showProgressBar();
             deferred = $q.defer();
+            $rootScope.showProgressBar();
             var module = document.querySelector("#ssh2_port_forwarding");
             var obj = {
                 command: "connect",
@@ -33,8 +33,8 @@ chromeMyAdmin.factory("ssh2PortForwardingService", ["$rootScope", "$q", function
             return deferred.promise;
         },
         portForwarding: function(ssh2AuthType, ssh2Username, ssh2Password, serverHostname, serverPort, privateKey) {
-            $rootScope.showProgressBar();
             deferred = $q.defer();
+            $rootScope.showProgressBar();
             var module = document.querySelector("#ssh2_port_forwarding");
             var obj = {
                 command: "forward",
