@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClientService", "Events", "configurationService", "QueryEditorWrapMode", "anyQueryExecuteService", function($scope, mySQLClientService, Events, configurationService, QueryEditorWrapMode, anyQueryExecuteService) {
+chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClientService", "Events", "configurationService", "QueryEditorWrapMode", "anyQueryExecuteService", "ssh2KnownHostService", function($scope, mySQLClientService, Events, configurationService, QueryEditorWrapMode, anyQueryExecuteService, ssh2KnownHostService) {
     "use strict";
 
     var doOpen = function(activeTab) {
@@ -22,6 +22,9 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
             return configurationService.getErDiagramShowColumnNotNull();
         }).then(function(showColumnNotNull) {
             $scope.erDiagramShowColumnNotNull = showColumnNotNull ? "ON" : "OFF";
+            return ssh2KnownHostService.getAll();
+        }).then(function(knownHosts) {
+            $scope.knownHosts = knownHosts;
         });
         $(".nav-pills a[href=\"#" + activeTab + "\"]").tab("show");
         $("#configurationDialog").modal("show");
@@ -86,6 +89,14 @@ chromeMyAdmin.controller("ConfigurationDialogController", ["$scope", "mySQLClien
                 configurationService.setErDiagramShowColumnNotNull(
                     $scope.erDiagramShowColumnNotNull === "ON");
             });
+    };
+
+    $scope.getFingerprintString = function(value) {
+        var disp = value.method + " " + value.fingerprint.substring(0, 2);
+        for (var i = 2; i < value.fingerprint.length; i += 2) {
+            disp += ":" + value.fingerprint.substring(i, i + 2);
+        }
+        return disp;
     };
 
 }]);
