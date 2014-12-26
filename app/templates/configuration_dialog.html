@@ -9,6 +9,7 @@
         <ul class="nav nav-pills">
           <li class="active"><a href="#configBasic" data-toggle="tab">Basic</a></li>
           <li><a href="#configErDiagram" data-toggle="tab">ER diagram</a></li>
+          <li><a href="#configSsh2Fingerprints" data-toggle="tab">SSH2 fingerprints</a></li>
           <li><a href="#configQueryHistory" data-toggle="tab">Query history</a></li>
         </ul>
         <div class="tab-content">
@@ -89,6 +90,13 @@
             <div class="configurationPanel configurationPanelQueryHistory">
               <table class="table table-striped">
                 <tr ng-repeat="query in getQueryHistory() track by $index"><td>{{query}} <span class="fa fa-pencil text-primary editQuery" ng-click="editQuery(query)"></span></td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane" id="configSsh2Fingerprints">
+            <div class="configurationPanel configurationPanelSsh2Fingerprints">
+              <table class="table table-striped">
+                <tr ng-repeat="(host, fingerprint) in knownHosts"><td>{{host}}</td><td>{{getFingerprintString(fingerprint)}}</td></tr>
               </table>
             </div>
           </div>

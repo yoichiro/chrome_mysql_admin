@@ -52,6 +52,14 @@ chromeMyAdmin.factory("ssh2KnownHostService", ["$rootScope", "$q", function($roo
                 });
             });
             return deferred.promise;
+        },
+        getAll: function() {
+            var deferred = $q.defer();
+            chrome.storage.sync.get("knownHosts", function(items) {
+                var knownHosts = items.knownHosts || {};
+                deferred.resolve(knownHosts);
+            });
+            return deferred.promise;
         }
     };
 }]);
