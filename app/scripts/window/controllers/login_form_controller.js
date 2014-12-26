@@ -75,22 +75,13 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
 
     var continueSsh2PortForwarding = function(callback) {
         var privateKey = $scope.ssh2PrivateKey || "";
-        /*
-        ssh2PortForwardingService.storePrivateKeyToFile(privateKey).then(function() {
-         */
-            ssh2PortForwardingService.portForwarding($scope.ssh2AuthType, $scope.ssh2UserName, $scope.ssh2Password, $scope.hostName, $scope.portNumber, $scope.ssh2PrivateKey).then(function(result) {
-                callback(result.values[0]);
-            }, function(reason) {
-                $scope.showErrorDialog("Port forwarding failed.",
-                                       reason.values[0]);
-                mySQLClientService.logout();
-            });
-        /*
+        ssh2PortForwardingService.portForwarding($scope.ssh2AuthType, $scope.ssh2UserName, $scope.ssh2Password, $scope.hostName, $scope.portNumber, $scope.ssh2PrivateKey).then(function(result) {
+            callback(result.values[0]);
         }, function(reason) {
-            $scope.showErrorDialog("Storing the private key failed: ", reason);
+            $scope.showErrorDialog("Port forwarding failed.",
+                                   reason.values[0]);
             mySQLClientService.logout();
         });
-                                                 */
     };
 
     var doTestConnectToMySQL = function(hostName, portNumber) {
