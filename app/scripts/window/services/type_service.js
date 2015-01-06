@@ -18,6 +18,10 @@ chromeMyAdmin.factory("typeService", ["$rootScope", "TypeMap", function($rootSco
         isNumeric: function(type) {
             var info = TypeMap[type];
             return info.isNumeric;
+        },
+        isDateTime: function(type) {
+            var info = TypeMap[type];
+            return info.isDateTime;
         }
     };
 

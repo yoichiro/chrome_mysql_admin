@@ -95,6 +95,9 @@ chromeMyAdmin.factory("targetObjectService", ["$rootScope", "Events", function($
         },
         saveErDiagramImage: function() {
             $rootScope.$broadcast(Events.SAVE_ER_DIAGRAM_IMAGE, null);
+        },
+        exportAllDatabases: function() {
+            $rootScope.$broadcast(Events.EXPORT_ALL_DATABASES, null);
         }
     };
 

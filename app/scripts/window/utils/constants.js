@@ -62,6 +62,7 @@ chromeMyAdmin.constant("Events", {
     QUERY_EXECUTED: "queryExecuted",
     EXECUTE_SELECTED_PROCEDURE: "executeSelectedProcedure",
     EXPORT_QUERY_RESULT: "exportQueryResult",
+    EXPORT_ALL_DATABASES: "exportAllDatabases",
     COPY_QUERY_RESULT_ROW_TO_CLIPBOARD: "copyQueryResultRowToClipboard",
     COPY_ROWS_PANEL_ROW_TO_CLIPBOARD: "copyRowsPanelRowToClipboard",
     SAVE_ER_DIAGRAM_IMAGE: "save_er_diagram_image",

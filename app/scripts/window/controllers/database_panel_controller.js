@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", "MySQLErrorCode", "Templates", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode, Templates) {
+chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", "MySQLErrorCode", "Templates", "$filter", "exportAllDatabasesService", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode, Templates, $filter, exportAllDatabasesService) {
     "use strict";
 
     var autoUpdatePromise = null;
@@ -139,6 +139,39 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
         }
     };
 
+    var exportAllDatabases = function() {
+        var now = $filter("date")(new Date(), "yyyyMMddHHmmss");
+        var filename = "dump_" + now + ".sql";
+        var options = {
+            type: "saveFile",
+            suggestedName: filename
+        };
+        chrome.fileSystem.chooseEntry(options, function(writableEntry) {
+            if (writableEntry) {
+                exportAllDatabasesService.exportAllDatabases().then(function(result) {
+                    var blob = result;
+                    writableEntry.createWriter(function(writer) {
+                        writer.onerror = function(e) {
+                            $scope.fatalErrorOccurred(e);
+                        };
+                        writer.onwriteend = function() {
+                            if (writer.length == 0) {
+                                writer.write(blob);
+                            } else {
+                                $scope.showMainStatusMessage("Exporting done: " + writableEntry.name);
+                            }
+                        };
+                        writer.truncate(0);
+                    }, function(e) {
+                        $scope.fatalErrorOccurred(e);
+                    });
+                }, function(reason) {
+                    $scope.fatalErrorOccurred(reason);
+                });
+            }
+        });
+    };
+
     var assignEventHandlers = function() {
         $scope.$on(Events.MODE_CHANGED, function(event, mode) {
             onModeChanged(mode);
@@ -148,6 +181,9 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
         });
         $scope.$on(Events.DELETE_SELECTED_DATABASE, function(event, data) {
             deleteSelectedDatabase();
+        });
+        $scope.$on(Events.EXPORT_ALL_DATABASES, function(event, data) {
+            exportAllDatabases();
         });
     };
 

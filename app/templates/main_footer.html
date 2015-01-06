@@ -21,6 +21,7 @@
   <div class="pull-right" ng-show="isDatabaseButtonsVisible()">
     <footer-button icon="plus" click="createDatabase()" title="Create a new database"></footer-button>
     <footer-button icon="trash-o" click="confirmDeleteSelectedDatabase()" title="Delete the database" enable="isDatabaseSelection()"></footer-button>
+    <footer-button icon="download" click="exportAllDatabases()" title="Export all databases"></footer-button>
   </div>
   <!-- for Information panel -->
   <div class="pull-right" ng-show="isInformationButtonsVisible()">
