@@ -274,4 +274,8 @@ chromeMyAdmin.controller("MainFooterController", ["$scope", "modeService", "mySQ
         $scope.showConfigurationDialog(ConfigurationTabs.ER_DIAGRAM);
     };
 
+    $scope.exportAllDatabases = function() {
+        targetObjectService.exportAllDatabases();
+    };
+
 }]);
