@@ -54,6 +54,27 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/manifest.json',
                     '<%= yeoman.app %>/_locales/{,*/}*.json'
                 ]
+            },
+            app: {
+                options: {
+                    spawn: true,
+                    atBegin: true
+                },
+                tasks: ['shell:loadAndLaunch'],
+                files: [
+                    // TODO: abstract app files array
+                    '<%= yeoman.app %>/*.html',
+                    '<%= yeoman.app %>/templates/*.html',
+                    '<%= yeoman.app %>/styles/{,*/}*.css',
+                    '<%= yeoman.app %>/scripts/{,*/}*.js',
+                    '<%= yeoman.app %>/scripts/window/{,*/}*.js',
+                    '<%= yeoman.app %>/scripts/window/controller/{,*/}*.js',
+                    '<%= yeoman.app %>/scripts/window/services/{,*/}*.js',
+                    '<%= yeoman.app %>/scripts/window/utils/{,*/}*.js',
+                    '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+                    '<%= yeoman.app %>/manifest.json',
+                    '<%= yeoman.app %>/_locales/{,*/}*.json'
+                ]
             }
         },
         connect: {
@@ -223,6 +244,10 @@ module.exports = function (grunt) {
                     'make',
                     'cd ../..'
                 ].join(';')
+            },
+            loadAndLaunch: {
+                // TODO: support other releases of google chrome: such as google-chrome-beta
+                command: 'google-chrome-stable --load-and-launch-app=app/'
             }
         }
     });
