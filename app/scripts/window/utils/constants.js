@@ -25,6 +25,7 @@ chromeMyAdmin.constant("Events", {
     SHOW_PROGRESS_BAR: "showProgressBar",
     SHOW_CHANGE_WINDOW_PANEL: "showChangeWindowPanel",
     SHOW_CONFIRM_DIALOG: "showConfirmDialog",
+    SHOW_ER_DIALOG: "showERDialog",
     SHOW_ERROR_DIALOG: "showErrorDialog",
     SHOW_ADD_COLUMN_DIALOG: "showAddColumnDialog",
     SHOW_ADD_INDEX_DIALOG: "showAddIndexDialog",
