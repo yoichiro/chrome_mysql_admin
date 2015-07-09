@@ -39,7 +39,7 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
         $scope.$on(Events.REFRESH_DATABASES, function(event, data) {
             loadDatabaseList();
         });
-        $scope.$on(Events.SHOW_ER_DIALOG, function(event, data) {
+        $scope.$on(Events.SHOW_ER_DIAGRAM, function(event, data) {
             modeService.changeMode(Modes.ER_DIAGRAM);
         });
     };
@@ -143,10 +143,10 @@ chromeMyAdmin.controller("NavbarController", ["$scope", "mySQLClientService", "m
 
     $scope.selectERDiagram = function() {
         $scope.showConfirmDialog(
-            "Render an ER dialog of the DB?\nIt might take more than a minute depending on the number of the tables.",
+            "Render an ER diagram of the DB?\nIt might take more than a minute depending on the number of the tables.",
             "Yes",
             "No",
-            Events.SHOW_ER_DIALOG,
+            Events.SHOW_ER_DIAGRAM,
             false
         );
     };
