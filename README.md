@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/yoichiro/chrome_mysql_admin/badges/gpa.svg)](https://codeclimate.com/github/yoichiro/chrome_mysql_admin)
+
 ChromeMyAdmin
 =======================
 
