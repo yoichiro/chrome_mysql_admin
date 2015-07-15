@@ -140,6 +140,15 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        concat: {
+            files: {
+                src: [
+                    '<%= yeoman.dist %>/scripts/window/*.js',
+                    '<%= yeoman.dist %>/scripts/window/**/*.js',
+                ],
+                dest: "<%= yeoman.dist %>/scripts/window.min.js"
+            }
+        },
         preprocess: {
             options: {
                 inline: true,
