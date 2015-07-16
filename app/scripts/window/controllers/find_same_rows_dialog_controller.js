@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("FindSameRowsDialogController", ["$scope", "Events", "targetObjectService", "mySQLQueryService", "rowsSelectionService", "TableTypes", "anyQueryExecuteService", function($scope, Events, targetObjectService, mySQLQueryService, rowsSelectionService, TableTypes, anyQueryExecuteService) {
+chromeMyAdmin.controller("FindSameRowsDialogController", function($scope, Events, targetObjectService, mySQLQueryService, rowsSelectionService, TableTypes, anyQueryExecuteService) {
     "use strict";
 
     var onShowDialog = function() {
@@ -147,4 +147,4 @@ chromeMyAdmin.controller("FindSameRowsDialogController", ["$scope", "Events", "t
         });
     };
 
-}]);
+});

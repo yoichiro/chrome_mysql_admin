@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("AddRelationDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "mySQLQueryService", function($scope, Events, mySQLClientService, $q, targetObjectService, mySQLQueryService) {
+chromeMyAdmin.controller("AddRelationDialogController", function($scope, Events, mySQLClientService, $q, targetObjectService, mySQLQueryService) {
     "use strict";
 
     var onShowDialog = function(table) {
@@ -147,4 +147,4 @@ chromeMyAdmin.controller("AddRelationDialogController", ["$scope", "Events", "my
         });
     };
 
-}]);
+});

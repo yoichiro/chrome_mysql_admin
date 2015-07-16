@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("relationSelectionService", ["$rootScope", "Events", function($rootScope, Events) {
+chromeMyAdmin.factory("relationSelectionService", function($rootScope, Events) {
     "use strict";
 
     var selectedRelation = null;
@@ -16,4 +16,4 @@ chromeMyAdmin.factory("relationSelectionService", ["$rootScope", "Events", funct
         }
     };
 
-}]);
+});

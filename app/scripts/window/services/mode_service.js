@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("modeService", ["$rootScope", "Events", "Modes", function($rootScope, Events, Modes) {
+chromeMyAdmin.factory("modeService", function($rootScope, Events, Modes) {
     "use strict";
 
     var mode = Modes.DATABASE;
@@ -13,4 +13,4 @@ chromeMyAdmin.factory("modeService", ["$rootScope", "Events", "Modes", function(
         }
     };
 
-}]);
+});

@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientService", "modeService", "$timeout", "UIConstants", "Events", "Modes", "targetObjectService", "configurationService", "MySQLErrorCode", "Templates", "$filter", "exportAllDatabasesService", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode, Templates, $filter, exportAllDatabasesService) {
+chromeMyAdmin.controller("DatabasePanelController", function($scope, mySQLClientService, modeService, $timeout, UIConstants, Events, Modes, targetObjectService, configurationService, MySQLErrorCode, Templates, $filter, exportAllDatabasesService) {
     "use strict";
 
     var autoUpdatePromise = null;
@@ -198,4 +198,4 @@ chromeMyAdmin.controller("DatabasePanelController", ["$scope", "mySQLClientServi
         return _isDatabasePanelVisible();
     };
 
-}]);
+});

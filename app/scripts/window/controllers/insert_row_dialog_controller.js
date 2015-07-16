@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectService", "rowsPagingService", "mySQLClientService", "Events", "sqlExpressionService", "ValueTypes", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events, sqlExpressionService, ValueTypes) {
+chromeMyAdmin.controller("InsertRowDialogController", function($scope, targetObjectService, rowsPagingService, mySQLClientService, Events, sqlExpressionService, ValueTypes) {
     "use strict";
 
     var resetErrorMessage = function() {
@@ -89,4 +89,4 @@ chromeMyAdmin.controller("InsertRowDialogController", ["$scope", "targetObjectSe
             $scope.valueTypes[columnName] === ValueTypes.DEFAULT;
     };
 
-}]);
+});

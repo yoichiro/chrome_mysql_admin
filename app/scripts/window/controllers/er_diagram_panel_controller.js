@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes", "mySQLClientService", "UIConstants", "modeService", "targetObjectService", "mySQLQueryService", "TableTypes", "relationService", "$filter", "configurationService", "Configurations", function($scope, Events, Modes, mySQLClientService, UIConstants, modeService, targetObjectService, mySQLQueryService, TableTypes, relationService, $filter, configurationService, Configurations) {
+chromeMyAdmin.controller("ErDiagramPanelController", function($scope, Events, Modes, mySQLClientService, UIConstants, modeService, targetObjectService, mySQLQueryService, TableTypes, relationService, $filter, configurationService, Configurations) {
     "use strict";
 
     var resetErDiagram = function() {
@@ -224,4 +224,4 @@ chromeMyAdmin.controller("ErDiagramPanelController", ["$scope", "Events", "Modes
         $scope.erDiagramAPI = api;
     };
 
-}]);
+});

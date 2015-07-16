@@ -1,4 +1,4 @@
-chromeMyAdmin.controller("ErrorDialogController", ["$scope", "mySQLClientService", "Events", "ErrorLevel", function($scope, mySQLClientService, Events, ErrorLevel) {
+chromeMyAdmin.controller("ErrorDialogController", function($scope, mySQLClientService, Events, ErrorLevel) {
     "use strict";
 
     var onCloseDialog = function() {
@@ -32,4 +32,4 @@ chromeMyAdmin.controller("ErrorDialogController", ["$scope", "mySQLClientService
         });
     };
 
-}]);
+});

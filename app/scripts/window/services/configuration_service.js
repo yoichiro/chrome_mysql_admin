@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("configurationService", ["$rootScope", "$q", "Configurations", function($rootScope, $q, Configurations) {
+chromeMyAdmin.factory("configurationService", function($rootScope, $q, Configurations) {
     "use strict";
 
     var configurationChangeListeners = [];
@@ -119,4 +119,4 @@ chromeMyAdmin.factory("configurationService", ["$rootScope", "$q", "Configuratio
                 showColumnNotNull);
         }
     };
-}]);
+});

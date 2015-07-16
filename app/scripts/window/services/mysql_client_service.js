@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $rootScope) {
+chromeMyAdmin.factory("mySQLClientService", function($q, $rootScope) {
     "use strict";
 
     var mySQLClient = new MySQL.Client();
@@ -300,4 +300,4 @@ chromeMyAdmin.factory("mySQLClientService", ["$q", "$rootScope", function($q, $r
         }
     };
 
-}]);
+});
