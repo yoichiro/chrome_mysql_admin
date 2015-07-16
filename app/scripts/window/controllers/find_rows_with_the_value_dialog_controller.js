@@ -1,4 +1,13 @@
-chromeMyAdmin.controller("FindRowsWithTheValueDialogController", function($scope, Events, targetObjectService, mySQLQueryService, rowsSelectionService, anyQueryExecuteService, TableTypes, sqlExpressionService) {
+chromeMyAdmin.controller("FindRowsWithTheValueDialogController", function(
+    $scope,
+    Events,
+    targetObjectService,
+    mySQLQueryService,
+    rowsSelectionService,
+    anyQueryExecuteService,
+    TableTypes,
+    sqlExpressionService
+) {
     "use strict";
 
     var ONLY_SAME_COLUMN_TYPE = "same";

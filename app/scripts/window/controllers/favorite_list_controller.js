@@ -1,4 +1,10 @@
-chromeMyAdmin.controller("FavoriteListController", function($scope, mySQLClientService, favoriteService, Events, UIConstants) {
+chromeMyAdmin.controller("FavoriteListController", function(
+    $scope,
+    mySQLClientService,
+    favoriteService,
+    Events,
+    UIConstants
+) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {

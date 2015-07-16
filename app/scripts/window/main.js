@@ -1,6 +1,15 @@
 var chromeMyAdmin = angular.module("chromeMyAdmin", ["ngGrid", "ui.ace"]);
 
-chromeMyAdmin.run(function($rootScope, Events, ErrorLevel, mySQLClientService, $q, UIConstants, KeyCodes, pingService) {
+chromeMyAdmin.run(function(
+    $rootScope,
+    Events,
+    ErrorLevel,
+    mySQLClientService,
+    $q,
+    UIConstants,
+    KeyCodes,
+    pingService
+) {
     "use strict";
 
     $rootScope.connected = false;

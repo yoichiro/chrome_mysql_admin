@@ -1,4 +1,9 @@
-chromeMyAdmin.controller("AddIndexDialogController", function($scope, Events, mySQLClientService, targetObjectService) {
+chromeMyAdmin.controller("AddIndexDialogController", function(
+    $scope,
+    Events,
+    mySQLClientService,
+    targetObjectService
+) {
     "use strict";
 
     var onShowDialog = function(data) {

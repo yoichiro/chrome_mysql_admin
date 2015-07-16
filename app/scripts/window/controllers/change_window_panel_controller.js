@@ -1,4 +1,7 @@
-chromeMyAdmin.controller("ChangeWindowPanelController", function($scope, Events) {
+chromeMyAdmin.controller("ChangeWindowPanelController", function(
+    $scope,
+    Events
+) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {

@@ -1,4 +1,11 @@
-chromeMyAdmin.controller("CreateRoutineDialogController", function($scope, Events, mySQLClientService, typeService, sqlExpressionService, targetObjectService) {
+chromeMyAdmin.controller("CreateRoutineDialogController", function(
+    $scope,
+    Events,
+    mySQLClientService,
+    typeService,
+    sqlExpressionService,
+    targetObjectService
+) {
     "use strict";
 
     var onShowDialog = function() {

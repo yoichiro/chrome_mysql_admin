@@ -1,4 +1,7 @@
-chromeMyAdmin.controller("ProgressBarController", function($scope, Events) {
+chromeMyAdmin.controller("ProgressBarController", function(
+    $scope,
+    Events
+) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {

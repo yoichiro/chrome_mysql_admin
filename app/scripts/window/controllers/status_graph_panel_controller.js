@@ -1,4 +1,15 @@
-chromeMyAdmin.controller("StatusGraphPanelController", function($scope, mySQLClientService, modeService, Modes, Events, UIConstants, $timeout, mySQLQueryService, configurationService, GraphTypes) {
+chromeMyAdmin.controller("StatusGraphPanelController", function(
+    $scope,
+    mySQLClientService,
+    modeService,
+    Modes,
+    Events,
+    UIConstants,
+    $timeout,
+    mySQLQueryService,
+    configurationService,
+    GraphTypes
+) {
     "use strict";
 
     var autoUpdatePromise = null;

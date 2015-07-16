@@ -1,4 +1,8 @@
-chromeMyAdmin.factory("relationService", function($q, $rootScope, mySQLQueryService) {
+chromeMyAdmin.factory("relationService", function(
+    $q,
+    $rootScope,
+    mySQLQueryService
+) {
     "use strict";
 
     var parseForeignKeysFromCreateTableDdl = function(ddl) {

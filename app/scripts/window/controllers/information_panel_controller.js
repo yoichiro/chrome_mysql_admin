@@ -1,4 +1,15 @@
-chromeMyAdmin.controller("InformationPanelController", function($scope, mySQLClientService, modeService, Events, Modes, targetObjectService, Engines, UIConstants, mySQLQueryService, TableTypes) {
+chromeMyAdmin.controller("InformationPanelController", function(
+    $scope,
+    mySQLClientService,
+    modeService,
+    Events,
+    Modes,
+    targetObjectService,
+    Engines,
+    UIConstants,
+    mySQLQueryService,
+    TableTypes
+) {
     "use strict";
 
     var _isInformationPanelVisible = function() {

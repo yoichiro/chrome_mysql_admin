@@ -1,4 +1,12 @@
-chromeMyAdmin.controller("ConfigurationDialogController", function($scope, mySQLClientService, Events, configurationService, QueryEditorWrapMode, anyQueryExecuteService, ssh2KnownHostService) {
+chromeMyAdmin.controller("ConfigurationDialogController", function(
+    $scope,
+    mySQLClientService,
+    Events,
+    configurationService,
+    QueryEditorWrapMode,
+    anyQueryExecuteService,
+    ssh2KnownHostService
+) {
     "use strict";
 
     var doOpen = function(activeTab) {

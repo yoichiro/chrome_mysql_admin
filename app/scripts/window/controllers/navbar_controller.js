@@ -1,4 +1,12 @@
-chromeMyAdmin.controller("NavbarController", function($scope, mySQLClientService, modeService, targetObjectService, Events, Modes, ConfigurationTabs) {
+chromeMyAdmin.controller("NavbarController", function(
+    $scope,
+    mySQLClientService,
+    modeService,
+    targetObjectService,
+    Events,
+    Modes,
+    ConfigurationTabs
+) {
     "use strict";
 
     var loadDatabaseList = function() {

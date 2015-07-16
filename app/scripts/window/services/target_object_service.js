@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("targetObjectService", function($rootScope, Events) {
+chromeMyAdmin.factory("targetObjectService", function(
+    $rootScope,
+    Events
+) {
     "use strict";
 
     var database = null;

@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("ssh2KnownHostService", function($rootScope, $q) {
+chromeMyAdmin.factory("ssh2KnownHostService", function(
+    $rootScope,
+    $q
+) {
     "use strict";
 
     var lastChecked = null;

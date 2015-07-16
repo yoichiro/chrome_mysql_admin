@@ -1,4 +1,13 @@
-chromeMyAdmin.controller("CreateTableDialogController", function($scope, targetObjectService, mySQLClientService, Events, modeService, Modes, Engines, mySQLQueryService) {
+chromeMyAdmin.controller("CreateTableDialogController", function(
+    $scope,
+    targetObjectService,
+    mySQLClientService,
+    Events,
+    modeService,
+    Modes,
+    Engines,
+    mySQLQueryService
+) {
     "use strict";
 
     var loadCharacterSets = function() {

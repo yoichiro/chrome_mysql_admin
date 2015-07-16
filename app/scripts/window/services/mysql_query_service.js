@@ -1,4 +1,8 @@
-chromeMyAdmin.factory("mySQLQueryService", function($q, $rootScope, mySQLClientService) {
+chromeMyAdmin.factory("mySQLQueryService", function(
+    $q,
+    $rootScope,
+    mySQLClientService
+) {
     "use strict";
 
     return {

@@ -1,4 +1,8 @@
-chromeMyAdmin.factory("configurationService", function($rootScope, $q, Configurations) {
+chromeMyAdmin.factory("configurationService", function(
+    $rootScope,
+    $q,
+    Configurations
+) {
     "use strict";
 
     var configurationChangeListeners = [];

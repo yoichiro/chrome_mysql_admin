@@ -1,4 +1,7 @@
-chromeMyAdmin.controller("ConfirmDialogController", function($scope, Events) {
+chromeMyAdmin.controller("ConfirmDialogController", function(
+    $scope,
+    Events
+) {
     "use strict";
 
     var open = function(message, yesButtonLabel, noButtonLabel, danger) {

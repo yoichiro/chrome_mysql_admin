@@ -1,4 +1,17 @@
-chromeMyAdmin.controller("StructurePanelController", function($scope, mySQLClientService, modeService, targetObjectService, UIConstants, $q, Events, Modes, mySQLQueryService, Templates, TableTypes, anyQueryExecuteService) {
+chromeMyAdmin.controller("StructurePanelController", function(
+    $scope,
+    mySQLClientService,
+    modeService,
+    targetObjectService,
+    UIConstants,
+    $q,
+    Events,
+    Modes,
+    mySQLQueryService,
+    Templates,
+    TableTypes,
+    anyQueryExecuteService
+) {
     "use strict";
 
     var initializeStructureGrid = function() {

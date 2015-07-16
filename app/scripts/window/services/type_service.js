@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("typeService", function($rootScope, TypeMap) {
+chromeMyAdmin.factory("typeService", function(
+    $rootScope,
+    TypeMap
+) {
     "use strict";
 
     var types = [];

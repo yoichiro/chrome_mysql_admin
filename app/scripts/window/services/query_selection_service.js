@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("querySelectionService", function($rootScope, Events) {
+chromeMyAdmin.factory("querySelectionService", function(
+    $rootScope,
+    Events
+) {
     "use strict";
 
     var queryResult = null;

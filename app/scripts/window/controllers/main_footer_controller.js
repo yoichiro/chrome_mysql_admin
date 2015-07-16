@@ -1,4 +1,19 @@
-chromeMyAdmin.controller("MainFooterController", function($scope, modeService, mySQLClientService, rowsPagingService, rowsSelectionService, targetObjectService, Events, Modes, relationSelectionService, TableTypes, routineSelectionService, anyQueryExecuteService, querySelectionService, ConfigurationTabs) {
+chromeMyAdmin.controller("MainFooterController", function(
+    $scope,
+    modeService,
+    mySQLClientService,
+    rowsPagingService,
+    rowsSelectionService,
+    targetObjectService,
+    Events,
+    Modes,
+    relationSelectionService,
+    TableTypes,
+    routineSelectionService,
+    anyQueryExecuteService,
+    querySelectionService,
+    ConfigurationTabs
+) {
     "use strict";
 
     var showMainStatusMessage = function(message) {

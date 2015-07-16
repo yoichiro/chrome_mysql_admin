@@ -1,4 +1,14 @@
-chromeMyAdmin.controller("DatabaseObjectListController", function($scope, mySQLClientService, targetObjectService, modeService, Events, Modes, mySQLQueryService, UIConstants, TableTypes) {
+chromeMyAdmin.controller("DatabaseObjectListController", function(
+    $scope,
+    mySQLClientService,
+    targetObjectService,
+    modeService,
+    Events,
+    Modes,
+    mySQLQueryService,
+    UIConstants,
+    TableTypes
+) {
     "use strict";
 
     var assignWindowResizeEventHandler = function() {

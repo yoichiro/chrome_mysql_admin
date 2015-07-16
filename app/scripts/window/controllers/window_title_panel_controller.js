@@ -1,4 +1,9 @@
-chromeMyAdmin.controller("windowTitlePanelController", function($scope, mySQLClientService, $q, Events) {
+chromeMyAdmin.controller("windowTitlePanelController", function(
+    $scope,
+    mySQLClientService,
+    $q,
+    Events
+) {
     "use strict";
 
     var assignEventHandlers = function() {

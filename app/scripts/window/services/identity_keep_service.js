@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("identityKeepService", function($rootScope, $q) {
+chromeMyAdmin.factory("identityKeepService", function(
+    $rootScope,
+    $q
+) {
     "use strict";
 
     var getKeyLength = function(map) {

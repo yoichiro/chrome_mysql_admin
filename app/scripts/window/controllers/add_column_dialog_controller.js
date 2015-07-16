@@ -1,4 +1,13 @@
-chromeMyAdmin.controller("AddColumnDialogController", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService, sqlExpressionService) {
+chromeMyAdmin.controller("AddColumnDialogController", function(
+    $scope,
+    Events,
+    mySQLClientService,
+    $q,
+    targetObjectService,
+    typeService,
+    mySQLQueryService,
+    sqlExpressionService
+) {
     "use strict";
 
     var onShowDialog = function(table) {

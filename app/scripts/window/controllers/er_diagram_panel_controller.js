@@ -1,4 +1,18 @@
-chromeMyAdmin.controller("ErDiagramPanelController", function($scope, Events, Modes, mySQLClientService, UIConstants, modeService, targetObjectService, mySQLQueryService, TableTypes, relationService, $filter, configurationService, Configurations) {
+chromeMyAdmin.controller("ErDiagramPanelController", function(
+    $scope,
+    Events,
+    Modes,
+    mySQLClientService,
+    UIConstants,
+    modeService,
+    targetObjectService,
+    mySQLQueryService,
+    TableTypes,
+    relationService,
+    $filter,
+    configurationService,
+    Configurations
+) {
     "use strict";
 
     var resetErDiagram = function() {

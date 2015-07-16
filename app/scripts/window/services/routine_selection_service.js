@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("routineSelectionService", function($rootScope, Events) {
+chromeMyAdmin.factory("routineSelectionService", function(
+    $rootScope,
+    Events
+) {
     "use strict";
 
     var selectedRoutine = null;

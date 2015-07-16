@@ -1,4 +1,10 @@
-chromeMyAdmin.factory("pingService", function($rootScope, Events, $timeout, mySQLClientService, Configurations) {
+chromeMyAdmin.factory("pingService", function(
+    $rootScope,
+    Events,
+    $timeout,
+    mySQLClientService,
+    Configurations
+) {
     "use strict";
 
     var autoPingPromise = null;

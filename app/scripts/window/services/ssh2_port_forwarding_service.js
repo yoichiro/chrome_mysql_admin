@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("ssh2PortForwardingService", function($rootScope, $q) {
+chromeMyAdmin.factory("ssh2PortForwardingService", function(
+    $rootScope,
+    $q
+) {
     "use strict";
 
     var deferred;

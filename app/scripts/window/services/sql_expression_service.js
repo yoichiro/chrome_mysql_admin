@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("sqlExpressionService", function($rootScope, ValueTypes) {
+chromeMyAdmin.factory("sqlExpressionService", function(
+    $rootScope,
+    ValueTypes
+) {
     "use strict";
 
     var createEqualRightExpression = function(value) {

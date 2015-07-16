@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("rowsSelectionService", function($rootScope, Events) {
+chromeMyAdmin.factory("rowsSelectionService", function(
+    $rootScope,
+    Events
+) {
     "use strict";
 
     var selectedRow = null;
