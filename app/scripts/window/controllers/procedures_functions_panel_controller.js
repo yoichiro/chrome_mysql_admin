@@ -1,18 +1,17 @@
-chromeMyAdmin.controller("ProceduresFunctionsPanelController"
-,
-function($scope,
-         mySQLClientService,
-         modeService,
-         targetObjectService,
-         UIConstants,
-         Modes,
-         Events,
-         mySQLQueryService,
-         Templates,
-         routineSelectionService,
-         $q,
-         anyQueryExecuteService
-        ) {
+chromeMyAdmin.controller("ProceduresFunctionsPanelController", function(
+    $scope,
+    mySQLClientService,
+    modeService,
+    targetObjectService,
+    UIConstants,
+    Modes,
+    Events,
+    mySQLQueryService,
+    Templates,
+    routineSelectionService,
+    $q,
+    anyQueryExecuteService
+) {
     "use strict";
 
     var initializeRoutinesGrid = function() {
