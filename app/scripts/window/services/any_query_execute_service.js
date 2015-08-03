@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("anyQueryExecuteService", ["$rootScope", "Events", function($rootScope, Events) {
+chromeMyAdmin.factory("anyQueryExecuteService", function(
+    $rootScope,
+    Events
+) {
     "use strict";
 
     return {
@@ -17,4 +20,4 @@ chromeMyAdmin.factory("anyQueryExecuteService", ["$rootScope", "Events", functio
         }
     };
 
-}]);
+});

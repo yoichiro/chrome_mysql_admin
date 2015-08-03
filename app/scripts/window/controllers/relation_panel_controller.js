@@ -1,4 +1,16 @@
-chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientService", "modeService", "Modes", "UIConstants", "targetObjectService", "Events", "relationSelectionService", "mySQLQueryService", "Templates", "relationService", function($scope, mySQLClientService, modeService, Modes, UIConstants, targetObjectService, Events, relationSelectionService, mySQLQueryService, Templates, relationService) {
+chromeMyAdmin.controller("RelationPanelController", function(
+    $scope,
+    mySQLClientService,
+    modeService,
+    Modes,
+    UIConstants,
+    targetObjectService,
+    Events,
+    relationSelectionService,
+    mySQLQueryService,
+    Templates,
+    relationService
+) {
     "use strict";
 
     var initializeRelationGrid = function() {
@@ -157,4 +169,4 @@ chromeMyAdmin.controller("RelationPanelController", ["$scope", "mySQLClientServi
         return _isRelationPanelVisible();
     };
 
-}]);
+});

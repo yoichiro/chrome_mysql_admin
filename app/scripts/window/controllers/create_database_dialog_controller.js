@@ -1,4 +1,10 @@
-chromeMyAdmin.controller("CreateDatabaseDialogController", ["$scope", "Events", "mySQLClientService", "targetObjectService", "mySQLQueryService", function($scope, Events, mySQLClientService, targetObjectService, mySQLQueryService) {
+chromeMyAdmin.controller("CreateDatabaseDialogController", function(
+    $scope,
+    Events,
+    mySQLClientService,
+    targetObjectService,
+    mySQLQueryService
+) {
     "use strict";
 
     var onShowDialog = function() {
@@ -63,4 +69,4 @@ chromeMyAdmin.controller("CreateDatabaseDialogController", ["$scope", "Events", 
         doCreateDatabase();
     };
 
-}]);
+});

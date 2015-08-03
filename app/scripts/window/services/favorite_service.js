@@ -1,4 +1,8 @@
-chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", "Events", function($rootScope, $q, Events) {
+chromeMyAdmin.factory("favoriteService", function(
+    $rootScope,
+    $q,
+    Events
+) {
     "use strict";
 
     var doSelect = function(name) {
@@ -75,4 +79,4 @@ chromeMyAdmin.factory("favoriteService", ["$rootScope", "$q", "Events", function
         }
     };
 
-}]);
+});

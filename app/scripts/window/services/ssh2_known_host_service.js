@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("ssh2KnownHostService", ["$rootScope", "$q", function($rootScope, $q) {
+chromeMyAdmin.factory("ssh2KnownHostService", function(
+    $rootScope,
+    $q
+) {
     "use strict";
 
     var lastChecked = null;
@@ -62,4 +65,4 @@ chromeMyAdmin.factory("ssh2KnownHostService", ["$rootScope", "$q", function($roo
             return deferred.promise;
         }
     };
-}]);
+});

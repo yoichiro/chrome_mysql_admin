@@ -1,4 +1,14 @@
-chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLClientService", "favoriteService", "Events", "identityKeepService", "ssh2PortForwardingService", "UIConstants", "ssh2KnownHostService", function($scope, $timeout, mySQLClientService, favoriteService, Events, identityKeepService, ssh2PortForwardingService, UIConstants, ssh2KnownHostService) {
+chromeMyAdmin.controller("LoginFormController", function(
+    $scope,
+    $timeout,
+    mySQLClientService,
+    favoriteService,
+    Events,
+    identityKeepService,
+    ssh2PortForwardingService,
+    UIConstants,
+    ssh2KnownHostService
+) {
     "use strict";
 
     // Private methods
@@ -300,4 +310,4 @@ chromeMyAdmin.controller("LoginFormController", ["$scope", "$timeout", "mySQLCli
         return isUsePortForwarding() && ($scope.ssh2AuthType === "publickey");
     };
 
-}]);
+});

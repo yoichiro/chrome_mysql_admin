@@ -1,4 +1,14 @@
-chromeMyAdmin.factory("exportAllDatabasesService", ["$rootScope", "$q", "Events", "mySQLClientService", "mySQLQueryService", "$filter", "typeService", "sqlExpressionService", "TableTypes", function($rootScope, $q, Events, mySQLClientService, mySQLQueryService, $filter, typeService, sqlExpressionService, TableTypes) {
+chromeMyAdmin.factory("exportAllDatabasesService", function(
+    $rootScope,
+    $q,
+    Events,
+    mySQLClientService,
+    mySQLQueryService,
+    $filter,
+    typeService,
+    sqlExpressionService,
+    TableTypes
+) {
     "use strict";
 
     var connectionInfo;
@@ -319,4 +329,4 @@ chromeMyAdmin.factory("exportAllDatabasesService", ["$rootScope", "$q", "Events"
             return deferred.promise;
         }
     };
-}]);
+});

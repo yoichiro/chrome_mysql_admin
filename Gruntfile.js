@@ -96,6 +96,22 @@ module.exports = function (grunt) {
                 'test/spec/{,*/}*.js'
             ]
         },
+        ngAnnotate: {
+            all: {
+                files: [
+                    {
+                        expand: true,
+                        src: [
+                            '<%= yeoman.app %>/scripts/window/{,*/}.js',
+                            '<%= yeoman.app %>/scripts/window/controllers/{,*/}*.js',
+                            '<%= yeoman.app %>/scripts/window/services/{,*/}*.js',
+                            '<%= yeoman.app %>/scripts/window/utils/{,*/}*.js'
+                        ],
+                        dest: '<%= yeoman.dist %>'
+                    }
+                ]
+            }
+        },
         useminPrepare: {
             options: {
                 dest: '<%= yeoman.dist %>'
@@ -122,6 +138,15 @@ module.exports = function (grunt) {
                     src: 'window.html',
                     dest: '<%= yeoman.dist %>'
                 }]
+            }
+        },
+        concat: {
+            files: {
+                src: [
+                    '<%= yeoman.dist %>/scripts/window/*.js',
+                    '<%= yeoman.dist %>/scripts/window/**/*.js',
+                ],
+                dest: "<%= yeoman.dist %>/scripts/window.min.js"
             }
         },
         preprocess: {
@@ -251,6 +276,7 @@ module.exports = function (grunt) {
         'make',
         'copy:angular_csp_css',
         'chromeManifest:dist',
+        'ngAnnotate',
         'useminPrepare',
         'concurrent:dist',
         'concat',

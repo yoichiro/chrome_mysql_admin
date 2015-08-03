@@ -1,4 +1,21 @@
-chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQLClientService", "targetObjectService", "UIConstants", "Events", "Modes", "queryHistoryService", "Templates", "configurationService", "Configurations", "$timeout", "querySelectionService", "columnTypeService", "$filter", "clipboardService", function($scope, modeService, mySQLClientService, targetObjectService, UIConstants, Events, Modes, queryHistoryService, Templates, configurationService, Configurations, $timeout, querySelectionService, columnTypeService, $filter, clipboardService) {
+chromeMyAdmin.controller("QueryPanelController", function(
+    $scope,
+    modeService,
+    mySQLClientService,
+    targetObjectService,
+    UIConstants,
+    Events,
+    Modes,
+    queryHistoryService,
+    Templates,
+    configurationService,
+    Configurations,
+    $timeout,
+    querySelectionService,
+    columnTypeService,
+    $filter,
+    clipboardService
+) {
     "use strict";
 
     var initializeQueryResultGrid = function() {
@@ -402,4 +419,4 @@ chromeMyAdmin.controller("QueryPanelController", ["$scope", "modeService", "mySQ
         }
     };
 
-}]);
+});

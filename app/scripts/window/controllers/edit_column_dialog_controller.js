@@ -1,4 +1,13 @@
-chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "mySQLClientService", "$q", "targetObjectService", "typeService", "mySQLQueryService", "sqlExpressionService", function($scope, Events, mySQLClientService, $q, targetObjectService, typeService, mySQLQueryService, sqlExpressionService) {
+chromeMyAdmin.controller("EditColumnDialogController", function(
+    $scope,
+    Events,
+    mySQLClientService,
+    $q,
+    targetObjectService,
+    typeService,
+    mySQLQueryService,
+    sqlExpressionService
+) {
     "use strict";
 
     var onShowDialog = function(table, columnDefs, columnStructure) {
@@ -266,4 +275,4 @@ chromeMyAdmin.controller("EditColumnDialogController", ["$scope", "Events", "myS
         }
     };
 
-}]);
+});

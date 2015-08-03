@@ -1,4 +1,7 @@
-chromeMyAdmin.factory("clipboardService", ["$rootScope", "columnTypeService", function($rootScope, columnTypeService) {
+chromeMyAdmin.factory("clipboardService", function(
+    $rootScope,
+    columnTypeService
+) {
     "use strict";
 
     return {
@@ -32,4 +35,4 @@ chromeMyAdmin.factory("clipboardService", ["$rootScope", "columnTypeService", fu
         }
     };
 
-}]);
+});

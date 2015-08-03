@@ -1,4 +1,8 @@
-chromeMyAdmin.factory("queryHistoryService", ["$rootScope", "$q", "Events", function($rootScope, $q, Events) {
+chromeMyAdmin.factory("queryHistoryService", function(
+    $rootScope,
+    $q,
+    Events
+) {
     "use strict";
 
     var trim = function(str) {
@@ -41,4 +45,4 @@ chromeMyAdmin.factory("queryHistoryService", ["$rootScope", "$q", "Events", func
         }
     };
 
-}]);
+});

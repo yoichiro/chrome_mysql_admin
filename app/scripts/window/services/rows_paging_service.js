@@ -1,4 +1,9 @@
-chromeMyAdmin.factory("rowsPagingService", ["$rootScope", "Events", "configurationService", "Configurations", function($rootScope, Events, configurationService, Configurations) {
+chromeMyAdmin.factory("rowsPagingService", function(
+    $rootScope,
+    Events,
+    configurationService,
+    Configurations
+) {
     "use strict";
 
     var rowCountPerPage = 100;
@@ -60,4 +65,4 @@ chromeMyAdmin.factory("rowsPagingService", ["$rootScope", "Events", "configurati
         }
     };
 
-}]);
+});

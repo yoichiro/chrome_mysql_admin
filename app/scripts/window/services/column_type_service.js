@@ -1,4 +1,4 @@
-chromeMyAdmin.factory("columnTypeService", ["$rootScope", function($rootScope) {
+chromeMyAdmin.factory("columnTypeService", function($rootScope) {
     "use strict";
 
     var numericTypes = [0, 1, 2, 3, 4, 5, 8, 9, 246];
@@ -9,4 +9,4 @@ chromeMyAdmin.factory("columnTypeService", ["$rootScope", function($rootScope) {
         }
     };
 
-}]);
+});

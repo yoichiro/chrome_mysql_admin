@@ -1,4 +1,20 @@
-chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService", "modeService", "targetObjectService", "$q", "rowsPagingService", "rowsSelectionService", "UIConstants", "Events", "Modes", "sqlExpressionService", "Templates", "mySQLQueryService", "columnTypeService", "clipboardService", function($scope, mySQLClientService, modeService, targetObjectService, $q, rowsPagingService, rowsSelectionService, UIConstants, Events, Modes, sqlExpressionService, Templates, mySQLQueryService, columnTypeService, clipboardService) {
+chromeMyAdmin.controller("RowsPanelController", function(
+    $scope,
+    mySQLClientService,
+    modeService,
+    targetObjectService,
+    $q,
+    rowsPagingService,
+    rowsSelectionService,
+    UIConstants,
+    Events,
+    Modes,
+    sqlExpressionService,
+    Templates,
+    mySQLQueryService,
+    columnTypeService,
+    clipboardService
+) {
     "use strict";
 
     var initializeRowsGrid = function() {
@@ -423,4 +439,4 @@ chromeMyAdmin.controller("RowsPanelController", ["$scope", "mySQLClientService",
         doQueryAndReload();
     };
 
-}]);
+});
