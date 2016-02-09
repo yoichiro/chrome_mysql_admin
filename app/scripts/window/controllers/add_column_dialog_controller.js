@@ -107,7 +107,9 @@ chromeMyAdmin.controller("AddColumnDialogController", function(
             sql += "NOT NULL ";
         }
         if ($scope.defaultValue) {
-            if (typeService.isNumeric($scope.type)) {
+            if (typeService.isNumeric($scope.type)
+                || $scope.type == 'TIMESTAMP' && $scope.defaultValue == "CURRENT_TIMESTAMP"
+            ) {
                 sql += "DEFAULT " + $scope.defaultValue + " ";
             } else {
                 sql += "DEFAULT '" + $scope.defaultValue + "' ";
