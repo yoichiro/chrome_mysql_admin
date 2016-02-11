@@ -12,7 +12,6 @@ chromeMyAdmin.controller("EditColumnDialogController", function(
 
     var onShowDialog = function(table, columnDefs, columnStructure) {
         resetErrorMessage();
-        console.log(columnStructure);
         $scope.selectedTable = table;
         $scope.originalColumnDefs = columnDefs;
         $scope.originalColumnStructure = columnStructure;
