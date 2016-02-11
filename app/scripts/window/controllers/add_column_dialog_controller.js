@@ -25,6 +25,7 @@ chromeMyAdmin.controller("AddColumnDialogController", function(
         $scope.key = "PRIMARY";
         $scope.setEnumValue = "";
         $scope.setEnumValues = [];
+        $scope.comment = "";
         $("#addColumnDialog").modal("show");
         loadDatabaseData();
     };
@@ -80,7 +81,7 @@ chromeMyAdmin.controller("AddColumnDialogController", function(
             }
         }
         var sql = "ALTER TABLE `" + $scope.selectedTable.name + "` ";
-        sql += "ADD COLUMN `" + $scope.columnName + "` ";
+        sql += "ADD COLUMN `" + sqlExpressionService.replaceValue($scope.columnName) + "` ";
         sql += $scope.type;
         if ($scope.length) {
             sql += "(" + $scope.length + ")";
@@ -110,8 +111,11 @@ chromeMyAdmin.controller("AddColumnDialogController", function(
             if (typeService.isNumeric($scope.type)) {
                 sql += "DEFAULT " + $scope.defaultValue + " ";
             } else {
-                sql += "DEFAULT '" + $scope.defaultValue + "' ";
+                sql += "DEFAULT '" + sqlExpressionService.replaceValue($scope.defaultValue) + "' ";
             }
+        }
+        if ($scope.comment) {
+            sql += "COMMENT '" + sqlExpressionService.replaceValue($scope.comment) + "' ";
         }
         if ($scope.extra !== "NONE") {
             sql += $scope.extra;
