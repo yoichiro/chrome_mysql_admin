@@ -12,6 +12,7 @@ chromeMyAdmin.controller("EditColumnDialogController", function(
 
     var onShowDialog = function(table, columnDefs, columnStructure) {
         resetErrorMessage();
+        console.log(columnStructure);
         $scope.selectedTable = table;
         $scope.originalColumnDefs = columnDefs;
         $scope.originalColumnStructure = columnStructure;
@@ -40,6 +41,7 @@ chromeMyAdmin.controller("EditColumnDialogController", function(
         $scope.defaultValue = columnStructure.Default;
         $scope.extra = getExtra(columnStructure.Extra);
         $scope.key = getKey(columnStructure.Key);
+        $scope.comment = columnStructure.Comment;
         $("#editColumnDialog").modal("show");
         var characterSet = getCharacterSet(collation);
         loadDatabaseData(characterSet, collation);
@@ -190,7 +192,7 @@ chromeMyAdmin.controller("EditColumnDialogController", function(
         }
         var sql = "ALTER TABLE `" + $scope.selectedTable.name + "` ";
         sql += "CHANGE COLUMN `" + $scope.originalColumnStructure.Field + "` `";
-        sql += $scope.columnName + "` ";
+        sql += sqlExpressionService.replaceValue($scope.columnName) + "` ";
         sql += $scope.type;
         if ($scope.length) {
             sql += "(" + $scope.length + ")";
@@ -220,8 +222,11 @@ chromeMyAdmin.controller("EditColumnDialogController", function(
             if (typeService.isNumeric($scope.type)) {
                 sql += "DEFAULT " + $scope.defaultValue + " ";
             } else {
-                sql += "DEFAULT '" + $scope.defaultValue + "' ";
+                sql += "DEFAULT '" + sqlExpressionService.replaceValue($scope.defaultValue) + "' ";
             }
+        }
+        if ($scope.comment) {
+            sql += "COMMENT '" + sqlExpressionService.replaceValue($scope.comment) + "' ";
         }
         if ($scope.extra !== "NONE") {
             sql += $scope.extra;
