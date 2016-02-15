@@ -103,8 +103,11 @@ chromeMyAdmin.controller("AddColumnDialogController", function(
                 sql += "ZEROFILL ";
             }
         }
+
         if (!$scope.allowNull) {
             sql += "NOT NULL ";
+        } else if ($scope.type == 'TIMESTAMP' && $scope.allowNull) {
+            sql += "NULL ";
         }
         if ($scope.defaultValue) {
             if (typeService.isNumeric($scope.type)
@@ -125,6 +128,7 @@ chromeMyAdmin.controller("AddColumnDialogController", function(
                 }
             }
         }
+
         mySQLClientService.query(sql).then(function(result) {
             if (result.hasResultsetRows) {
                 $scope.fatalErrorOccurred("Adding column failed.");
