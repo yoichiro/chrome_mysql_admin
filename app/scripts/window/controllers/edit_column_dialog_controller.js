@@ -216,9 +216,13 @@ chromeMyAdmin.controller("EditColumnDialogController", function(
         }
         if (!$scope.allowNull) {
             sql += "NOT NULL ";
+        } else if ($scope.type == 'TIMESTAMP' && $scope.allowNull) {
+            sql += "NULL ";
         }
         if ($scope.defaultValue) {
-            if (typeService.isNumeric($scope.type)) {
+            if (typeService.isNumeric($scope.type)
+                || $scope.type == 'TIMESTAMP' && $scope.defaultValue == "CURRENT_TIMESTAMP"
+            ) {
                 sql += "DEFAULT " + $scope.defaultValue + " ";
             } else {
                 sql += "DEFAULT '" + sqlExpressionService.replaceValue($scope.defaultValue) + "' ";
