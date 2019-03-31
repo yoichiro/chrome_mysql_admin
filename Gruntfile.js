@@ -128,7 +128,7 @@ module.exports = function (grunt) {
                         'fonts/{,*/}*.*',
                         '*.html',
                         'templates/*.html',
-                        'newlib/Release/*.{nexe,nmf}'
+                        'clang-newlib/Release/*.{nexe,nmf}'
                     ]
                 }]
             }
