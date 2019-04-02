@@ -13,7 +13,7 @@ chromeMyAdmin.factory("queryHistoryService", function(
         add: function(query) {
             var trimed = trim(query);
             var deferred = $q.defer();
-            chrome.storage.sync.get("queries", function(items) {
+            chrome.storage.local.get("queries", function(items) {
                 var queries = items.queries || [];
                 var exists = false;
                 angular.forEach(queries, function(target) {
@@ -26,7 +26,7 @@ chromeMyAdmin.factory("queryHistoryService", function(
                     if (queries.length > 30) {
                         queries = queries.slice(-30);
                     }
-                    chrome.storage.sync.set({queries: queries}, function() {
+                    chrome.storage.local.set({queries: queries}, function() {
                         deferred.resolve();
                     });
                 } else {
@@ -37,7 +37,7 @@ chromeMyAdmin.factory("queryHistoryService", function(
         },
         getAll: function() {
             var deferred = $q.defer();
-            chrome.storage.sync.get("queries", function(items) {
+            chrome.storage.local.get("queries", function(items) {
                 var queries = items.queries || [];
                 deferred.resolve(queries);
             });

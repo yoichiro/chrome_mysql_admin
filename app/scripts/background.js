@@ -19,7 +19,7 @@
 var windows = [];
 
 function createWindow() {
-    chrome.storage.sync.get("windowSize", function(items) {
+    chrome.storage.local.get("windowSize", function(items) {
         var params = {};
         if (items.windowSize) {
             var windowSize = items.windowSize;
@@ -68,7 +68,7 @@ function createWindow() {
                         isFullscreen: window.isFullscreen(),
                         isMaximized: window.isMaximized()
                     };
-                    chrome.storage.sync.set({windowSize: windowSize}, function() {
+                    chrome.storage.local.set({windowSize: windowSize}, function() {
                     });
                 };
             })(createdWindow));
@@ -101,6 +101,31 @@ function focusWindow(id) {
     }
 }
 
+function migrateStorage(callback) {
+    chrome.storage.sync.get([
+        'windowSize',
+		'erDiagramDimensions',
+		'configurations',
+		'favorites',
+		'identities',
+		'queries',
+        'knownHosts'
+    ], function(items) {
+        if (Object.keys(items).length !== 0) {
+            chrome.storage.local.set(items, function() {
+                chrome.storage.sync.clear(function() {
+                    console.log('Configuration migrated.');
+                    callback();
+                });
+            });
+        } else {
+            callback();
+        }
+    });
+}
+
 chrome.app.runtime.onLaunched.addListener(function() {
-    createWindow();
+    migrateStorage(function() {
+        createWindow();
+    });
 });

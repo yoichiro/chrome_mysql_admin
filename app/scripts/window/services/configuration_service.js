@@ -9,7 +9,7 @@ chromeMyAdmin.factory("configurationService", function(
 
     var getConfigurationValue = function(name, defaultValue) {
         var deferred = $q.defer();
-        chrome.storage.sync.get("configurations", function(items) {
+        chrome.storage.local.get("configurations", function(items) {
             var configurations = items.configurations || {};
             var result = configurations[name];
             if (typeof result === "string") {
@@ -31,10 +31,10 @@ chromeMyAdmin.factory("configurationService", function(
 
     var setConfigurationValue = function(name, value) {
         var deferred = $q.defer();
-        chrome.storage.sync.get("configurations", function(items) {
+        chrome.storage.local.get("configurations", function(items) {
             var configurations = items.configurations || {};
             configurations[name] = value;
-            chrome.storage.sync.set({configurations: configurations}, function() {
+            chrome.storage.local.set({configurations: configurations}, function() {
                 deferred.resolve();
                 notifyConfigurationChanged(name, value);
             });

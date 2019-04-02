@@ -214,17 +214,17 @@ chromeMyAdmin.controller("ErDiagramPanelController", function(
     };
 
     $scope.storePosition = function(model, dimensions) {
-        chrome.storage.sync.get("erDiagramDimensions", function(items) {
+        chrome.storage.local.get("erDiagramDimensions", function(items) {
             var erDiagramDimensions = items.erDiagramDimensions || {};
             erDiagramDimensions[model.getDatabase()] = dimensions;
-            chrome.storage.sync.set({erDiagramDimensions: erDiagramDimensions}, function() {
+            chrome.storage.local.set({erDiagramDimensions: erDiagramDimensions}, function() {
             });
         });
     };
 
     $scope.providePosition = function(model, callback) {
         if (model) {
-            chrome.storage.sync.get("erDiagramDimensions", function(items) {
+            chrome.storage.local.get("erDiagramDimensions", function(items) {
                 var erDiagramDimensions = items.erDiagramDimensions || {};
                 var dimensions = erDiagramDimensions[model.getDatabase()];
                 callback(dimensions);

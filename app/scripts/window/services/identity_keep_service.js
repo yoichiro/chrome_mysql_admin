@@ -15,7 +15,7 @@ chromeMyAdmin.factory("identityKeepService", function(
     return {
         set: function(hostName, port, userName, password) {
             var deferred = $q.defer();
-            chrome.storage.sync.get("identities", function(items) {
+            chrome.storage.local.get("identities", function(items) {
                 var identities = items.identities || {};
                 if (getKeyLength(identities) >= 10) {
                     var minKey = null;
@@ -37,7 +37,7 @@ chromeMyAdmin.factory("identityKeepService", function(
                 identity.password = password;
                 identity.created = (new Date()).getTime();
                 identities[key] = identity;
-                chrome.storage.sync.set({identities: identities}, function() {
+                chrome.storage.local.set({identities: identities}, function() {
                     deferred.resolve();
                 });
             });
@@ -45,7 +45,7 @@ chromeMyAdmin.factory("identityKeepService", function(
         },
         get: function(hostName, port, userName) {
             var deferred = $q.defer();
-            chrome.storage.sync.get("identities", function(items) {
+            chrome.storage.local.get("identities", function(items) {
                 var identities = items.identities || {};
                 var key = hostName + ":" + port + ":" + userName;
                 var result = identities[key];

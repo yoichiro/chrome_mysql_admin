@@ -15,7 +15,7 @@ chromeMyAdmin.factory("ssh2KnownHostService", function(
                 fingerprint: fingerprint
             };
             var deferred = $q.defer();
-            chrome.storage.sync.get("knownHosts", function(items) {
+            chrome.storage.local.get("knownHosts", function(items) {
                 var knownHosts = items.knownHosts || {};
                 var key = hostName + ":" + port;
                 var knownHost = knownHosts[key];
@@ -42,7 +42,7 @@ chromeMyAdmin.factory("ssh2KnownHostService", function(
         },
         addLastChecked: function() {
             var deferred = $q.defer();
-            chrome.storage.sync.get("knownHosts", function(items) {
+            chrome.storage.local.get("knownHosts", function(items) {
                 var knownHosts = items.knownHosts || {};
                 var key = lastChecked.hostName + ":" + lastChecked.port;
                 var value = {
@@ -50,7 +50,7 @@ chromeMyAdmin.factory("ssh2KnownHostService", function(
                     fingerprint: lastChecked.fingerprint
                 };
                 knownHosts[key] = value;
-                chrome.storage.sync.set({knownHosts: knownHosts}, function() {
+                chrome.storage.local.set({knownHosts: knownHosts}, function() {
                     deferred.resolve();
                 });
             });
@@ -58,7 +58,7 @@ chromeMyAdmin.factory("ssh2KnownHostService", function(
         },
         getAll: function() {
             var deferred = $q.defer();
-            chrome.storage.sync.get("knownHosts", function(items) {
+            chrome.storage.local.get("knownHosts", function(items) {
                 var knownHosts = items.knownHosts || {};
                 deferred.resolve(knownHosts);
             });
