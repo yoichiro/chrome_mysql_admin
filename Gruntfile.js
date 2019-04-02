@@ -131,6 +131,20 @@ module.exports = function (grunt) {
                         'clang-newlib/Release/*.{nexe,nmf}'
                     ]
                 }]
+            },
+            dependencies: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: 'bower_components',
+                    dest: '<%= yeoman.dist %>/scripts/lib',
+                    src: [
+                        'ace-builds/src-min-noconflict/{,*/}*.js',
+                        'jquery/dist/jquery.js',
+                        'angular/angular.js',
+                        'angular-ui-ace/ui-ace.js'
+                    ]
+                }]
             }
         },
         chromeManifest: {
@@ -205,6 +219,7 @@ module.exports = function (grunt) {
         'copy:angular_csp_css',
         'chromeManifest:dist',
         'copy:dist',
+        'copy:dependencies',
         'compress'
     ]);
 
