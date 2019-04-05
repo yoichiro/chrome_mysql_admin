@@ -20,6 +20,7 @@ chromeMyAdmin.constant("Events", {
     ROUTINE_SELECTION_CHANGED: "routineSelectionChanged",
 
     SHOW_INSERT_ROW_DIALOG: "showInsertRowDialog",
+    SHOW_CLONE_ROW_DIALOG: "showCloneRowDialog",
     SHOW_UPDATE_ROW_DIALOG: "showUpdateRowDialog",
     SHOW_MAIN_STATUS_MESSAGE: "showMainStatusMessage",
     SHOW_PROGRESS_BAR: "showProgressBar",
@@ -52,6 +53,7 @@ chromeMyAdmin.constant("Events", {
     TRUNCATE_SELECTED_TABLE: "truncateSelectedTable",
     REQUEST_INSERT_ROW: "requestInsertRow",
     REQUEST_UPDATE_ROW: "requestUpdateRow",
+    REQUEST_CLONE_ROW: "requestCloneRow",
     FATAL_ERROR_OCCURRED: "fatalErrorOccurred",
     REFRESH_TABLE_LIST: "refreshTableList",
     REFRESH_DATABASES: "refreshDatabases",
