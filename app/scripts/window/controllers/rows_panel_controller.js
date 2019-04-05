@@ -325,6 +325,19 @@ chromeMyAdmin.controller("RowsPanelController", function(
         });
     };
 
+    var showCloneRowDialog = function() {
+        loadTableStructure(function(columnDefinitions) {
+            if ($scope.lastQueryResult) {
+                var row = rowsSelectionService.getSelectedRows();
+                var originalRow = $scope.lastQueryResult.resultsetRows[row.rowIndex];
+                targetObjectService.showCloneRowDialog({
+                    columnDefinitions: columnDefinitions,
+                    row: originalRow
+                });
+            }
+        });
+    };
+
     var showUpdateRowDialog = function() {
         loadTableStructure(function(columnDefinitions) {
             if ($scope.lastQueryResult) {
@@ -376,6 +389,9 @@ chromeMyAdmin.controller("RowsPanelController", function(
         });
         $scope.$on(Events.REQUEST_INSERT_ROW, function(event, table) {
             showInsertRowDialog();
+        });
+        $scope.$on(Events.REQUEST_CLONE_ROW, function(event, table) {
+            showCloneRowDialog();
         });
         $scope.$on(Events.REQUEST_UPDATE_ROW, function(event, table) {
             showUpdateRowDialog();

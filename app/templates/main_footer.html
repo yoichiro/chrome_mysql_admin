@@ -3,6 +3,7 @@
   <!-- for Rows panel -->
   <div class="pull-right" ng-show="isRowsButtonsVisible()">
     <footer-button icon="plus" click="insertRow()" title="Insert a new row" enable="isTableSelection() && isTable()"></footer-button>
+    <footer-button icon="clone" click="cloneRow()" title="Clone the selected row" enable="isTable() && isRowSelection()"></footer-button>
     <footer-button icon="pencil" click="updateRow()" title="Edit the selected row" enable="isTable() && isRowSelection()"></footer-button>
     <footer-button icon="trash-o" click="confirmDeleteSelectedRow()" title="Delete the selected row" enable="isTable() && isRowSelection()"></footer-button>
     <footer-button icon="refresh" click="refreshRows()" title="Refresh the row list"></footer-button>

@@ -25,9 +25,29 @@ chromeMyAdmin.controller("InsertRowDialogController", function(
         $("#insertRowDialog").modal("show");
     };
 
+    var doOpenWith = function(columnDefinitions, row) {
+        resetErrorMessage();
+        $scope.values = {};
+        $scope.valueTypes = {};
+        angular.forEach(columnDefinitions, function(column, index) {
+            var value = row.values[index];
+            $scope.values[column.name] = value;
+            if (value === null) {
+                $scope.valueTypes[column.name] = ValueTypes.NULL;
+            } else {
+                $scope.valueTypes[column.name] = ValueTypes.VALUE;
+            }
+        });
+        $scope.columnDefinitions = columnDefinitions;
+        $("#insertRowDialog").modal("show");
+    }
+
     var assignEventHandlers = function() {
         $scope.$on(Events.SHOW_INSERT_ROW_DIALOG, function(event, columnDefinitions) {
             doOpen(columnDefinitions);
+        });
+        $scope.$on(Events.SHOW_CLONE_ROW_DIALOG, function(event, data) {
+            doOpenWith(data.columnDefinitions, data.row);
         });
     };
 

@@ -140,6 +140,12 @@ chromeMyAdmin.controller("MainFooterController", function(
         }
     };
 
+    $scope.cloneRow = function() {
+        if ($scope.isTable() && $scope.isRowSelection()) {
+            targetObjectService.requestCloneRow();
+        }
+    };
+
     $scope.updateRow = function() {
         if ($scope.isTable() && $scope.isRowSelection()) {
             targetObjectService.requestUpdateRow();

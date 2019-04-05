@@ -48,8 +48,14 @@ chromeMyAdmin.factory("targetObjectService", function(
         requestUpdateRow: function() {
             $rootScope.$broadcast(Events.REQUEST_UPDATE_ROW, table);
         },
+        requestCloneRow: function() {
+            $rootScope.$broadcast(Events.REQUEST_CLONE_ROW, table);
+        },
         showInsertRowDialog: function(columnDefinitions) {
             $rootScope.$broadcast(Events.SHOW_INSERT_ROW_DIALOG, columnDefinitions);
+        },
+        showCloneRowDialog: function(data) {
+            $rootScope.$broadcast(Events.SHOW_CLONE_ROW_DIALOG, data);
         },
         showUpdateRowDialog: function(data) {
             $rootScope.$broadcast(Events.SHOW_UPDATE_ROW_DIALOG, data);
