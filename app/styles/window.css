@@ -191,6 +191,10 @@ body {
     margin-top: 5px;
 }
 
+#progressPanel>div .panel-footer {
+    text-align: right;
+}
+
 #changeWindowPanel {
     position: fixed;
     left: 0;

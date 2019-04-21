@@ -187,6 +187,28 @@ chromeMyAdmin.factory("mySQLQueryService", function(
                 deferred.reject(reason);
             });
             return deferred.promise;
+        },
+        getConnectionId: function() {
+            var deferred = $q.defer();
+            mySQLClientService.queryWithoutProgressBar("SELECT CONNECTION_ID()").then(function(result) {
+                if (result.hasResultsetRows) {
+                    deferred.resolve(result);
+                } else {
+                    deferred.reject("Retrieving connection ID failed.");
+                }
+            }, function(reason) {
+                deferred.reject(reason);
+            });
+            return deferred.promise;
+        },
+        kill: function(connectionId) {
+            var deferred = $q.defer();
+            mySQLClientService.query("KILL " + connectionId).then(function(result) {
+                deferred.resolve(result);
+            }, function(reason) {
+                deferred.reject(reason);
+            });
+            return deferred.promise;
         }
     };
 
