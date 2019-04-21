@@ -2,4 +2,9 @@
   <div class="statisticsPanel">{{statistics}}</div>
   <div id="processListGrid" class="gridStyle" ng-grid="processListGrid">
   </div>
+  <div class="middleFooter">
+      <div class="pull-right">
+        <footer-button icon="stop-circle-o" click="confirmKillProcess()" title="Kill" enable="isProcessSelection()"></footer-button>
+      </div>
+    </div>
 </div>

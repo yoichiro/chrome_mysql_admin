@@ -71,6 +71,7 @@ chromeMyAdmin.constant("Events", {
     SAVE_ER_DIAGRAM_IMAGE: "save_er_diagram_image",
     CONTINUE_SSH2_PORT_FORWARDING: "continue_ssh2_port_forwarding",
     CONTINUE_SSH2_PORT_FORWARDING_FOR_TEST: "continue_ssh2_port_forwarding_for_test",
+    KILL_SELECTED_PROCESS: "killSelectedProcess",
     LOGOUT: "logout",
     LOGIN: "login"
 });

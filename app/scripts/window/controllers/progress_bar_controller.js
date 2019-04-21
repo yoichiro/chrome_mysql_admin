@@ -1,6 +1,7 @@
 chromeMyAdmin.controller("ProgressBarController", function(
     $scope,
-    Events
+    Events,
+    mySQLClientService
 ) {
     "use strict";
 
@@ -49,6 +50,13 @@ chromeMyAdmin.controller("ProgressBarController", function(
 
     $scope.isVisibleProgressBar = function() {
         return $scope.visibleProgressBar;
+    };
+
+    $scope.abort = function() {
+        setVisibleProgressBar(false);
+        mySQLClientService.logout().then(function() {
+            $scope.notifyConnectionChanged();
+        });
     };
 
 });

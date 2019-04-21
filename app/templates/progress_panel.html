@@ -1,6 +1,11 @@
 <div id="progressPanel" ng-controller="ProgressBarController" ng-show="isVisibleProgressBar()" ng-init="initialize()">
-  <div class="well center-block">
-    <div class="executingTitle">Now communicating with MySQL server...</div>
-    <div class="executingQuery">{{query}}</div>
+  <div class="panel panel-default center-block">
+    <div class="panel-body">
+      <div class="executingTitle">Now communicating with MySQL server...</div>
+      <div class="executingQuery">{{query}}</div>
+    </div>
+    <div class="panel-footer">
+      <button type="button" class="btn btn-warning" ng-click="abort()">Disconnect</button>
+    </div>
   </div>
 </div>

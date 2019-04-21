@@ -11,7 +11,9 @@ chromeMyAdmin.controller("DatabasePanelController", function(
     MySQLErrorCode,
     Templates,
     $filter,
-    exportAllDatabasesService
+    exportAllDatabasesService,
+    mySQLQueryService,
+    connectionInformationService
 ) {
     "use strict";
 
@@ -31,8 +33,18 @@ chromeMyAdmin.controller("DatabasePanelController", function(
             enableSorting: false,
             enablePinning: true,
             headerRowHeight: UIConstants.GRID_ROW_HEIGHT,
-            rowHeight: UIConstants.GRID_ROW_HEIGHT
+            rowHeight: UIConstants.GRID_ROW_HEIGHT,
+            multiSelect: false,
+            selectedItems: $scope.selectedProcesses,
+            afterSelectionChange: function(rowItem, event) {
+                if (rowItem.selected) {
+                    $scope.selectedProcess = rowItem.entity;
+                } else {
+                    $scope.selectedProcess = null;
+                }
+            }
         };
+        $scope.selectedProcess = null;
     };
 
     var resetProcessListGrid = function() {
@@ -51,7 +63,7 @@ chromeMyAdmin.controller("DatabasePanelController", function(
             $(window).height() -
                 UIConstants.WINDOW_TITLE_PANEL_HEIGHT -
                 UIConstants.NAVBAR_HEIGHT -
-                UIConstants.FOOTER_HEIGHT - 50);
+                (UIConstants.FOOTER_HEIGHT * 2) - 50);
     };
 
     var onModeChanged = function(mode) {
@@ -131,6 +143,7 @@ chromeMyAdmin.controller("DatabasePanelController", function(
             rows.push(row);
         });
         $scope.processListData = rows;
+        $scope.selectedProcess = null;
     };
 
     var deleteSelectedDatabase = function() {
@@ -199,6 +212,20 @@ chromeMyAdmin.controller("DatabasePanelController", function(
         $scope.$on(Events.EXPORT_ALL_DATABASES, function(event, data) {
             exportAllDatabases();
         });
+        $scope.$on(Events.KILL_SELECTED_PROCESS, function(event, data) {
+            killProcess();
+        });
+    };
+
+    var killProcess = function() {
+        var connectionId = $scope.selectedProcess.Id;
+        mySQLQueryService.kill(connectionId).then(function(result) {
+            console.log(result);
+            loadProcessList();
+        }, function(reason) {
+            $scope.showErrorDialog("Killing process failed", reason);
+            loadProcessList();
+        });
     };
 
     $scope.initialize = function() {
@@ -210,6 +237,21 @@ chromeMyAdmin.controller("DatabasePanelController", function(
 
     $scope.isDatabasePanelVisible = function() {
         return _isDatabasePanelVisible();
+    };
+
+    $scope.isProcessSelection = function() {
+        return $scope.selectedProcess !== null
+            && $scope.selectedProcess.Id !== connectionInformationService.getConnectionId();
+    };
+
+    $scope.confirmKillProcess = function() {
+        $scope.showConfirmDialog(
+            "Would you really like to kill the selected process?",
+            "Yes",
+            "No",
+            Events.KILL_SELECTED_PROCESS,
+            true
+        );
     };
 
 });
